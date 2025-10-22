@@ -472,7 +472,7 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
                       bounciness: 0,
                     }),
                     Animated.timing(yesCancelOpacity, {
-                      toValue: 0.8,
+                      toValue: 0.2,
                       duration: 100,
                       useNativeDriver: true,
                     }),
@@ -521,7 +521,7 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
                       bounciness: 0,
                     }),
                     Animated.timing(noContinueOpacity, {
-                      toValue: 0.8,
+                      toValue: 0.2,
                       duration: 100,
                       useNativeDriver: true,
                     }),
