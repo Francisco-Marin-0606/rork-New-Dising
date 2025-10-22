@@ -716,6 +716,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: 0,
   },
   confirmTitle: {
     fontSize: 32,
@@ -734,6 +735,7 @@ const styles = StyleSheet.create({
   confirmButtons: {
     width: '100%',
     marginTop: 40,
+    alignItems: 'center',
   },
   confirmButton: {
     width: '100%',
