@@ -558,6 +558,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 44,
     paddingTop: Platform.OS === 'android' ? 16 : 60,
     paddingBottom: 40,
+    justifyContent: 'center',
   },
   header: {
     paddingBottom: 20,
@@ -581,7 +582,6 @@ const styles = StyleSheet.create({
   },
   infoSection: {
     gap: 32,
-    flex: 1,
   },
   infoRow: {
     flexDirection: 'row',
