@@ -148,6 +148,11 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
 
   const [isCancelled, setIsCancelled] = useState<boolean>(false);
   const [subscriptionActive, setSubscriptionActive] = useState<boolean>(true);
+  const [showCancelConfirm, setShowCancelConfirm] = useState<boolean>(false);
+  const cancelConfirmScale = useRef(new Animated.Value(0.85)).current;
+  const cancelConfirmOpacity = useRef(new Animated.Value(0)).current;
+  const yesCancelScale = useRef(new Animated.Value(1)).current;
+  const noContinueScale = useRef(new Animated.Value(1)).current;
 
   const handleCancelSubscription = useCallback(async () => {
     if (Platform.OS !== 'web') {
@@ -157,9 +162,72 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
         console.log('Haptic feedback error:', error);
       }
     }
-    setIsCancelled(true);
-    console.log('Cancel subscription');
-  }, []);
+    setShowCancelConfirm(true);
+    cancelConfirmScale.setValue(0.85);
+    cancelConfirmOpacity.setValue(0);
+    Animated.parallel([
+      Animated.spring(cancelConfirmScale, {
+        toValue: 1,
+        useNativeDriver: true,
+        tension: 120,
+        friction: 14,
+      }),
+      Animated.timing(cancelConfirmOpacity, {
+        toValue: 1,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [cancelConfirmScale, cancelConfirmOpacity]);
+
+  const handleConfirmCancel = useCallback(async () => {
+    if (Platform.OS !== 'web') {
+      try {
+        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+      } catch (error) {
+        console.log('Haptic feedback error:', error);
+      }
+    }
+    Animated.parallel([
+      Animated.timing(cancelConfirmScale, {
+        toValue: 0.85,
+        duration: 150,
+        useNativeDriver: true,
+      }),
+      Animated.timing(cancelConfirmOpacity, {
+        toValue: 0,
+        duration: 150,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      setShowCancelConfirm(false);
+      setIsCancelled(true);
+    });
+  }, [cancelConfirmScale, cancelConfirmOpacity]);
+
+  const handleCloseCancelConfirm = useCallback(async () => {
+    if (Platform.OS !== 'web') {
+      try {
+        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+      } catch (error) {
+        console.log('Haptic feedback error:', error);
+      }
+    }
+    Animated.parallel([
+      Animated.timing(cancelConfirmScale, {
+        toValue: 0.85,
+        duration: 150,
+        useNativeDriver: true,
+      }),
+      Animated.timing(cancelConfirmOpacity, {
+        toValue: 0,
+        duration: 150,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      setShowCancelConfirm(false);
+    });
+  }, [cancelConfirmScale, cancelConfirmOpacity]);
 
   const handlePressIn = () => {
     Animated.parallel([
@@ -319,6 +387,81 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
           </View>
         </View>
       </Animated.View>
+
+      {showCancelConfirm && (
+        <View style={styles.confirmOverlay}>
+          <Pressable style={styles.confirmBackdrop} onPress={handleCloseCancelConfirm} />
+          <Animated.View
+            style={[
+              styles.confirmContainer,
+              {
+                opacity: cancelConfirmOpacity,
+                transform: [{ scale: cancelConfirmScale }],
+              },
+            ]}
+          >
+            <View style={styles.confirmContent}>
+              <Text style={styles.confirmTitle}>¿Estás seguro que{"\n"}quieres cancelar tu{"\n"}suscripción a Mental?</Text>
+              <Text style={styles.confirmSubtitle}>
+                El siguiente click abre una línea de tiempo en la{"\n"}que no podrás pedir nuevas hipnosis.{"\n"}{"\n"}
+                Y para escuchar las anteriores, tendrás que{"\n"}renovar tu suscripción.
+              </Text>
+
+              <Pressable
+                style={styles.confirmButton}
+                onPress={handleConfirmCancel}
+                onPressIn={() => {
+                  Animated.spring(yesCancelScale, {
+                    toValue: 0.95,
+                    useNativeDriver: true,
+                    speed: 50,
+                    bounciness: 0,
+                  }).start();
+                }}
+                onPressOut={() => {
+                  Animated.spring(yesCancelScale, {
+                    toValue: 1,
+                    useNativeDriver: true,
+                    speed: 50,
+                    bounciness: 4,
+                  }).start();
+                }}
+                android_ripple={Platform.OS === 'android' ? { color: 'transparent' } : undefined}
+              >
+                <Animated.View style={[styles.confirmButtonInner, { transform: [{ scale: yesCancelScale }] }]}>
+                  <Text style={styles.confirmButtonText}>Sí, quiero cancelar</Text>
+                </Animated.View>
+              </Pressable>
+
+              <Pressable
+                style={styles.confirmButtonSecondary}
+                onPress={handleCloseCancelConfirm}
+                onPressIn={() => {
+                  Animated.spring(noContinueScale, {
+                    toValue: 0.95,
+                    useNativeDriver: true,
+                    speed: 50,
+                    bounciness: 0,
+                  }).start();
+                }}
+                onPressOut={() => {
+                  Animated.spring(noContinueScale, {
+                    toValue: 1,
+                    useNativeDriver: true,
+                    speed: 50,
+                    bounciness: 4,
+                  }).start();
+                }}
+                android_ripple={Platform.OS === 'android' ? { color: 'transparent' } : undefined}
+              >
+                <Animated.View style={[styles.confirmButtonSecondaryInner, { transform: [{ scale: noContinueScale }] }]}>
+                  <Text style={styles.confirmButtonSecondaryText}>No, deseo continuar</Text>
+                </Animated.View>
+              </Pressable>
+            </View>
+          </Animated.View>
+        </View>
+      )}
     </View>
   );
 }
@@ -466,5 +609,93 @@ const styles = StyleSheet.create({
   },
   infoValueInactive: {
     opacity: 0.3,
+  },
+  confirmOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 4000,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  confirmBackdrop: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+  },
+  confirmContainer: {
+    backgroundColor: '#170501',
+    borderRadius: 20,
+    width: '92%',
+    maxWidth: 440,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 12 },
+    shadowOpacity: 0.6,
+    shadowRadius: 24,
+    elevation: 24,
+    overflow: 'hidden',
+  },
+  confirmContent: {
+    paddingVertical: 40,
+    paddingHorizontal: 32,
+  },
+  confirmTitle: {
+    fontSize: 32,
+    fontWeight: '700',
+    color: '#fbefd9',
+    textAlign: 'center',
+    marginBottom: 20,
+    lineHeight: 38,
+  },
+  confirmSubtitle: {
+    fontSize: 16,
+    color: 'rgba(251, 239, 217, 0.7)',
+    textAlign: 'center',
+    lineHeight: 24,
+    marginBottom: 32,
+  },
+  confirmButton: {
+    width: '100%',
+    marginBottom: 12,
+  },
+  confirmButtonInner: {
+    width: '100%',
+    backgroundColor: 'rgba(251, 239, 217, 0.08)',
+    paddingVertical: 16,
+    borderRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  confirmButtonText: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: '#ffffff',
+    letterSpacing: -0.3,
+  },
+  confirmButtonSecondary: {
+    width: '100%',
+  },
+  confirmButtonSecondaryInner: {
+    width: '100%',
+    backgroundColor: '#ff6b35',
+    paddingVertical: 16,
+    borderRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 8,
+  },
+  confirmButtonSecondaryText: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: '#ffffff',
+    letterSpacing: -0.3,
   },
 });
