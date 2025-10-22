@@ -425,102 +425,102 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
                   El siguiente click abre una línea de tiempo en la{"\n"}que no podrás pedir nuevas hipnosis.{"\n"}{"\n"}
                   Y para escuchar las anteriores, tendrás que{"\n"}renovar tu suscripción.
                 </Text>
-              </View>
 
-              <View style={styles.confirmButtons}>
-                <Animated.View style={{ transform: [{ scale: yesCancelScale }], opacity: yesCancelOpacity, marginBottom: 12 }}>
-                  <Pressable
-                    style={styles.confirmButton}
-                    onPress={handleConfirmCancel}
-                    onPressIn={async () => {
-                      if (Platform.OS !== 'web') {
-                        try {
-                          await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-                        } catch (error) {
-                          console.log('Haptic feedback error:', error);
+                <View style={styles.confirmButtons}>
+                  <Animated.View style={{ transform: [{ scale: yesCancelScale }], opacity: yesCancelOpacity, marginBottom: 12 }}>
+                    <Pressable
+                      style={styles.confirmButton}
+                      onPress={handleConfirmCancel}
+                      onPressIn={async () => {
+                        if (Platform.OS !== 'web') {
+                          try {
+                            await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+                          } catch (error) {
+                            console.log('Haptic feedback error:', error);
+                          }
                         }
-                      }
-                      Animated.parallel([
-                        Animated.spring(yesCancelScale, {
-                          toValue: 0.9,
-                          useNativeDriver: true,
-                          speed: 50,
-                          bounciness: 0,
-                        }),
-                        Animated.timing(yesCancelOpacity, {
-                          toValue: 0.2,
-                          duration: 150,
-                          useNativeDriver: true,
-                        }),
-                      ]).start();
-                    }}
-                    onPressOut={() => {
-                      Animated.parallel([
-                        Animated.spring(yesCancelScale, {
-                          toValue: 1,
-                          useNativeDriver: true,
-                          speed: 50,
-                          bounciness: 4,
-                        }),
-                        Animated.timing(yesCancelOpacity, {
-                          toValue: 1,
-                          duration: 150,
-                          useNativeDriver: true,
-                        }),
-                      ]).start();
-                    }}
-                    android_ripple={Platform.OS === 'android' ? { color: 'transparent' } : undefined}
-                  >
-                    <Text style={styles.confirmButtonText}>Sí, quiero cancelar</Text>
-                  </Pressable>
-                </Animated.View>
+                        Animated.parallel([
+                          Animated.spring(yesCancelScale, {
+                            toValue: 0.9,
+                            useNativeDriver: true,
+                            speed: 50,
+                            bounciness: 0,
+                          }),
+                          Animated.timing(yesCancelOpacity, {
+                            toValue: 0.2,
+                            duration: 150,
+                            useNativeDriver: true,
+                          }),
+                        ]).start();
+                      }}
+                      onPressOut={() => {
+                        Animated.parallel([
+                          Animated.spring(yesCancelScale, {
+                            toValue: 1,
+                            useNativeDriver: true,
+                            speed: 50,
+                            bounciness: 4,
+                          }),
+                          Animated.timing(yesCancelOpacity, {
+                            toValue: 1,
+                            duration: 150,
+                            useNativeDriver: true,
+                          }),
+                        ]).start();
+                      }}
+                      android_ripple={Platform.OS === 'android' ? { color: 'transparent' } : undefined}
+                    >
+                      <Text style={styles.confirmButtonText}>Sí, quiero cancelar</Text>
+                    </Pressable>
+                  </Animated.View>
 
-                <Animated.View style={{ transform: [{ scale: noContinueScale }], opacity: noContinueOpacity }}>
-                  <Pressable
-                    style={styles.confirmButtonSecondary}
-                    onPress={handleCloseCancelConfirm}
-                    onPressIn={async () => {
-                      if (Platform.OS !== 'web') {
-                        try {
-                          await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-                        } catch (error) {
-                          console.log('Haptic feedback error:', error);
+                  <Animated.View style={{ transform: [{ scale: noContinueScale }], opacity: noContinueOpacity }}>
+                    <Pressable
+                      style={styles.confirmButtonSecondary}
+                      onPress={handleCloseCancelConfirm}
+                      onPressIn={async () => {
+                        if (Platform.OS !== 'web') {
+                          try {
+                            await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+                          } catch (error) {
+                            console.log('Haptic feedback error:', error);
+                          }
                         }
-                      }
-                      Animated.parallel([
-                        Animated.spring(noContinueScale, {
-                          toValue: 0.9,
-                          useNativeDriver: true,
-                          speed: 50,
-                          bounciness: 0,
-                        }),
-                        Animated.timing(noContinueOpacity, {
-                          toValue: 0.2,
-                          duration: 150,
-                          useNativeDriver: true,
-                        }),
-                      ]).start();
-                    }}
-                    onPressOut={() => {
-                      Animated.parallel([
-                        Animated.spring(noContinueScale, {
-                          toValue: 1,
-                          useNativeDriver: true,
-                          speed: 50,
-                          bounciness: 4,
-                        }),
-                        Animated.timing(noContinueOpacity, {
-                          toValue: 1,
-                          duration: 150,
-                          useNativeDriver: true,
-                        }),
-                      ]).start();
-                    }}
-                    android_ripple={Platform.OS === 'android' ? { color: 'transparent' } : undefined}
-                  >
-                    <Text style={styles.confirmButtonSecondaryText}>No, deseo continuar</Text>
-                  </Pressable>
-                </Animated.View>
+                        Animated.parallel([
+                          Animated.spring(noContinueScale, {
+                            toValue: 0.9,
+                            useNativeDriver: true,
+                            speed: 50,
+                            bounciness: 0,
+                          }),
+                          Animated.timing(noContinueOpacity, {
+                            toValue: 0.2,
+                            duration: 150,
+                            useNativeDriver: true,
+                          }),
+                        ]).start();
+                      }}
+                      onPressOut={() => {
+                        Animated.parallel([
+                          Animated.spring(noContinueScale, {
+                            toValue: 1,
+                            useNativeDriver: true,
+                            speed: 50,
+                            bounciness: 4,
+                          }),
+                          Animated.timing(noContinueOpacity, {
+                            toValue: 1,
+                            duration: 150,
+                            useNativeDriver: true,
+                          }),
+                        ]).start();
+                      }}
+                      android_ripple={Platform.OS === 'android' ? { color: 'transparent' } : undefined}
+                    >
+                      <Text style={styles.confirmButtonSecondaryText}>No, deseo continuar</Text>
+                    </Pressable>
+                  </Animated.View>
+                </View>
               </View>
             </View>
           </Animated.View>
@@ -733,6 +733,7 @@ const styles = StyleSheet.create({
   },
   confirmButtons: {
     width: '100%',
+    marginTop: 40,
   },
   confirmButton: {
     width: '100%',
