@@ -574,23 +574,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#fbefd9',
+    backgroundColor: '#ff6b35',
     paddingVertical: 16,
     borderRadius: 14,
     gap: 8,
+    marginBottom: 25,
     ...BUTTON_STYLES.elevatedShadow,
   },
   completeButtonDisabled: {
-    backgroundColor: 'rgba(251, 239, 217, 0.15)',
+    backgroundColor: 'rgba(255, 107, 53, 0.3)',
   },
   completeButtonText: {
     fontSize: 20,
     fontWeight: '600' as const,
-    color: '#000000',
+    color: '#ffffff',
     letterSpacing: -0.3,
   },
   completeButtonTextDisabled: {
-    color: 'rgba(251, 239, 217, 0.35)',
+    color: 'rgba(255, 255, 255, 0.4)',
   },
   inputText: {
     fontSize: 16,
