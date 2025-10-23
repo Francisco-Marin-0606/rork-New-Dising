@@ -713,8 +713,9 @@ const styles = StyleSheet.create({
   },
   confirmBody: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
+    marginTop: 80,
   },
   confirmTitle: {
     fontSize: 32,
