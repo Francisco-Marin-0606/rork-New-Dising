@@ -496,16 +496,61 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
             )}
 
             {/* Android: diálogo nativo (confirmación corregida en handleDateChange) */}
-           {showDatePicker && Platform.OS === 'android' && (
-  <DateTimePicker
-    testID="dateTimePicker"
-    value={tempDate}
-    mode="date"
-    display="spinner"
-    onChange={handleDateChange}
-    maximumDate={new Date()}
-    accentColor="#ff6b35"    // fuerza el color naranja en botones
-  />
+          {showDatePicker && Platform.OS === 'android' && (
+  <View
+    style={{
+      backgroundColor: '#1a1a1a',
+      borderRadius: 12,
+      marginHorizontal: 24,
+      paddingVertical: 8,
+      elevation: 12,
+    }}
+  >
+    <DateTimePicker
+      testID="dateTimePicker"
+      value={tempDate}
+      mode="date"
+      display="spinner"
+      onChange={handleDateChange}
+      maximumDate={new Date()}
+      themeVariant="dark"
+    />
+
+    {/* Botones personalizados */}
+    <View
+      style={{
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        borderTopWidth: 1,
+        borderTopColor: 'rgba(255,255,255,0.1)',
+        paddingVertical: 10,
+      }}
+    >
+      <Pressable onPress={() => setShowDatePicker(false)}>
+        <Text
+          style={{
+            color: '#ff6b35',
+            fontWeight: '600',
+            fontSize: 16,
+          }}
+        >
+          Cancelar
+        </Text>
+      </Pressable>
+
+      <Pressable onPress={handleDatePickerDone}>
+        <Text
+          style={{
+            color: '#ff6b35',
+            fontWeight: '600',
+            fontSize: 16,
+          }}
+        >
+          Aceptar
+        </Text>
+      </Pressable>
+    </View>
+  </View>
 )}
             <View style={styles.footer}>
               <Animated.View
