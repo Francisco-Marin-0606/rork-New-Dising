@@ -19,12 +19,14 @@ import type { TextInput as RNTextInput } from 'react-native';
 import { router, Stack } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { BUTTON_STYLES } from '@/constants/buttonStyles';
+import CompleteDataModal from '@/components/CompleteDataModal';
 
 export default function AuthScreen() {
   const [code, setCode] = useState<string[]>(['', '', '', '']);
   const [timer, setTimer] = useState<number>(555);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isResending, setIsResending] = useState<boolean>(false);
+  const [showCompleteDataModal, setShowCompleteDataModal] = useState<boolean>(false);
   const inputRefs = useRef<(RNTextInput | null)[]>([]);
   const backButtonScale = useRef(new Animated.Value(1)).current;
   const verifyButtonScale = useRef(new Animated.Value(1)).current;
@@ -130,11 +132,9 @@ export default function AuthScreen() {
     }
     const fullCode = code.join('');
     console.log('Code entered:', fullCode);
-    router.push('/');
     
-    setTimeout(() => {
-      setIsSubmitting(false);
-    }, 1000);
+    setShowCompleteDataModal(true);
+    setIsSubmitting(false);
   }, [code, isSubmitting]);
 
   const handleResendCode = useCallback(async () => {
@@ -157,7 +157,11 @@ export default function AuthScreen() {
 
   const isCodeComplete = code.every(digit => digit !== '');
 
-
+  const handleCompleteData = useCallback((data: { name: string; gender: string; birthdate: string }) => {
+    console.log('User data completed:', data);
+    setShowCompleteDataModal(false);
+    router.push('/');
+  }, []);
 
   return (
     <View style={styles.root}>
@@ -356,6 +360,11 @@ export default function AuthScreen() {
             </View>
         </ScrollView>
       </SafeAreaView>
+      
+      <CompleteDataModal
+        visible={showCompleteDataModal}
+        onComplete={handleCompleteData}
+      />
     </View>
   );
 }
