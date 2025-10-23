@@ -11,7 +11,6 @@ import {
   TextInput,
   ScrollView,
   Keyboard,
-  TouchableWithoutFeedback,
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -38,6 +37,9 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
   const [birthdate, setBirthdate] = useState<string>('');
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
   const [date, setDate] = useState<Date>(new Date(2004, 9, 19));
+  
+  const datePickerSlideAnim = useRef(new Animated.Value(500)).current;
+  const datePickerOpacityAnim = useRef(new Animated.Value(0)).current;
 
   const buttonAnimation = useRef({
     scale: new Animated.Value(1),
@@ -190,6 +192,40 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
     }
   };
 
+  const animateDatePickerIn = useCallback(() => {
+    Animated.parallel([
+      Animated.timing(datePickerSlideAnim, {
+        toValue: 0,
+        duration: 300,
+        easing: Easing.bezier(0.4, 0.0, 0.2, 1),
+        useNativeDriver: true,
+      }),
+      Animated.timing(datePickerOpacityAnim, {
+        toValue: 1,
+        duration: 250,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [datePickerSlideAnim, datePickerOpacityAnim]);
+
+  const animateDatePickerOut = useCallback(() => {
+    Animated.parallel([
+      Animated.timing(datePickerSlideAnim, {
+        toValue: 500,
+        duration: 250,
+        easing: Easing.bezier(0.4, 0.0, 0.2, 1),
+        useNativeDriver: true,
+      }),
+      Animated.timing(datePickerOpacityAnim, {
+        toValue: 0,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      setShowDatePicker(false);
+    });
+  }, [datePickerSlideAnim, datePickerOpacityAnim]);
+
   const handleDatePress = async () => {
     if (Platform.OS !== 'web') {
       try {
@@ -202,9 +238,24 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
     setShowDatePicker(true);
   };
 
-  const handleDatePickerDone = () => {
-    setShowDatePicker(false);
+  const handleDatePickerDone = async () => {
+    if (Platform.OS !== 'web') {
+      try {
+        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      } catch (error) {
+        console.log('Haptic feedback error:', error);
+      }
+    }
+    animateDatePickerOut();
   };
+
+  useEffect(() => {
+    if (showDatePicker && Platform.OS === 'ios') {
+      datePickerSlideAnim.setValue(500);
+      datePickerOpacityAnim.setValue(0);
+      animateDatePickerIn();
+    }
+  }, [showDatePicker, animateDatePickerIn, datePickerSlideAnim, datePickerOpacityAnim]);
 
   const isFormValid = name.trim().length > 0 && birthdate.length > 0;
 
@@ -224,16 +275,15 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
         ]}
         testID="complete-data-container"
       >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View style={styles.content}>
-            <ScrollView 
-              style={styles.scrollView}
-              contentContainerStyle={styles.scrollContent}
-              showsVerticalScrollIndicator={false}
-              keyboardShouldPersistTaps="handled"
-              keyboardDismissMode={Platform.OS === 'ios' ? 'on-drag' : 'none'}
-              scrollEventThrottle={16}
-            >
+        <View style={styles.content}>
+          <ScrollView 
+            style={styles.scrollView}
+            contentContainerStyle={styles.scrollContent}
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+            keyboardDismissMode="on-drag"
+            scrollEventThrottle={16}
+          >
               <View style={styles.formContainer}>
                 <Text style={styles.mainTitle}>Completa tus datos antes de pedir tu hipnosis</Text>
 
@@ -330,37 +380,63 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
                   </Pressable>
                 </View>
 
-                {showDatePicker && Platform.OS === 'ios' && (
-                  <View style={styles.datePickerContainer}>
-                    <View style={styles.datePickerHeader}>
-                      <Pressable onPress={handleDatePickerDone}>
-                        <Text style={styles.datePickerDoneText}>Listo</Text>
-                      </Pressable>
-                    </View>
-                    <DateTimePicker
-                      testID="dateTimePicker"
-                      value={date}
-                      mode="date"
-                      display="spinner"
-                      onChange={handleDateChange}
-                      textColor="#fbefd9"
-                      maximumDate={new Date()}
-                    />
-                  </View>
-                )}
 
-                {showDatePicker && Platform.OS === 'android' && (
-                  <DateTimePicker
-                    testID="dateTimePicker"
-                    value={date}
-                    mode="date"
-                    display="spinner"
-                    onChange={handleDateChange}
-                    maximumDate={new Date()}
-                  />
-                )}
               </View>
             </ScrollView>
+
+            {showDatePicker && Platform.OS === 'ios' && (
+              <Pressable
+                style={styles.datePickerOverlay}
+                onPress={handleDatePickerDone}
+                testID="date-picker-backdrop"
+              >
+                <Animated.View 
+                  style={{
+                    opacity: datePickerOpacityAnim,
+                  }}
+                >
+                  <Pressable 
+                    style={styles.datePickerPopup}
+                    onPress={(e) => e.stopPropagation()}
+                  >
+                    <Animated.View
+                      style={[
+                        styles.datePickerPopupContent,
+                        {
+                          transform: [{ translateY: datePickerSlideAnim }],
+                        },
+                      ]}
+                    >
+                      <View style={styles.datePickerHeader}>
+                        <Pressable onPress={handleDatePickerDone}>
+                          <Text style={styles.datePickerDoneText}>Listo</Text>
+                        </Pressable>
+                      </View>
+                      <DateTimePicker
+                        testID="dateTimePicker"
+                        value={date}
+                        mode="date"
+                        display="spinner"
+                        onChange={handleDateChange}
+                        textColor="#fbefd9"
+                        maximumDate={new Date()}
+                      />
+                    </Animated.View>
+                  </Pressable>
+                </Animated.View>
+              </Pressable>
+            )}
+
+            {showDatePicker && Platform.OS === 'android' && (
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={date}
+                mode="date"
+                display="spinner"
+                onChange={handleDateChange}
+                maximumDate={new Date()}
+              />
+            )}
 
             <View style={styles.footer}>
               <Animated.View
@@ -392,7 +468,6 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
               </Animated.View>
             </View>
           </View>
-        </TouchableWithoutFeedback>
       </Animated.View>
     </View>
   );
@@ -552,12 +627,34 @@ const styles = StyleSheet.create({
   placeholderText: {
     color: 'rgba(251, 239, 217, 0.3)',
   },
-  datePickerContainer: {
+  datePickerOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 10000,
+  },
+  datePickerPopup: {
+    width: '85%',
+    maxWidth: 340,
+  },
+  datePickerPopupContent: {
     backgroundColor: '#2a1410',
-    borderRadius: 12,
+    borderRadius: 16,
     paddingTop: 8,
     paddingBottom: 16,
-    marginTop: 8,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 8,
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 16,
+    elevation: 24,
   },
   datePickerHeader: {
     flexDirection: 'row',

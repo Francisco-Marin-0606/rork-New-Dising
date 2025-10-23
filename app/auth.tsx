@@ -133,8 +133,12 @@ export default function AuthScreen() {
     const fullCode = code.join('');
     console.log('Code entered:', fullCode);
     
-    setShowCompleteDataModal(true);
-    setIsSubmitting(false);
+    Keyboard.dismiss();
+    
+    setTimeout(() => {
+      setShowCompleteDataModal(true);
+      setIsSubmitting(false);
+    }, 100);
   }, [code, isSubmitting]);
 
   const handleResendCode = useCallback(async () => {
