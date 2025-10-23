@@ -715,7 +715,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    marginTop: 80,
+    marginTop: 110,
   },
   confirmTitle: {
     fontSize: 32,
