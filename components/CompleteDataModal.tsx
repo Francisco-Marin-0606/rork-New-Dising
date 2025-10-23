@@ -160,34 +160,40 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
 
   const handleDateChange = (event: any, selectedDate?: Date) => {
     if (Platform.OS === 'android') {
-      setShowDatePicker(false);
-      
       if (event.type === 'dismissed') {
+        setShowDatePicker(false);
         return;
       }
       
-      if (!selectedDate) {
-        return;
+      if (event.type === 'set') {
+        setShowDatePicker(false);
+        
+        if (!selectedDate) {
+          return;
+        }
+        
+        const today = new Date();
+        const threeYearsAgo = new Date();
+        threeYearsAgo.setFullYear(today.getFullYear() - 3);
+        
+        if (selectedDate > threeYearsAgo) {
+          Alert.alert(
+            '¿Seguro que eres tan joven?',
+            'No me cuadra...\nDale otra vez.',
+            [{ text: 'OK', style: 'default' }]
+          );
+          return;
+        }
+        
+        setDate(selectedDate);
+        setTempDate(selectedDate);
+        const day = String(selectedDate.getDate()).padStart(2, '0');
+        const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
+        const year = selectedDate.getFullYear();
+        setBirthdate(`${day}/${month}/${year}`);
+      } else if (selectedDate) {
+        setTempDate(selectedDate);
       }
-      
-      const today = new Date();
-      const threeYearsAgo = new Date();
-      threeYearsAgo.setFullYear(today.getFullYear() - 3);
-      
-      if (selectedDate > threeYearsAgo) {
-        Alert.alert(
-          '¿Seguro que eres tan joven?',
-          'No me cuadra...\nDale otra vez.',
-          [{ text: 'OK', style: 'default' }]
-        );
-        return;
-      }
-      
-      setDate(selectedDate);
-      const day = String(selectedDate.getDate()).padStart(2, '0');
-      const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
-      const year = selectedDate.getFullYear();
-      setBirthdate(`${day}/${month}/${year}`);
       return;
     }
     
@@ -494,7 +500,7 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
             {showDatePicker && Platform.OS === 'android' && (
               <DateTimePicker
                 testID="dateTimePicker"
-                value={date}
+                value={tempDate}
                 mode="date"
                 display="spinner"
                 onChange={handleDateChange}
