@@ -537,7 +537,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     zIndex: 2,
     width: 254,
-    alignSelf: 'center',
+    alignSelf: 'flex-start',
   },
   genderButton: {
     width: 121,
