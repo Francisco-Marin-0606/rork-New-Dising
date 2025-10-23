@@ -102,10 +102,24 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
         console.log('Haptic feedback error:', error);
       }
     }
+    
+    const today = new Date();
+    const threeYearsAgo = new Date();
+    threeYearsAgo.setFullYear(today.getFullYear() - 3);
+    
+    if (date > threeYearsAgo) {
+      Alert.alert(
+        '¿Seguro que eres tan joven?',
+        'No me cuadra...\nDale otra vez.',
+        [{ text: 'OK', style: 'default' }]
+      );
+      return;
+    }
+    
     const trimmedName = name.trim();
     console.log('Completing data:', { name: trimmedName, gender, birthdate });
     onComplete({ name: trimmedName, gender, birthdate });
-  }, [name, gender, birthdate, onComplete]);
+  }, [name, gender, birthdate, date, onComplete]);
 
   const handlePressIn = () => {
     Animated.parallel([
@@ -162,19 +176,6 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
       setShowDatePicker(false);
     }
     if (selectedDate) {
-      const today = new Date();
-      const threeYearsAgo = new Date();
-      threeYearsAgo.setFullYear(today.getFullYear() - 3);
-      
-      if (selectedDate > threeYearsAgo) {
-        Alert.alert(
-          '¿Seguro que eres tan joven?',
-          'No me cuadra...\nDale otra vez.',
-          [{ text: 'OK', style: 'default' }]
-        );
-        return;
-      }
-      
       setDate(selectedDate);
       const day = String(selectedDate.getDate()).padStart(2, '0');
       const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
@@ -447,7 +448,7 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
                       />
                       <View style={styles.datePickerFooter}>
                         <Pressable onPress={handleDatePickerDone}>
-                          <Text style={styles.datePickerDoneText}>Confirmar</Text>
+                          <Text style={styles.datePickerDoneText}>CONFIRMAR</Text>
                         </Pressable>
                       </View>
                     </Animated.View>
