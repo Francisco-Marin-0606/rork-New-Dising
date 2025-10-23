@@ -478,7 +478,6 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    paddingHorizontal: 44,
     paddingTop: Platform.OS === 'android' ? 60 : 90,
     paddingBottom: 40,
   },
@@ -488,6 +487,7 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingTop: 0,
     paddingBottom: 180,
+    paddingHorizontal: 44,
   },
   formContainer: {
     gap: 24,
