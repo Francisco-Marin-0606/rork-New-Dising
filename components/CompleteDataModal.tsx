@@ -11,6 +11,7 @@ import {
   TextInput,
   ScrollView,
   Keyboard,
+  Alert,
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -155,6 +156,19 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
       setShowDatePicker(false);
     }
     if (selectedDate) {
+      const today = new Date();
+      const threeYearsAgo = new Date();
+      threeYearsAgo.setFullYear(today.getFullYear() - 3);
+      
+      if (selectedDate > threeYearsAgo) {
+        Alert.alert(
+          '¿Seguro que eres tan joven?',
+          'No me cuadra...\nDale otra vez.',
+          [{ text: 'OK', style: 'default' }]
+        );
+        return;
+      }
+      
       setDate(selectedDate);
       const day = String(selectedDate.getDate()).padStart(2, '0');
       const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
@@ -334,8 +348,8 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
 
                 <View style={styles.fieldContainer}>
                   <Text style={styles.label}>Fecha de nacimiento</Text>
-                  <Pressable onPress={handleDatePress}>
-                    <View style={styles.input} pointerEvents="none">
+                  <Pressable onPress={handleDatePress} style={styles.dateInputWrapper}>
+                    <View style={styles.dateInput} pointerEvents="none">
                       <Text style={[styles.inputText, !birthdate && styles.placeholderText]}>
                         {birthdate || '19/10/2004'}
                       </Text>
@@ -599,6 +613,17 @@ const styles = StyleSheet.create({
   },
   placeholderText: {
     color: 'rgba(251, 239, 217, 0.3)',
+  },
+  dateInputWrapper: {
+    alignSelf: 'flex-start',
+  },
+  dateInput: {
+    backgroundColor: 'rgba(251, 239, 217, 0.08)',
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    borderWidth: 1,
+    borderColor: 'rgba(251, 239, 217, 0.2)',
   },
   datePickerOverlay: {
     position: 'absolute',
