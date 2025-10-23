@@ -540,7 +540,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   genderButton: {
-    flex: 1,
+    width: 121,
     paddingVertical: 12,
     borderRadius: 12,
     alignItems: 'center',
