@@ -169,7 +169,10 @@ export default function EditProfileModal({ visible, onClose }: EditProfileModalP
         console.log('Haptic feedback error:', error);
       }
     }
-    console.log('Saving profile:', { nombre, apellido, nombrePreferido, email, fechaNacimiento, genero });
+    const trimmedNombre = nombre.trim();
+    const trimmedApellido = apellido.trim();
+    const trimmedNombrePreferido = nombrePreferido.trim();
+    console.log('Saving profile:', { nombre: trimmedNombre, apellido: trimmedApellido, nombrePreferido: trimmedNombrePreferido, email, fechaNacimiento, genero });
     closeModal();
   }, [nombre, apellido, nombrePreferido, email, fechaNacimiento, genero, closeModal]);
 

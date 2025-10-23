@@ -98,8 +98,9 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
         console.log('Haptic feedback error:', error);
       }
     }
-    console.log('Completing data:', { name, gender, birthdate });
-    onComplete({ name, gender, birthdate });
+    const trimmedName = name.trim();
+    console.log('Completing data:', { name: trimmedName, gender, birthdate });
+    onComplete({ name: trimmedName, gender, birthdate });
   }, [name, gender, birthdate, onComplete]);
 
   const handlePressIn = () => {
