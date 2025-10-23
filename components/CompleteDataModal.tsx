@@ -32,23 +32,22 @@ interface UserData {
 
 export default function CompleteDataModal({ visible, onComplete }: CompleteDataModalProps) {
   const { height: screenHeight } = useWindowDimensions();
-  
+
   const translateY = useRef(new Animated.Value(screenHeight)).current;
   const opacity = useRef(new Animated.Value(0)).current;
-  
+
   const [name, setName] = useState<string>('');
   const handleNameChange = (text: string) => {
     const validText = text.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]/g, '');
     const limitedText = validText.slice(0, 25);
     setName(limitedText);
   };
-
   const [gender, setGender] = useState<'Hombre' | 'Mujer'>('Hombre');
   const [birthdate, setBirthdate] = useState<string>('');
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
   const [date, setDate] = useState<Date>(new Date(2004, 9, 19));
   const [tempDate, setTempDate] = useState<Date>(new Date(2004, 9, 19));
-  
+
   const datePickerSlideAnim = useRef(new Animated.Value(500)).current;
   const datePickerOpacityAnim = useRef(new Animated.Value(0)).current;
 
@@ -83,9 +82,7 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
   }, [opacity, translateY, easeInOut]);
 
   useEffect(() => {
-    if (visible) {
-      openModal();
-    }
+    if (visible) openModal();
   }, [visible, openModal]);
 
   useEffect(() => {
@@ -129,41 +126,25 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
     }).start();
   };
 
-  // ====== DatePicker Handlers ======
-  const handleDateChange = (event: any, selectedDate?: Date) => {
-    // iOS overlay: llega event sin "type"; Android (overlay propio) también
+  // ============ DatePicker ============
+  const handleDateChange = (_event: any, selectedDate?: Date) => {
+    // Solo se actualiza el temporal; NO se confirma.
     if (selectedDate) setTempDate(selectedDate);
-
-    // Si estuvieras usando diálogo nativo Android:
-    if (Platform.OS === 'android' && event?.type === 'dismissed') {
-      setShowDatePicker(false);
-      setTempDate(date);
-    }
   };
 
   const animateDatePickerIn = useCallback(() => {
     Animated.parallel([
-      Animated.timing(datePickerSlideAnim, {
-        toValue: 0,
-        duration: 300,
-        easing: Easing.bezier(0.4, 0.0, 0.2, 1),
-        useNativeDriver: true,
-      }),
+      Animated.timing(datePickerSlideAnim, { toValue: 0, duration: 300, easing: easeInOut, useNativeDriver: true }),
       Animated.timing(datePickerOpacityAnim, { toValue: 1, duration: 250, useNativeDriver: true }),
     ]).start();
-  }, [datePickerSlideAnim, datePickerOpacityAnim]);
+  }, [datePickerSlideAnim, datePickerOpacityAnim, easeInOut]);
 
   const animateDatePickerOut = useCallback(() => {
     Animated.parallel([
-      Animated.timing(datePickerSlideAnim, {
-        toValue: 500,
-        duration: 250,
-        easing: Easing.bezier(0.4, 0.0, 0.2, 1),
-        useNativeDriver: true,
-      }),
+      Animated.timing(datePickerSlideAnim, { toValue: 500, duration: 250, easing: easeInOut, useNativeDriver: true }),
       Animated.timing(datePickerOpacityAnim, { toValue: 0, duration: 200, useNativeDriver: true }),
-    ]).start(() => { setShowDatePicker(false); });
-  }, [datePickerSlideAnim, datePickerOpacityAnim]);
+    ]).start(() => setShowDatePicker(false)); // cerrar SIN confirmar
+  }, [datePickerSlideAnim, datePickerOpacityAnim, easeInOut]);
 
   const handleDatePress = async () => {
     if (Platform.OS !== 'web') {
@@ -175,7 +156,7 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
   };
 
   const handleDatePickerCancel = () => {
-    // Cancelar: no confirmar, restaurar y cerrar
+    // Restauro y cierro SIN confirmar
     setTempDate(date);
     animateDatePickerOut();
   };
@@ -184,15 +165,15 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
     if (Platform.OS !== 'web') {
       try { await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); } catch {}
     }
+    // Validación edad
     const today = new Date();
     const threeYearsAgo = new Date();
     threeYearsAgo.setFullYear(today.getFullYear() - 3);
-
     if (tempDate > threeYearsAgo) {
       Alert.alert('¿Seguro que eres tan joven?', 'No me cuadra...\nDale otra vez.', [{ text: 'OK', style: 'default' }]);
-      return; // no cerrar; que corrija
+      return; // no cierro; que corrija
     }
-
+    // Confirmo recién acá
     setDate(tempDate);
     const day = String(tempDate.getDate()).padStart(2, '0');
     const month = String(tempDate.getMonth() + 1).padStart(2, '0');
@@ -202,14 +183,13 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
   };
 
   useEffect(() => {
-    // Animación de entrada SOLO cuando usamos overlay (iOS y ahora Android también)
     if (showDatePicker) {
       datePickerSlideAnim.setValue(500);
       datePickerOpacityAnim.setValue(0);
       animateDatePickerIn();
     }
   }, [showDatePicker, animateDatePickerIn, datePickerSlideAnim, datePickerOpacityAnim]);
-  // ================================
+  // ====================================
 
   useEffect(() => {
     const show = Keyboard.addListener(
@@ -219,16 +199,12 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
         const screenHeight = Dimensions.get('window').height;
         const keyboardTop = screenHeight - e.endCoordinates.height;
         setTimeout(() => {
-          nameInputRef.current?.measureInWindow((x, y, width, height) => {
-            const bottom = y + height;
+          nameInputRef.current?.measureInWindow((x, y, _w, h) => {
+            const bottom = y + h;
             const overlap = bottom + 12 - keyboardTop;
             if (overlap > 0) {
               hasShiftedRef.current = true;
-              Animated.timing(formTranslateY, {
-                toValue: -overlap,
-                duration: Platform.OS === 'ios' ? 220 : 0,
-                useNativeDriver: true,
-              }).start();
+              Animated.timing(formTranslateY, { toValue: -overlap, duration: Platform.OS === 'ios' ? 220 : 0, useNativeDriver: true }).start();
             }
           });
         }, Platform.OS === 'ios' ? 50 : 100);
@@ -240,11 +216,7 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
       () => {
         if (!hasShiftedRef.current) return;
         hasShiftedRef.current = false;
-        Animated.timing(formTranslateY, {
-          toValue: 0,
-          duration: Platform.OS === 'ios' ? 220 : 0,
-          useNativeDriver: true,
-        }).start();
+        Animated.timing(formTranslateY, { toValue: 0, duration: Platform.OS === 'ios' ? 220 : 0, useNativeDriver: true }).start();
       }
     );
 
@@ -252,12 +224,13 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
   }, [formTranslateY]);
 
   const isFormValid = name.trim().length > 0 && birthdate.length > 0;
+
   if (!visible) return null;
 
   return (
     <View style={styles.overlay} testID="complete-data-overlay">
       <Animated.View style={[styles.backdrop, { opacity }]} pointerEvents="none" />
-      
+
       <Animated.View
         style={[styles.modalContainer, { height: screenHeight, transform: [{ translateY }] }]}
         testID="complete-data-container"
@@ -267,7 +240,7 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
             <View style={StyleSheet.absoluteFill} pointerEvents="box-none" />
           </TouchableWithoutFeedback>
 
-          <ScrollView 
+          <ScrollView
             style={styles.scrollView}
             contentContainerStyle={styles.scrollContent}
             showsVerticalScrollIndicator={false}
@@ -306,24 +279,15 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
                   <Animated.View
                     style={[
                       styles.toggleSelector,
-                      {
-                        transform: [{
-                          translateX: togglePosition.interpolate({ inputRange: [0, 1], outputRange: [0, 133] }),
-                        }],
-                      },
+                      { transform: [{ translateX: togglePosition.interpolate({ inputRange: [0, 1], outputRange: [0, 133] }) }] },
                     ]}
                   />
                   <View style={styles.genderContainer}>
                     <Pressable style={styles.genderButton} onPress={() => handleGenderPress('Hombre')} testID="gender-hombre-button">
-                      <Text style={[styles.genderButtonText, gender === 'Hombre' && styles.genderButtonTextActive]}>
-                        Hombre
-                      </Text>
+                      <Text style={[styles.genderButtonText, gender === 'Hombre' && styles.genderButtonTextActive]}>Hombre</Text>
                     </Pressable>
-
                     <Pressable style={styles.genderButton} onPress={() => handleGenderPress('Mujer')} testID="gender-mujer-button">
-                      <Text style={[styles.genderButtonText, gender === 'Mujer' && styles.genderButtonTextActive]}>
-                        Mujer
-                      </Text>
+                      <Text style={[styles.genderButtonText, gender === 'Mujer' && styles.genderButtonTextActive]}>Mujer</Text>
                     </Pressable>
                   </View>
                 </View>
@@ -342,7 +306,7 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
             </Animated.View>
           </ScrollView>
 
-          {/* iOS overlay con animaciones (sin cambios) */}
+          {/* iOS overlay (igual que tenías) */}
           {showDatePicker && Platform.OS === 'ios' && (
             <Pressable style={styles.datePickerOverlay} onPress={handleDatePickerDone} testID="date-picker-backdrop">
               <Animated.View style={{ opacity: datePickerOpacityAnim }}>
@@ -368,8 +332,9 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
             </Pressable>
           )}
 
-          {/* ANDROID: overlay propio con botones naranjas (no diálogo nativo) */}
+          {/* ANDROID: overlay propio + botones naranjas */}
           {showDatePicker && Platform.OS === 'android' && (
+            // OJO: en Android el backdrop CANCELA (no confirma).
             <Pressable style={styles.datePickerOverlay} onPress={handleDatePickerCancel} testID="date-picker-backdrop">
               <Animated.View style={{ opacity: datePickerOpacityAnim }}>
                 <Pressable style={styles.datePickerPopup} onPress={(e) => e.stopPropagation()}>
@@ -381,7 +346,7 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
                       display="spinner"
                       onChange={handleDateChange}
                       maximumDate={new Date()}
-                      themeVariant="dark" // fondo oscuro, no fuerza modo global
+                      themeVariant="dark"
                     />
                     <View style={styles.androidButtonsRow}>
                       <Pressable onPress={handleDatePickerCancel} hitSlop={8}>
@@ -451,7 +416,8 @@ const styles = StyleSheet.create({
   dateInputWrapper: { alignSelf: 'flex-start' },
   dateInput: { backgroundColor: 'rgba(251, 239, 217, 0.08)', borderRadius: 12, paddingHorizontal: 16, paddingVertical: 14, borderWidth: 1, borderColor: 'rgba(251, 239, 217, 0.2)' },
 
-  datePickerOverlay: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0, 0, 0, 0.6)', justifyContent: 'center', alignItems: 'center', zIndex: 10000 },
+  // Overlay para ambos SO
+  datePickerOverlay: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'center', alignItems: 'center', zIndex: 10000 },
   datePickerPopup: { width: '85%', maxWidth: 340 },
   datePickerPopupContent: {
     backgroundColor: '#2a1410',
@@ -465,8 +431,9 @@ const styles = StyleSheet.create({
     elevation: 24,
   },
   datePickerFooter: { flexDirection: 'row', justifyContent: 'center', paddingHorizontal: 16, paddingTop: 12 },
+  datePickerDoneText: { fontSize: 16, fontWeight: '600', color: '#ff6b35' },
 
-  // Android botones naranjas
+  // Android: fila de botones naranjas
   androidButtonsRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -476,10 +443,5 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: 'rgba(255,255,255,0.08)',
   },
-  androidActionText: {
-    color: '#ff6b35',
-    fontWeight: '700',
-    fontSize: 16,
-    letterSpacing: 0.2,
-  },
+  androidActionText: { color: '#ff6b35', fontWeight: '700', fontSize: 16, letterSpacing: 0.2 },
 });
