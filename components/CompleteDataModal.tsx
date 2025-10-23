@@ -290,7 +290,7 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
                             {
                               translateX: togglePosition.interpolate({
                                 inputRange: [0, 1],
-                                outputRange: [0, 127],
+                                outputRange: [0, 133],
                               }),
                             },
                           ],
@@ -525,7 +525,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     left: 0,
-    width: 115,
+    width: 121,
     height: 48,
     backgroundColor: '#ff6b35',
     borderRadius: 12,
