@@ -154,6 +154,9 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
   };
 
   const handleDateChange = (event: any, selectedDate?: Date) => {
+    if (Platform.OS === 'android') {
+      setShowDatePicker(false);
+    }
     if (selectedDate) {
       const today = new Date();
       const threeYearsAgo = new Date();
@@ -233,19 +236,8 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
     animateDatePickerOut();
   };
 
-  const handleDatePickerCancel = async () => {
-    if (Platform.OS !== 'web') {
-      try {
-        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-      } catch (error) {
-        console.log('Haptic feedback error:', error);
-      }
-    }
-    animateDatePickerOut();
-  };
-
   useEffect(() => {
-    if (showDatePicker) {
+    if (showDatePicker && Platform.OS === 'ios') {
       datePickerSlideAnim.setValue(500);
       datePickerOpacityAnim.setValue(0);
       animateDatePickerIn();
@@ -372,10 +364,10 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
               </View>
             </ScrollView>
 
-            {showDatePicker && (
+            {showDatePicker && Platform.OS === 'ios' && (
               <Pressable
                 style={styles.datePickerOverlay}
-                onPress={handleDatePickerCancel}
+                onPress={handleDatePickerDone}
                 testID="date-picker-backdrop"
               >
                 <Animated.View 
@@ -405,17 +397,25 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
                         maximumDate={new Date()}
                       />
                       <View style={styles.datePickerFooter}>
-                        <Pressable onPress={handleDatePickerCancel}>
-                          <Text style={styles.datePickerButtonText}>Cancelar</Text>
-                        </Pressable>
                         <Pressable onPress={handleDatePickerDone}>
-                          <Text style={styles.datePickerButtonText}>Confirmar</Text>
+                          <Text style={styles.datePickerDoneText}>Confirmar</Text>
                         </Pressable>
                       </View>
                     </Animated.View>
                   </Pressable>
                 </Animated.View>
               </Pressable>
+            )}
+
+            {showDatePicker && Platform.OS === 'android' && (
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={date}
+                mode="date"
+                display="spinner"
+                onChange={handleDateChange}
+                maximumDate={new Date()}
+              />
             )}
 
             <View style={styles.footer}>
@@ -660,11 +660,11 @@ const styles = StyleSheet.create({
   },
   datePickerFooter: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     paddingHorizontal: 16,
     paddingTop: 12,
   },
-  datePickerButtonText: {
+  datePickerDoneText: {
     fontSize: 16,
     fontWeight: '600',
     color: '#ff6b35',
