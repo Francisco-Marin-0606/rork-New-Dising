@@ -565,6 +565,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    marginBottom: 40,
     marginTop: Platform.OS === 'android' ? 0 : 30,
   },
   closeButton: {
