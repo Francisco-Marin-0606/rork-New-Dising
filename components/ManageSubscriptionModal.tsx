@@ -706,7 +706,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    marginBottom: 40,
     marginTop: Platform.OS === 'android' ? 0 : 30,
   },
   confirmCloseButton: {
