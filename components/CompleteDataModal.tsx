@@ -47,6 +47,7 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
   const [birthdate, setBirthdate] = useState<string>('');
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
   const [date, setDate] = useState<Date>(new Date(2004, 9, 19));
+  const [tempDate, setTempDate] = useState<Date>(new Date(2004, 9, 19));
   
   const datePickerSlideAnim = useRef(new Animated.Value(500)).current;
   const datePickerOpacityAnim = useRef(new Animated.Value(0)).current;
@@ -168,9 +169,7 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
       if (!selectedDate) {
         return;
       }
-    }
-    
-    if (selectedDate) {
+      
       const today = new Date();
       const threeYearsAgo = new Date();
       threeYearsAgo.setFullYear(today.getFullYear() - 3);
@@ -189,6 +188,11 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
       const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
       const year = selectedDate.getFullYear();
       setBirthdate(`${day}/${month}/${year}`);
+      return;
+    }
+    
+    if (selectedDate) {
+      setTempDate(selectedDate);
     }
   };
 
@@ -235,6 +239,7 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
       }
     }
     Keyboard.dismiss();
+    setTempDate(date);
     setShowDatePicker(true);
   };
 
@@ -246,6 +251,27 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
         console.log('Haptic feedback error:', error);
       }
     }
+    
+    const today = new Date();
+    const threeYearsAgo = new Date();
+    threeYearsAgo.setFullYear(today.getFullYear() - 3);
+    
+    if (tempDate > threeYearsAgo) {
+      Alert.alert(
+        '¿Seguro que eres tan joven?',
+        'No me cuadra...\nDale otra vez.',
+        [{ text: 'OK', style: 'default' }]
+      );
+      animateDatePickerOut();
+      return;
+    }
+    
+    setDate(tempDate);
+    const day = String(tempDate.getDate()).padStart(2, '0');
+    const month = String(tempDate.getMonth() + 1).padStart(2, '0');
+    const year = tempDate.getFullYear();
+    setBirthdate(`${day}/${month}/${year}`);
+    
     animateDatePickerOut();
   };
 
@@ -447,7 +473,7 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
                     >
                       <DateTimePicker
                         testID="dateTimePicker"
-                        value={date}
+                        value={tempDate}
                         mode="date"
                         display="spinner"
                         onChange={handleDateChange}
