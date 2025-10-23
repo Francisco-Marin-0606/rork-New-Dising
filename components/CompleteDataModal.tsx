@@ -13,6 +13,7 @@ import {
   Keyboard,
   Alert,
   TouchableWithoutFeedback,
+  Dimensions,
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -56,6 +57,9 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
   }).current;
 
   const togglePosition = useRef(new Animated.Value(0)).current;
+  const formTranslateY = useRef(new Animated.Value(0)).current;
+  const nameInputRef = useRef<View>(null);
+  const hasShiftedRef = useRef<boolean>(false);
 
   const DURATION_OPEN = 400;
   const easeInOut = Easing.bezier(0.4, 0.0, 0.2, 1);
@@ -244,6 +248,49 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
     }
   }, [showDatePicker, animateDatePickerIn, datePickerSlideAnim, datePickerOpacityAnim]);
 
+  useEffect(() => {
+    const show = Keyboard.addListener(
+      Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
+      (e) => {
+        if (!nameInputRef.current) return;
+        const screenHeight = Dimensions.get('window').height;
+        const keyboardTop = screenHeight - e.endCoordinates.height;
+        setTimeout(() => {
+          nameInputRef.current?.measureInWindow((x, y, width, height) => {
+            const bottom = y + height;
+            const overlap = bottom + 12 - keyboardTop;
+            if (overlap > 0) {
+              hasShiftedRef.current = true;
+              Animated.timing(formTranslateY, {
+                toValue: -overlap,
+                duration: Platform.OS === 'ios' ? 220 : 0,
+                useNativeDriver: true,
+              }).start();
+            }
+          });
+        }, Platform.OS === 'ios' ? 50 : 100);
+      }
+    );
+
+    const hide = Keyboard.addListener(
+      Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide',
+      () => {
+        if (!hasShiftedRef.current) return;
+        hasShiftedRef.current = false;
+        Animated.timing(formTranslateY, {
+          toValue: 0,
+          duration: Platform.OS === 'ios' ? 220 : 0,
+          useNativeDriver: true,
+        }).start();
+      }
+    );
+
+    return () => {
+      show.remove();
+      hide.remove();
+    };
+  }, [formTranslateY]);
+
   const isFormValid = name.trim().length > 0 && birthdate.length > 0;
 
   if (!visible) return null;
@@ -274,7 +321,7 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
             keyboardDismissMode="on-drag"
             scrollEventThrottle={16}
           >
-            <View style={styles.formContainer}>
+            <Animated.View style={[styles.formContainer, { transform: [{ translateY: formTranslateY }] }]}>
                 <Text style={styles.mainTitle}>Completa tus datos antes de pedir tu hipnosis</Text>
 
                 <View style={styles.infoBox}>
@@ -283,7 +330,7 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
                   </Text>
                 </View>
 
-                <View style={styles.fieldContainer}>
+                <View style={styles.fieldContainer} ref={nameInputRef} collapsable={false}>
                   <Text style={styles.label}>¿Cómo quieres que te llamen?</Text>
                   <Text style={styles.helperText}>
                     Escríbelo como se lee, y si tiene algún acento raro, márcalo. (Que no es lo mismo Julián, que Julian, o Yulian).
@@ -363,7 +410,7 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
                 </View>
 
 
-            </View>
+            </Animated.View>
           </ScrollView>
 
             {showDatePicker && Platform.OS === 'ios' && (
