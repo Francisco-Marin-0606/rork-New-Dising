@@ -530,6 +530,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ff6b35',
     borderRadius: 12,
     zIndex: 1,
+    padding: 5,
   },
   genderContainer: {
     flexDirection: 'row',
