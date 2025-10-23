@@ -543,8 +543,9 @@ const styles = StyleSheet.create({
     width: 121,
     paddingVertical: 12,
     borderRadius: 12,
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'center',
+    paddingLeft: 20,
     height: 48,
   },
   genderButtonText: {
