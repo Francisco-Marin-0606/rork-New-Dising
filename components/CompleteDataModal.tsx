@@ -104,7 +104,6 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
       }
     }
     const trimmedName = name.trim();
-    console.log('Completing data:', { name: trimmedName, gender, birthdate });
     onComplete({ name: trimmedName, gender, birthdate });
   }, [name, gender, birthdate, onComplete]);
 
@@ -158,49 +157,53 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
     }).start();
   };
 
+  // ====== Opción B aplicada: diálogo nativo Android, confirmación solo al aceptar ======
   const handleDateChange = (event: any, selectedDate?: Date) => {
     if (Platform.OS === 'android') {
       if (event.type === 'dismissed') {
+        // Cancelado: no confirmamos y restauramos tempDate al valor confirmado actual
         setShowDatePicker(false);
+        setTempDate(date);
         return;
       }
-      
-      if (event.type === 'set') {
-        setShowDatePicker(false);
-        
-        if (!selectedDate) {
-          return;
-        }
-        
+
+      if (event.type === 'set' && selectedDate) {
+        // Actualizamos el valor temporal mientras el usuario elige
+        setTempDate(selectedDate);
+
+        // Validamos edad ANTES de cerrar
         const today = new Date();
         const threeYearsAgo = new Date();
         threeYearsAgo.setFullYear(today.getFullYear() - 3);
-        
+
         if (selectedDate > threeYearsAgo) {
           Alert.alert(
             '¿Seguro que eres tan joven?',
             'No me cuadra...\nDale otra vez.',
             [{ text: 'OK', style: 'default' }]
           );
+          // Importante: NO cerramos el diálogo; dejamos que el usuario corrija
           return;
         }
-        
+
+        // Válida: confirmamos y cerramos
         setDate(selectedDate);
-        setTempDate(selectedDate);
         const day = String(selectedDate.getDate()).padStart(2, '0');
         const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
         const year = selectedDate.getFullYear();
         setBirthdate(`${day}/${month}/${year}`);
-      } else if (selectedDate) {
-        setTempDate(selectedDate);
+
+        setShowDatePicker(false);
       }
       return;
     }
-    
+
+    // iOS (overlay): mientras se scrollea, solo actualizamos tempDate
     if (selectedDate) {
       setTempDate(selectedDate);
     }
   };
+  // =====================================================================================
 
   const animateDatePickerIn = useCallback(() => {
     Animated.parallel([
@@ -449,11 +452,10 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
                     </View>
                   </Pressable>
                 </View>
-
-
             </Animated.View>
           </ScrollView>
 
+            {/* iOS overlay con animaciones (se mantiene) */}
             {showDatePicker && Platform.OS === 'ios' && (
               <Pressable
                 style={styles.datePickerOverlay}
@@ -461,9 +463,7 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
                 testID="date-picker-backdrop"
               >
                 <Animated.View 
-                  style={{
-                    opacity: datePickerOpacityAnim,
-                  }}
+                  style={{ opacity: datePickerOpacityAnim }}
                 >
                   <Pressable 
                     style={styles.datePickerPopup}
@@ -472,9 +472,7 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
                     <Animated.View
                       style={[
                         styles.datePickerPopupContent,
-                        {
-                          transform: [{ translateY: datePickerSlideAnim }],
-                        },
+                        { transform: [{ translateY: datePickerSlideAnim }] },
                       ]}
                     >
                       <DateTimePicker
@@ -497,6 +495,7 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
               </Pressable>
             )}
 
+            {/* Android: diálogo nativo (confirmación corregida en handleDateChange) */}
             {showDatePicker && Platform.OS === 'android' && (
               <DateTimePicker
                 testID="dateTimePicker"
