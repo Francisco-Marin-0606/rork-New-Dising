@@ -14,6 +14,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 interface CompleteDataModalProps {
   visible: boolean;
@@ -35,6 +36,8 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
   const [name, setName] = useState<string>('');
   const [gender, setGender] = useState<'Hombre' | 'Mujer'>('Hombre');
   const [birthdate, setBirthdate] = useState<string>('');
+  const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
+  const [date, setDate] = useState<Date>(new Date(2004, 9, 19));
 
   const buttonAnimation = useRef({
     scale: new Animated.Value(1),
@@ -174,6 +177,35 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
     setGender(selectedGender);
   };
 
+  const handleDateChange = (event: any, selectedDate?: Date) => {
+    if (Platform.OS === 'android') {
+      setShowDatePicker(false);
+    }
+    if (selectedDate) {
+      setDate(selectedDate);
+      const day = String(selectedDate.getDate()).padStart(2, '0');
+      const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
+      const year = selectedDate.getFullYear();
+      setBirthdate(`${day}/${month}/${year}`);
+    }
+  };
+
+  const handleDatePress = async () => {
+    if (Platform.OS !== 'web') {
+      try {
+        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      } catch (error) {
+        console.log('Haptic feedback error:', error);
+      }
+    }
+    Keyboard.dismiss();
+    setShowDatePicker(true);
+  };
+
+  const handleDatePickerDone = () => {
+    setShowDatePicker(false);
+  };
+
   const isFormValid = name.trim().length > 0 && birthdate.length > 0;
 
   if (!visible) return null;
@@ -289,15 +321,44 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
 
                 <View style={styles.fieldContainer}>
                   <Text style={styles.label}>Fecha de nacimiento</Text>
-                  <TextInput
-                    style={styles.input}
-                    value={birthdate}
-                    onChangeText={setBirthdate}
-                    placeholder="19/10/2004"
-                    placeholderTextColor="rgba(251, 239, 217, 0.3)"
-                    testID="birthdate-input"
-                  />
+                  <Pressable onPress={handleDatePress}>
+                    <View style={styles.input} pointerEvents="none">
+                      <Text style={[styles.inputText, !birthdate && styles.placeholderText]}>
+                        {birthdate || '19/10/2004'}
+                      </Text>
+                    </View>
+                  </Pressable>
                 </View>
+
+                {showDatePicker && Platform.OS === 'ios' && (
+                  <View style={styles.datePickerContainer}>
+                    <View style={styles.datePickerHeader}>
+                      <Pressable onPress={handleDatePickerDone}>
+                        <Text style={styles.datePickerDoneText}>Listo</Text>
+                      </Pressable>
+                    </View>
+                    <DateTimePicker
+                      testID="dateTimePicker"
+                      value={date}
+                      mode="date"
+                      display="spinner"
+                      onChange={handleDateChange}
+                      textColor="#fbefd9"
+                      maximumDate={new Date()}
+                    />
+                  </View>
+                )}
+
+                {showDatePicker && Platform.OS === 'android' && (
+                  <DateTimePicker
+                    testID="dateTimePicker"
+                    value={date}
+                    mode="date"
+                    display="spinner"
+                    onChange={handleDateChange}
+                    maximumDate={new Date()}
+                  />
+                )}
               </View>
             </ScrollView>
 
@@ -483,5 +544,30 @@ const styles = StyleSheet.create({
   },
   completeButtonTextDisabled: {
     color: 'rgba(251, 239, 217, 0.3)',
+  },
+  inputText: {
+    fontSize: 16,
+    color: '#fbefd9',
+  },
+  placeholderText: {
+    color: 'rgba(251, 239, 217, 0.3)',
+  },
+  datePickerContainer: {
+    backgroundColor: '#2a1410',
+    borderRadius: 12,
+    paddingTop: 8,
+    paddingBottom: 16,
+    marginTop: 8,
+  },
+  datePickerHeader: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    paddingHorizontal: 16,
+    paddingBottom: 8,
+  },
+  datePickerDoneText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#ff6b35',
   },
 });
