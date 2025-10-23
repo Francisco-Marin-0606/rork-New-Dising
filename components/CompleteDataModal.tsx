@@ -248,11 +248,7 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
 
   return (
     <View style={styles.overlay} testID="complete-data-overlay">
-      <Pressable 
-        style={[styles.backdrop, { opacity }]} 
-        onPress={() => Keyboard.dismiss()}
-        testID="backdrop-pressable"
-      />
+      <Animated.View style={[styles.backdrop, { opacity }]} pointerEvents="none" />
       
       <Animated.View
         style={[
@@ -516,7 +512,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   label: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: '600',
     color: '#fbefd9',
     marginBottom: 8,
