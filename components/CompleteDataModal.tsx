@@ -496,17 +496,17 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
             )}
 
             {/* Android: diálogo nativo (confirmación corregida en handleDateChange) */}
-            {showDatePicker && Platform.OS === 'android' && (
-              <DateTimePicker
-                testID="dateTimePicker"
-                value={tempDate}
-                mode="date"
-                display="spinner"
-                onChange={handleDateChange}
-                maximumDate={new Date()}
-              />
-            )}
-
+           {showDatePicker && Platform.OS === 'android' && (
+  <DateTimePicker
+    testID="dateTimePicker"
+    value={tempDate}
+    mode="date"
+    display="spinner"
+    onChange={handleDateChange}
+    maximumDate={new Date()}
+    accentColor="#ff6b35"    // fuerza el color naranja en botones
+  />
+)}
             <View style={styles.footer}>
               <Animated.View
                 style={{
