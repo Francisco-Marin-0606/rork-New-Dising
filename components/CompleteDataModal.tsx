@@ -520,7 +520,6 @@ const styles = StyleSheet.create({
   },
   genderToggleWrapper: {
     position: 'relative',
-    overflow: 'visible',
   },
   toggleSelector: {
     position: 'absolute',
@@ -531,7 +530,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#ff6b35',
     borderRadius: 12,
     zIndex: 1,
-    overflow: 'visible',
   },
   genderContainer: {
     flexDirection: 'row',
@@ -541,13 +539,13 @@ const styles = StyleSheet.create({
   },
   genderButton: {
     flex: 1,
-    height: 48,
+    paddingVertical: 12,
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
   },
   genderButtonText: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '600',
     color: 'rgba(251, 239, 217, 0.6)',
   },
