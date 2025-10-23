@@ -103,23 +103,10 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
       }
     }
     
-    const today = new Date();
-    const threeYearsAgo = new Date();
-    threeYearsAgo.setFullYear(today.getFullYear() - 3);
-    
-    if (date > threeYearsAgo) {
-      Alert.alert(
-        '¿Seguro que eres tan joven?',
-        'No me cuadra...\nDale otra vez.',
-        [{ text: 'OK', style: 'default' }]
-      );
-      return;
-    }
-    
     const trimmedName = name.trim();
     console.log('Completing data:', { name: trimmedName, gender, birthdate });
     onComplete({ name: trimmedName, gender, birthdate });
-  }, [name, gender, birthdate, date, onComplete]);
+  }, [name, gender, birthdate, onComplete]);
 
   const handlePressIn = () => {
     Animated.parallel([
@@ -174,6 +161,21 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
   const handleDateChange = (event: any, selectedDate?: Date) => {
     if (Platform.OS === 'android') {
       setShowDatePicker(false);
+      
+      if (selectedDate) {
+        const today = new Date();
+        const threeYearsAgo = new Date();
+        threeYearsAgo.setFullYear(today.getFullYear() - 3);
+        
+        if (selectedDate > threeYearsAgo) {
+          Alert.alert(
+            '¿Seguro que eres tan joven?',
+            'No me cuadra...\nDale otra vez.',
+            [{ text: 'OK', style: 'default' }]
+          );
+          return;
+        }
+      }
     }
     if (selectedDate) {
       setDate(selectedDate);
@@ -231,6 +233,20 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
   };
 
   const handleDatePickerDone = async () => {
+    const today = new Date();
+    const threeYearsAgo = new Date();
+    threeYearsAgo.setFullYear(today.getFullYear() - 3);
+    
+    if (date > threeYearsAgo) {
+      Alert.alert(
+        '¿Seguro que eres tan joven?',
+        'No me cuadra...\nDale otra vez.',
+        [{ text: 'OK', style: 'default' }]
+      );
+      animateDatePickerOut();
+      return;
+    }
+    
     if (Platform.OS !== 'web') {
       try {
         await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -544,7 +560,7 @@ const styles = StyleSheet.create({
   },
   mainTitle: {
     fontSize: 37,
-    fontWeight: '700',
+    fontWeight: Platform.OS === 'android' ? '600' : '700',
     color: '#fbefd9',
     lineHeight: 42,
     letterSpacing: -0.5,
@@ -566,7 +582,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 24,
-    fontWeight: '600',
+    fontWeight: Platform.OS === 'android' ? '500' : '600',
     color: '#fbefd9',
     marginBottom: 8,
   },
@@ -618,7 +634,7 @@ const styles = StyleSheet.create({
   },
   genderButtonText: {
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: Platform.OS === 'android' ? '500' : '600',
     color: 'rgba(251, 239, 217, 0.6)',
     textAlign: 'center',
     lineHeight: 24,
@@ -653,7 +669,7 @@ const styles = StyleSheet.create({
   },
   completeButtonText: {
     fontSize: 20,
-    fontWeight: '600' as const,
+    fontWeight: Platform.OS === 'android' ? '500' : ('600' as const),
     color: '#ffffff',
     letterSpacing: -0.3,
   },
@@ -715,7 +731,7 @@ const styles = StyleSheet.create({
   },
   datePickerDoneText: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: Platform.OS === 'android' ? '500' : '600',
     color: '#ff6b35',
   },
 });
