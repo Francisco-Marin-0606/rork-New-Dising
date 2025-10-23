@@ -524,7 +524,7 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   toggleSelector: {
-    position: 'absolute',
+    position: 'absolute' as const,
     top: 0,
     left: 0,
     width: 121,
@@ -532,7 +532,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#ff6b35',
     borderRadius: 12,
     zIndex: 1,
-    padding: 5,
   },
   genderContainer: {
     flexDirection: 'row',
