@@ -141,11 +141,11 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
     }
     setGender(selectedGender);
     
-    Animated.spring(togglePosition, {
+    Animated.timing(togglePosition, {
       toValue: selectedGender === 'Hombre' ? 0 : 1,
+      duration: 350,
+      easing: Easing.bezier(0.4, 0.0, 0.2, 1),
       useNativeDriver: true,
-      speed: 14,
-      bounciness: 6,
     }).start();
   };
 
