@@ -52,16 +52,7 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
     opacity: new Animated.Value(1),
   }).current;
 
-  const genderButtonAnimation = useRef({
-    hombre: {
-      scale: new Animated.Value(1),
-      opacity: new Animated.Value(1),
-    },
-    mujer: {
-      scale: new Animated.Value(1),
-      opacity: new Animated.Value(1),
-    },
-  }).current;
+  const togglePosition = useRef(new Animated.Value(0)).current;
 
   const DURATION_OPEN = 400;
   const easeInOut = Easing.bezier(0.4, 0.0, 0.2, 1);
@@ -140,40 +131,6 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
     ]).start();
   };
 
-  const handleGenderPressIn = (selectedGender: 'Hombre' | 'Mujer') => {
-    const anim = selectedGender === 'Hombre' ? genderButtonAnimation.hombre : genderButtonAnimation.mujer;
-    Animated.parallel([
-      Animated.spring(anim.scale, {
-        toValue: 0.9,
-        useNativeDriver: true,
-        speed: 50,
-        bounciness: 0,
-      }),
-      Animated.timing(anim.opacity, {
-        toValue: 0.2,
-        duration: 150,
-        useNativeDriver: true,
-      }),
-    ]).start();
-  };
-
-  const handleGenderPressOut = (selectedGender: 'Hombre' | 'Mujer') => {
-    const anim = selectedGender === 'Hombre' ? genderButtonAnimation.hombre : genderButtonAnimation.mujer;
-    Animated.parallel([
-      Animated.spring(anim.scale, {
-        toValue: 1,
-        useNativeDriver: true,
-        speed: 50,
-        bounciness: 4,
-      }),
-      Animated.timing(anim.opacity, {
-        toValue: 1,
-        duration: 150,
-        useNativeDriver: true,
-      }),
-    ]).start();
-  };
-
   const handleGenderPress = async (selectedGender: 'Hombre' | 'Mujer') => {
     if (Platform.OS !== 'web') {
       try {
@@ -183,6 +140,13 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
       }
     }
     setGender(selectedGender);
+    
+    Animated.spring(togglePosition, {
+      toValue: selectedGender === 'Hombre' ? 0 : 1,
+      useNativeDriver: true,
+      speed: 14,
+      bounciness: 6,
+    }).start();
   };
 
   const handleDateChange = (event: any, selectedDate?: Date) => {
@@ -317,22 +281,26 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
 
                 <View style={styles.fieldContainer}>
                   <Text style={styles.label}>Eres...</Text>
-                  <View style={styles.genderContainer}>
+                  <View style={styles.genderToggleWrapper}>
                     <Animated.View
-                      style={{
-                        flex: 1,
-                        transform: [{ scale: genderButtonAnimation.hombre.scale }],
-                        opacity: genderButtonAnimation.hombre.opacity,
-                      }}
-                    >
+                      style={[
+                        styles.toggleSelector,
+                        {
+                          transform: [
+                            {
+                              translateX: togglePosition.interpolate({
+                                inputRange: [0, 1],
+                                outputRange: [0, 155],
+                              }),
+                            },
+                          ],
+                        },
+                      ]}
+                    />
+                    <View style={styles.genderContainer}>
                       <Pressable
-                        style={[
-                          styles.genderButton,
-                          gender === 'Hombre' && styles.genderButtonActive,
-                        ]}
+                        style={styles.genderButton}
                         onPress={() => handleGenderPress('Hombre')}
-                        onPressIn={() => handleGenderPressIn('Hombre')}
-                        onPressOut={() => handleGenderPressOut('Hombre')}
                         testID="gender-hombre-button"
                       >
                         <Text
@@ -344,23 +312,10 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
                           Hombre
                         </Text>
                       </Pressable>
-                    </Animated.View>
 
-                    <Animated.View
-                      style={{
-                        flex: 1,
-                        transform: [{ scale: genderButtonAnimation.mujer.scale }],
-                        opacity: genderButtonAnimation.mujer.opacity,
-                      }}
-                    >
                       <Pressable
-                        style={[
-                          styles.genderButton,
-                          gender === 'Mujer' && styles.genderButtonActive,
-                        ]}
+                        style={styles.genderButton}
                         onPress={() => handleGenderPress('Mujer')}
-                        onPressIn={() => handleGenderPressIn('Mujer')}
-                        onPressOut={() => handleGenderPressOut('Mujer')}
                         testID="gender-mujer-button"
                       >
                         <Text
@@ -372,7 +327,7 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
                           Mujer
                         </Text>
                       </Pressable>
-                    </Animated.View>
+                    </View>
                   </View>
                 </View>
 
@@ -563,22 +518,31 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(251, 239, 217, 0.2)',
   },
+  genderToggleWrapper: {
+    position: 'relative',
+  },
+  toggleSelector: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: 143,
+    height: 48,
+    backgroundColor: '#ff6b35',
+    borderRadius: 12,
+    zIndex: 1,
+  },
   genderContainer: {
     flexDirection: 'row',
     gap: 12,
+    position: 'relative',
+    zIndex: 2,
   },
   genderButton: {
+    flex: 1,
     paddingVertical: 12,
     borderRadius: 12,
-    backgroundColor: 'rgba(251, 239, 217, 0.1)',
-    borderWidth: 1,
-    borderColor: 'rgba(251, 239, 217, 0.2)',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  genderButtonActive: {
-    backgroundColor: '#ff6b35',
-    borderColor: '#ff6b35',
   },
   genderButtonText: {
     fontSize: 16,
