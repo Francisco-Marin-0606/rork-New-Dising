@@ -351,7 +351,7 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
                   <Pressable onPress={handleDatePress} style={styles.dateInputWrapper}>
                     <View style={styles.dateInput} pointerEvents="none">
                       <Text style={[styles.inputText, !birthdate && styles.placeholderText]}>
-                        {birthdate || '19/10/2004'}
+                        {birthdate || 'dd/mm/aaaa'}
                       </Text>
                     </View>
                   </Pressable>
