@@ -164,6 +164,10 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
       if (event.type === 'dismissed') {
         return;
       }
+      
+      if (!selectedDate) {
+        return;
+      }
     }
     
     if (selectedDate) {
