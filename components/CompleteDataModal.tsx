@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { BUTTON_STYLES } from '@/constants/buttonStyles';
 
 interface CompleteDataModalProps {
   visible: boolean;
@@ -573,29 +574,23 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#935139',
+    backgroundColor: '#fbefd9',
     paddingVertical: 16,
     borderRadius: 14,
-    shadowColor: '#000000',
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 8,
-    overflow: 'hidden',
+    gap: 8,
+    ...BUTTON_STYLES.elevatedShadow,
   },
   completeButtonDisabled: {
-    backgroundColor: 'rgba(147, 81, 57, 0.3)',
+    backgroundColor: 'rgba(251, 239, 217, 0.15)',
   },
   completeButtonText: {
-    color: '#fbefd9',
-    fontSize: 18,
-    fontWeight: '700',
+    fontSize: 20,
+    fontWeight: '600' as const,
+    color: '#000000',
+    letterSpacing: -0.3,
   },
   completeButtonTextDisabled: {
-    color: 'rgba(251, 239, 217, 0.3)',
+    color: 'rgba(251, 239, 217, 0.35)',
   },
   inputText: {
     fontSize: 16,
