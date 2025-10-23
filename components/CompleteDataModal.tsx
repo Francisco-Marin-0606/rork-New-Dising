@@ -160,10 +160,6 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
   const handleDateChange = (event: any, selectedDate?: Date) => {
     if (Platform.OS === 'android') {
       setShowDatePicker(false);
-      
-      if (event.type === 'dismissed') {
-        return;
-      }
     }
     if (selectedDate) {
       const today = new Date();
@@ -465,7 +461,7 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
                 testID="dateTimePicker"
                 value={date}
                 mode="date"
-                display="default"
+                display="spinner"
                 onChange={handleDateChange}
                 maximumDate={new Date()}
               />
