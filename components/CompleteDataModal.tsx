@@ -33,6 +33,12 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
   const opacity = useRef(new Animated.Value(0)).current;
   
   const [name, setName] = useState<string>('');
+  
+  const handleNameChange = (text: string) => {
+    const validText = text.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]/g, '');
+    const limitedText = validText.slice(0, 25);
+    setName(limitedText);
+  };
   const [gender, setGender] = useState<'Hombre' | 'Mujer'>('Hombre');
   const [birthdate, setBirthdate] = useState<string>('');
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
@@ -301,9 +307,10 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
                   <TextInput
                     style={styles.input}
                     value={name}
-                    onChangeText={setName}
+                    onChangeText={handleNameChange}
                     placeholder="Ingresa tu apodo"
                     placeholderTextColor="rgba(251, 239, 217, 0.3)"
+                    maxLength={25}
                     testID="name-input"
                   />
                 </View>
@@ -407,11 +414,6 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
                         },
                       ]}
                     >
-                      <View style={styles.datePickerHeader}>
-                        <Pressable onPress={handleDatePickerDone}>
-                          <Text style={styles.datePickerDoneText}>Listo</Text>
-                        </Pressable>
-                      </View>
                       <DateTimePicker
                         testID="dateTimePicker"
                         value={date}
@@ -421,6 +423,11 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
                         textColor="#fbefd9"
                         maximumDate={new Date()}
                       />
+                      <View style={styles.datePickerFooter}>
+                        <Pressable onPress={handleDatePickerDone}>
+                          <Text style={styles.datePickerDoneText}>Confirmar</Text>
+                        </Pressable>
+                      </View>
                     </Animated.View>
                   </Pressable>
                 </Animated.View>
@@ -656,11 +663,11 @@ const styles = StyleSheet.create({
     shadowRadius: 16,
     elevation: 24,
   },
-  datePickerHeader: {
+  datePickerFooter: {
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     paddingHorizontal: 16,
-    paddingBottom: 8,
+    paddingTop: 12,
   },
   datePickerDoneText: {
     fontSize: 16,
