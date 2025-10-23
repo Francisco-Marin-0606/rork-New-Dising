@@ -518,8 +518,8 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   helperText: {
-    fontSize: 14,
-    color: 'rgba(251, 239, 217, 0.5)',
+    fontSize: 15,
+    color: 'rgba(251, 239, 217, 0.6)',
     marginBottom: 12,
     lineHeight: 20,
   },
