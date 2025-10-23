@@ -543,11 +543,14 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
+    height: 48,
   },
   genderButtonText: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '600',
     color: 'rgba(251, 239, 217, 0.6)',
+    textAlign: 'center',
+    lineHeight: 24,
   },
   genderButtonTextActive: {
     color: '#fbefd9',
