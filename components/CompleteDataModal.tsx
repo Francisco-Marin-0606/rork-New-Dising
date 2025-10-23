@@ -581,7 +581,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   label: {
-    fontSize: Platform.OS === 'android' ? 22.8 : 24,
+    fontSize: Platform.OS === 'android' ? 21.6 : 24,
     fontWeight: Platform.OS === 'android' ? '500' : '600',
     color: '#fbefd9',
     marginBottom: 8,
