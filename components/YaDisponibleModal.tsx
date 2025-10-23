@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     paddingHorizontal: 44,
-    paddingTop: 120,
+    paddingTop: Platform.OS === 'android' ? 80 : 120,
   },
   title: {
     fontSize: 62,
@@ -237,6 +237,11 @@ const styles = StyleSheet.create({
     ...BUTTON_STYLES.primaryButton,
     backgroundColor: '#fbefd9',
     overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: Platform.OS === 'android' ? 4 : 0 },
+    shadowOpacity: Platform.OS === 'android' ? 0.3 : 0,
+    shadowRadius: Platform.OS === 'android' ? 4 : 0,
+    elevation: Platform.OS === 'android' ? 4 : 0,
   },
   primaryButtonText: {
     ...BUTTON_STYLES.primaryButtonText,
@@ -246,6 +251,11 @@ const styles = StyleSheet.create({
     ...BUTTON_STYLES.primaryButton,
     backgroundColor: Platform.OS === 'android' ? '#935139' : 'rgba(255, 255, 255, 0.2)',
     overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: Platform.OS === 'android' ? 4 : 0 },
+    shadowOpacity: Platform.OS === 'android' ? 0.3 : 0,
+    shadowRadius: Platform.OS === 'android' ? 4 : 0,
+    elevation: Platform.OS === 'android' ? 4 : 0,
   },
   secondaryButtonText: {
     ...BUTTON_STYLES.primaryButtonText,
