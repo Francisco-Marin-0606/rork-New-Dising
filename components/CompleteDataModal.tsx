@@ -234,7 +234,7 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
 
   return (
     <View style={styles.overlay} testID="complete-data-overlay">
-      <Animated.View style={[styles.backdrop, { opacity }]} pointerEvents="none" />
+      <Pressable style={[styles.backdrop, { opacity }]} onPress={() => {}} />
       
       <Animated.View
         style={[
@@ -254,6 +254,7 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
             keyboardShouldPersistTaps="handled"
             keyboardDismissMode="on-drag"
             scrollEventThrottle={16}
+            bounces={true}
           >
               <View style={styles.formContainer}>
                 <Text style={styles.mainTitle}>Completa tus datos antes de pedir tu hipnosis</Text>
@@ -504,7 +505,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   helperText: {
-    fontSize: 14,
+    fontSize: 16,
     color: 'rgba(251, 239, 217, 0.5)',
     marginBottom: 12,
     lineHeight: 20,
@@ -574,10 +575,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#fbefd9',
+    backgroundColor: '#ff6b35',
     paddingVertical: 16,
     borderRadius: 14,
     gap: 8,
+    marginBottom: 25,
     ...BUTTON_STYLES.elevatedShadow,
   },
   completeButtonDisabled: {
@@ -586,7 +588,7 @@ const styles = StyleSheet.create({
   completeButtonText: {
     fontSize: 20,
     fontWeight: '600' as const,
-    color: '#000000',
+    color: '#fbefd9',
     letterSpacing: -0.3,
   },
   completeButtonTextDisabled: {
