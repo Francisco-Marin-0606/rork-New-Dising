@@ -261,8 +261,7 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
         ]}
         testID="complete-data-container"
       >
-        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-          <View style={styles.content}>
+        <View style={styles.content}>
           <ScrollView 
             style={styles.scrollView}
             contentContainerStyle={styles.scrollContent}
@@ -270,6 +269,7 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
             keyboardShouldPersistTaps="handled"
             keyboardDismissMode="on-drag"
             scrollEventThrottle={16}
+            scrollEnabled={true}
           >
               <View style={styles.formContainer}>
                 <Text style={styles.mainTitle}>Completa tus datos antes de pedir tu hipnosis</Text>
@@ -361,9 +361,9 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
 
 
               </View>
-            </ScrollView>
+          </ScrollView>
 
-            {showDatePicker && Platform.OS === 'ios' && (
+          {showDatePicker && Platform.OS === 'ios' && (
               <Pressable
                 style={styles.datePickerOverlay}
                 onPress={handleDatePickerDone}
@@ -404,9 +404,9 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
                   </Pressable>
                 </Animated.View>
               </Pressable>
-            )}
+          )}
 
-            {showDatePicker && Platform.OS === 'android' && (
+          {showDatePicker && Platform.OS === 'android' && (
               <DateTimePicker
                 testID="dateTimePicker"
                 value={date}
@@ -415,8 +415,9 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
                 onChange={handleDateChange}
                 maximumDate={new Date()}
               />
-            )}
+          )}
 
+          <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <View style={styles.footer}>
               <Animated.View
                 style={{
@@ -446,8 +447,8 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
                 </Pressable>
               </Animated.View>
             </View>
-          </View>
-        </TouchableWithoutFeedback>
+          </TouchableWithoutFeedback>
+        </View>
       </Animated.View>
     </View>
   );
