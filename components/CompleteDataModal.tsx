@@ -559,7 +559,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 44,
   },
   mainTitle: {
-    fontSize: 37,
+    fontSize: Platform.OS === 'android' ? 35.15 : 37,
     fontWeight: Platform.OS === 'android' ? '600' : '700',
     color: '#fbefd9',
     lineHeight: 42,
@@ -573,7 +573,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   infoText: {
-    fontSize: 16,
+    fontSize: Platform.OS === 'android' ? 15.2 : 16,
     color: 'rgba(251, 239, 217, 0.5)',
     lineHeight: 22,
   },
@@ -581,13 +581,13 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   label: {
-    fontSize: 24,
+    fontSize: Platform.OS === 'android' ? 22.8 : 24,
     fontWeight: Platform.OS === 'android' ? '500' : '600',
     color: '#fbefd9',
     marginBottom: 8,
   },
   helperText: {
-    fontSize: 15,
+    fontSize: Platform.OS === 'android' ? 14.25 : 15,
     color: 'rgba(251, 239, 217, 0.6)',
     marginBottom: 12,
     lineHeight: 20,
@@ -597,7 +597,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 14,
-    fontSize: 16,
+    fontSize: Platform.OS === 'android' ? 15.2 : 16,
     color: '#fbefd9',
     borderWidth: 1,
     borderColor: 'rgba(251, 239, 217, 0.2)',
@@ -633,7 +633,7 @@ const styles = StyleSheet.create({
     height: 48,
   },
   genderButtonText: {
-    fontSize: 18,
+    fontSize: Platform.OS === 'android' ? 17.1 : 18,
     fontWeight: Platform.OS === 'android' ? '500' : '600',
     color: 'rgba(251, 239, 217, 0.6)',
     textAlign: 'center',
@@ -668,7 +668,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 107, 53, 0.3)',
   },
   completeButtonText: {
-    fontSize: 20,
+    fontSize: Platform.OS === 'android' ? 19 : 20,
     fontWeight: Platform.OS === 'android' ? '500' : ('600' as const),
     color: '#ffffff',
     letterSpacing: -0.3,
@@ -677,7 +677,7 @@ const styles = StyleSheet.create({
     color: 'rgba(255, 255, 255, 0.4)',
   },
   inputText: {
-    fontSize: 16,
+    fontSize: Platform.OS === 'android' ? 15.2 : 16,
     color: '#fbefd9',
   },
   placeholderText: {
@@ -730,7 +730,7 @@ const styles = StyleSheet.create({
     paddingTop: 12,
   },
   datePickerDoneText: {
-    fontSize: 16,
+    fontSize: Platform.OS === 'android' ? 15.2 : 16,
     fontWeight: Platform.OS === 'android' ? '500' : '600',
     color: '#ff6b35',
   },
