@@ -12,6 +12,7 @@ import {
   ScrollView,
   Keyboard,
   Alert,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -260,7 +261,8 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
         ]}
         testID="complete-data-container"
       >
-        <View style={styles.content}>
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+          <View style={styles.content}>
           <ScrollView 
             style={styles.scrollView}
             contentContainerStyle={styles.scrollContent}
@@ -445,6 +447,7 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
               </Animated.View>
             </View>
           </View>
+        </TouchableWithoutFeedback>
       </Animated.View>
     </View>
   );
