@@ -160,7 +160,12 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
   const handleDateChange = (event: any, selectedDate?: Date) => {
     if (Platform.OS === 'android') {
       setShowDatePicker(false);
+      
+      if (event.type === 'dismissed') {
+        return;
+      }
     }
+    
     if (selectedDate) {
       const today = new Date();
       const threeYearsAgo = new Date();
