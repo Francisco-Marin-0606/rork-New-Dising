@@ -262,8 +262,10 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
         ]}
         testID="complete-data-container"
       >
-        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-          <View style={styles.content}>
+        <View style={styles.content}>
+          <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+            <View style={StyleSheet.absoluteFill} pointerEvents="box-none" />
+          </TouchableWithoutFeedback>
           <ScrollView 
             style={styles.scrollView}
             contentContainerStyle={styles.scrollContent}
@@ -272,7 +274,7 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
             keyboardDismissMode="on-drag"
             scrollEventThrottle={16}
           >
-              <View style={styles.formContainer}>
+            <View style={styles.formContainer}>
                 <Text style={styles.mainTitle}>Completa tus datos antes de pedir tu hipnosis</Text>
 
                 <View style={styles.infoBox}>
@@ -361,8 +363,8 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
                 </View>
 
 
-              </View>
-            </ScrollView>
+            </View>
+          </ScrollView>
 
             {showDatePicker && Platform.OS === 'ios' && (
               <Pressable
@@ -446,9 +448,8 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
                   </Text>
                 </Pressable>
               </Animated.View>
-            </View>
           </View>
-        </TouchableWithoutFeedback>
+        </View>
       </Animated.View>
     </View>
   );
@@ -488,10 +489,10 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingTop: 0,
     paddingBottom: 180,
-    paddingHorizontal: 44,
   },
   formContainer: {
     gap: 24,
+    paddingHorizontal: 44,
   },
   mainTitle: {
     fontSize: 37,
