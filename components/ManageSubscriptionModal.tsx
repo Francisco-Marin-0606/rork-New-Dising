@@ -729,6 +729,7 @@ const styles = StyleSheet.create({
   confirmTitleAndroid: {
     fontSize: 30,
     lineHeight: 32,
+    maxWidth: '95%',
   },
   confirmSubtitle: {
     fontSize: 18,
