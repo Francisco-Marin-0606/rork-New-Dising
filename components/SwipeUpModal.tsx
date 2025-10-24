@@ -75,7 +75,9 @@ export default function SwipeUpModal({ visible, onClose, imageUri, title, downlo
   const deleteAlertScale = useRef(new Animated.Value(0.85)).current;
   const deleteAlertOpacity = useRef(new Animated.Value(0)).current;
   const deleteCancelButtonScale = useRef(new Animated.Value(1)).current;
+  const deleteCancelButtonOpacity = useRef(new Animated.Value(1)).current;
   const deleteConfirmButtonScale = useRef(new Animated.Value(1)).current;
+  const deleteConfirmButtonOpacity = useRef(new Animated.Value(1)).current;
 
   const easeInOut = Easing.out(Easing.cubic);
   const DURATION_OPEN = 600;
@@ -625,7 +627,7 @@ export default function SwipeUpModal({ visible, onClose, imageUri, title, downlo
               <Text style={styles.deleteConfirmTitle}>Eliminar descarga</Text>
               <Text style={styles.deleteConfirmMessage}>¿Estás seguro que deseas eliminar esta hipnosis de tus descargas?</Text>
               <View style={styles.deleteConfirmButtons}>
-                <Animated.View style={{ flex: 1, transform: [{ scale: deleteCancelButtonScale }] }}>
+                <Animated.View style={{ flex: 1, transform: [{ scale: deleteCancelButtonScale }], opacity: deleteCancelButtonOpacity }}>
                   <TouchableOpacity
                     style={styles.deleteConfirmCancelButton}
                     onPress={async () => {
@@ -648,27 +650,41 @@ export default function SwipeUpModal({ visible, onClose, imageUri, title, downlo
                       });
                     }}
                     onPressIn={() => {
-                      Animated.spring(deleteCancelButtonScale, {
-                        toValue: 0.9,
-                        useNativeDriver: true,
-                        speed: 50,
-                        bounciness: 0,
-                      }).start();
+                      Animated.parallel([
+                        Animated.spring(deleteCancelButtonScale, {
+                          toValue: 0.9,
+                          useNativeDriver: true,
+                          speed: 50,
+                          bounciness: 0,
+                        }),
+                        Animated.timing(deleteCancelButtonOpacity, {
+                          toValue: 0.2,
+                          duration: 150,
+                          useNativeDriver: true,
+                        }),
+                      ]).start();
                     }}
                     onPressOut={() => {
-                      Animated.spring(deleteCancelButtonScale, {
-                        toValue: 1,
-                        useNativeDriver: true,
-                        speed: 50,
-                        bounciness: 4,
-                      }).start();
+                      Animated.parallel([
+                        Animated.spring(deleteCancelButtonScale, {
+                          toValue: 1,
+                          useNativeDriver: true,
+                          speed: 50,
+                          bounciness: 4,
+                        }),
+                        Animated.timing(deleteCancelButtonOpacity, {
+                          toValue: 1,
+                          duration: 150,
+                          useNativeDriver: true,
+                        }),
+                      ]).start();
                     }}
                     activeOpacity={1}
                   >
                     <Text style={styles.deleteConfirmCancelText}>Cancelar</Text>
                   </TouchableOpacity>
                 </Animated.View>
-                <Animated.View style={{ flex: 1, transform: [{ scale: deleteConfirmButtonScale }] }}>
+                <Animated.View style={{ flex: 1, transform: [{ scale: deleteConfirmButtonScale }], opacity: deleteConfirmButtonOpacity }}>
                   <TouchableOpacity
                     style={styles.deleteConfirmDeleteButton}
                     onPress={async () => {
@@ -692,20 +708,34 @@ export default function SwipeUpModal({ visible, onClose, imageUri, title, downlo
                       });
                     }}
                     onPressIn={() => {
-                      Animated.spring(deleteConfirmButtonScale, {
-                        toValue: 0.9,
-                        useNativeDriver: true,
-                        speed: 50,
-                        bounciness: 0,
-                      }).start();
+                      Animated.parallel([
+                        Animated.spring(deleteConfirmButtonScale, {
+                          toValue: 0.9,
+                          useNativeDriver: true,
+                          speed: 50,
+                          bounciness: 0,
+                        }),
+                        Animated.timing(deleteConfirmButtonOpacity, {
+                          toValue: 0.2,
+                          duration: 150,
+                          useNativeDriver: true,
+                        }),
+                      ]).start();
                     }}
                     onPressOut={() => {
-                      Animated.spring(deleteConfirmButtonScale, {
-                        toValue: 1,
-                        useNativeDriver: true,
-                        speed: 50,
-                        bounciness: 4,
-                      }).start();
+                      Animated.parallel([
+                        Animated.spring(deleteConfirmButtonScale, {
+                          toValue: 1,
+                          useNativeDriver: true,
+                          speed: 50,
+                          bounciness: 4,
+                        }),
+                        Animated.timing(deleteConfirmButtonOpacity, {
+                          toValue: 1,
+                          duration: 150,
+                          useNativeDriver: true,
+                        }),
+                      ]).start();
                     }}
                     activeOpacity={1}
                   >
