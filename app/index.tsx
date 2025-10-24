@@ -828,6 +828,7 @@ export default function HomeScreen() {
           }),
         ]).start();
       } else if (downloadInfo?.state !== 'downloading') {
+        setMenuModalVisible(false);
         startDownload(id);
       }
     }
@@ -854,15 +855,18 @@ export default function HomeScreen() {
 
   useEffect(() => {
     Object.entries(downloads).forEach(([id, info]) => {
-      if (info?.state === 'completed' && timersRef.current[id]) {
-        const t = timersRef.current[id];
-        if (typeof t === 'number') clearInterval(t as number);
-        timersRef.current[id] = 0;
+      if (info?.state === 'completed') {
+        if (timersRef.current[id]) {
+          const t = timersRef.current[id];
+          if (typeof t === 'number') clearInterval(t as number);
+          timersRef.current[id] = 0;
+        }
         
         if (!completedDownloadsRef.current.has(id)) {
           completedDownloadsRef.current.add(id);
           const session = [...HYPNOSIS_SESSIONS, ...HYPNOSIS_PREVIOUS].find(s => s.id === id);
           if (session) {
+            console.log('[Download] Completed download for:', session.title);
             setCompletedDownloadTitle(session.title);
             setDownloadCompleteModalVisible(true);
           }
