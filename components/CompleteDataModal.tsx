@@ -559,10 +559,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 44,
   },
   mainTitle: {
-    fontSize: Platform.OS === 'android' ? 35.15 : 37,
+    fontSize: Platform.OS === 'android' ? 38 : 37,
     fontWeight: Platform.OS === 'android' ? '600' : '700',
     color: '#fbefd9',
-    lineHeight: 42,
+    lineHeight: Platform.OS === 'android' ? 40 : 42,
     letterSpacing: -0.5,
     marginBottom: 8,
   },

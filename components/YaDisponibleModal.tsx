@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 62,
-    fontWeight: '600' as const,
+    fontWeight: Platform.OS === 'android' ? '500' as const : '600' as const,
     color: '#fbefd9',
     textAlign: 'left',
     letterSpacing: -2.5,
