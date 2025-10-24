@@ -723,7 +723,7 @@ export default function FormScreen() {
                     textAlignVertical="top"
                     autoFocus={false}
                     editable={!isRecording}
-                    scrollEnabled={Platform.OS === 'android'}
+                    scrollEnabled={true}
                   />
                   {inputValue.length > 500 && (
                     <View style={styles.textOverlay} pointerEvents="none">
@@ -996,7 +996,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#fbefd9',
     lineHeight: 24,
-    minHeight: 200,
+    minHeight: 100,
     borderWidth: 1,
     borderColor: 'rgba(251, 239, 217, 0.2)',
     ...(Platform.OS === 'android' && { includeFontPadding: false }),
