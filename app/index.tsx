@@ -2068,7 +2068,7 @@ const styles = StyleSheet.create({
     marginTop: -40,
   },
   emptyMainTitle: { width: '100%', textAlign: 'center', color: '#fbefd9', fontSize: 32, fontWeight: '700' as const, marginBottom: 20, marginTop: 40, lineHeight: 38 },
-  emptySubtitle: { width: '100%', textAlign: 'center', color: 'rgba(251, 239, 217, 0.7)', fontSize: 16, lineHeight: 24, marginBottom: 16 },
+  emptySubtitle: { width: '100%', textAlign: 'center', color: 'rgba(251, 239, 217, 0.7)', fontSize: Platform.OS === 'android' ? 15 : 16, lineHeight: Platform.OS === 'android' ? 22 : 24, marginBottom: 16 },
   emptySubtitle2: { width: '100%', textAlign: 'center', color: 'rgba(251, 239, 217, 0.7)', fontSize: 16, lineHeight: 24 },
   deleteConfirmContainer: {
     borderRadius: 20,
