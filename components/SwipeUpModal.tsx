@@ -625,7 +625,7 @@ export default function SwipeUpModal({ visible, onClose, imageUri, title, downlo
               <Text style={styles.deleteConfirmTitle}>Eliminar descarga</Text>
               <Text style={styles.deleteConfirmMessage}>¿Estás seguro que deseas eliminar esta hipnosis de tus descargas?</Text>
               <View style={styles.deleteConfirmButtons}>
-                <Animated.View style={{ flex: 1, transform: [{ scale: deleteCancelButtonScale }], opacity: deleteCancelButtonScale.interpolate({ inputRange: [0.9, 1], outputRange: [0.2, 1] }) }}>
+                <Animated.View style={{ flex: 1, transform: [{ scale: deleteCancelButtonScale }] }}>
                   <TouchableOpacity
                     style={styles.deleteConfirmCancelButton}
                     onPress={async () => {
@@ -668,7 +668,7 @@ export default function SwipeUpModal({ visible, onClose, imageUri, title, downlo
                     <Text style={styles.deleteConfirmCancelText}>Cancelar</Text>
                   </TouchableOpacity>
                 </Animated.View>
-                <Animated.View style={{ flex: 1, transform: [{ scale: deleteConfirmButtonScale }], opacity: deleteConfirmButtonScale.interpolate({ inputRange: [0.9, 1], outputRange: [0.2, 1] }) }}>
+                <Animated.View style={{ flex: 1, transform: [{ scale: deleteConfirmButtonScale }] }}>
                   <TouchableOpacity
                     style={styles.deleteConfirmDeleteButton}
                     onPress={async () => {
