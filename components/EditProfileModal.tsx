@@ -36,6 +36,7 @@ export default function EditProfileModal({ visible, onClose }: EditProfileModalP
   const [email] = useState<string>('panchito.contacto@gmail.com');
   const [fechaNacimiento] = useState<string>('26 septiembre 2009');
   const [genero] = useState<string>('Hombre');
+  const [validationError, setValidationError] = useState<string>('');
 
   const buttonAnimation = useRef({
     scale: new Animated.Value(1),
@@ -162,6 +163,20 @@ export default function EditProfileModal({ visible, onClose }: EditProfileModalP
   ).current;
 
   const handleSave = useCallback(async () => {
+    const trimmedNombrePreferido = nombrePreferido.trim();
+    
+    if (trimmedNombrePreferido.length === 0) {
+      setValidationError('Este campo es obligatorio');
+      if (Platform.OS !== 'web') {
+        try {
+          await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+        } catch (error) {
+          console.log('Haptic feedback error:', error);
+        }
+      }
+      return;
+    }
+    
     if (Platform.OS !== 'web') {
       try {
         await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
@@ -171,7 +186,6 @@ export default function EditProfileModal({ visible, onClose }: EditProfileModalP
     }
     const trimmedNombre = nombre.trim();
     const trimmedApellido = apellido.trim();
-    const trimmedNombrePreferido = nombrePreferido.trim();
     console.log('Saving profile:', { nombre: trimmedNombre, apellido: trimmedApellido, nombrePreferido: trimmedNombrePreferido, email, fechaNacimiento, genero });
     closeModal();
   }, [nombre, apellido, nombrePreferido, email, fechaNacimiento, genero, closeModal]);
@@ -277,12 +291,20 @@ export default function EditProfileModal({ visible, onClose }: EditProfileModalP
                   Escríbelo como se lee, y si tiene algún acento raro, márcalo. (Que no es lo mismo Julián, que Julian, o Yulian).
                 </Text>
                 <TextInput
-                  style={styles.input}
+                  style={[styles.input, validationError && styles.inputError]}
                   value={nombrePreferido}
-                  onChangeText={setNombrePreferido}
+                  onChangeText={(text) => {
+                    setNombrePreferido(text);
+                    if (validationError && text.trim().length > 0) {
+                      setValidationError('');
+                    }
+                  }}
                   placeholderTextColor="rgba(251, 239, 217, 0.3)"
                   testID="nombre-preferido-input"
                 />
+                {validationError && (
+                  <Text style={styles.errorText}>{validationError}</Text>
+                )}
               </View>
 
               <View style={styles.fieldContainer}>
@@ -423,6 +445,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'rgba(251, 239, 217, 0.3)',
     textAlign: 'left',
+  },
+  inputError: {
+    borderColor: '#ff6b35',
+    borderWidth: 2,
+  },
+  errorText: {
+    fontSize: 13,
+    color: '#ff6b35',
+    marginTop: 8,
+    fontWeight: '600',
   },
   rowContainer: {
     flexDirection: 'row',
