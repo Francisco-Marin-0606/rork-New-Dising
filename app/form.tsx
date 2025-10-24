@@ -1137,7 +1137,6 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     padding: 16,
-    paddingTop: Platform.OS === 'android' ? 17 : 16,
   },
   overlayText: {
     fontSize: 16,
