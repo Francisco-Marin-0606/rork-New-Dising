@@ -120,8 +120,8 @@ export default function DownloadCompleteModal({ visible, onClose, hypnosisTitle 
             <Svg width="100%" height="100%" style={StyleSheet.absoluteFillObject}>
               <Defs>
                 <SvgLinearGradient id="downloadCompleteBg" x1="0%" y1="0%" x2="86.6%" y2="50%">
-                  <Stop offset="0%" stopColor="#2d2d2d" stopOpacity={1} />
-                  <Stop offset="100%" stopColor="#1a1a1a" stopOpacity={1} />
+                  <Stop offset="0%" stopColor="#a2380e" stopOpacity={1} />
+                  <Stop offset="100%" stopColor="#7c2709" stopOpacity={1} />
                 </SvgLinearGradient>
               </Defs>
               <Rect x={0} y={0} width="100%" height="100%" fill="url(#downloadCompleteBg)" />
@@ -196,21 +196,21 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 26,
     fontWeight: '700' as const,
-    color: '#ffffff',
+    color: '#fbefd9',
     textAlign: 'center',
     marginBottom: 16,
     lineHeight: 32,
   },
   message: {
-    fontSize: 17,
-    color: 'rgba(255, 255, 255, 0.9)',
+    fontSize: 13.6,
+    color: 'rgba(251, 239, 217, 0.85)',
     textAlign: 'center',
-    lineHeight: 24,
+    lineHeight: 19.2,
     marginBottom: 28,
   },
   button: {
     paddingVertical: 16,
-    backgroundColor: '#4A90E2',
+    backgroundColor: '#ff6b35',
     borderRadius: 14,
     justifyContent: 'center',
     alignItems: 'center',
