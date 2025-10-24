@@ -792,7 +792,7 @@ export default function FormScreen() {
 
           <Animated.View style={[styles.footer, { 
             transform: [{ translateY: keyboardAnimatedHeight }],
-            paddingBottom: keyboardHeight === 0 ? 55 : 15,
+            paddingBottom: keyboardHeight === 0 ? 55 : (Platform.OS === 'android' ? 30 : 15),
           }]} pointerEvents="box-none">
             <Pressable
               onPress={handlePrevious}
