@@ -819,7 +819,7 @@ const styles = StyleSheet.create({
   icon: { width: 18, height: 18, resizeMode: 'contain' },
   downloadBtn: { width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: '#D4621F', paddingVertical: 10, borderRadius: 10, position: 'relative', overflow: 'hidden' },
   downloadBtnLoading: { backgroundColor: '#b36017' },
-  downloadBtnCompleted: { backgroundColor: 'rgba(255, 255, 255, 0.2)' },
+  downloadBtnCompleted: { backgroundColor: Platform.OS === 'android' ? '#935139' : 'rgba(255, 255, 255, 0.2)' },
   downloadProgress: { position: 'absolute', left: 0, top: 0, bottom: 0, backgroundColor: 'rgba(255, 255, 255, 0.4)', borderRadius: 10 },
   downloadText: { color: '#FFFFFF', fontSize: 16, fontWeight: '700' },
   tabContentContainer: { flex: 1 },
