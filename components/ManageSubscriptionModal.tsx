@@ -420,10 +420,11 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
               </View>
 
               <View style={styles.confirmBody}>
-                <Text style={styles.confirmTitle}>¿Estás seguro que{"\n"}quieres cancelar tu{"\n"}suscripción a Mental?</Text>
-                <Text style={styles.confirmSubtitle}>
-                  El siguiente click abre una línea de tiempo en la{"\n"}que no podrás pedir nuevas hipnosis.{"\n"}{"\n"}
-                  Y para escuchar las anteriores, tendrás que{"\n"}renovar tu suscripción.
+                <Text style={[styles.confirmTitle, Platform.OS === 'android' && styles.confirmTitleAndroid]}>
+                  ¿Estás seguro que quieres cancelar tu suscripción a Mental?
+                </Text>
+                <Text style={[styles.confirmSubtitle, Platform.OS === 'android' && styles.confirmSubtitleAndroid]}>
+                  El siguiente click abre una línea de tiempo en la que no podrás pedir nuevas hipnosis. Y para escuchar las anteriores, tendrás que renovar tu suscripción.
                 </Text>
 
                 <View style={styles.confirmButtons}>
@@ -725,11 +726,19 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     lineHeight: 38,
   },
+  confirmTitleAndroid: {
+    fontSize: 26,
+    lineHeight: 32,
+  },
   confirmSubtitle: {
     fontSize: 16,
     color: 'rgba(251, 239, 217, 0.7)',
     textAlign: 'center',
     lineHeight: 24,
+  },
+  confirmSubtitleAndroid: {
+    fontSize: 14,
+    lineHeight: 20,
   },
   confirmButtons: {
     width: '100%',
