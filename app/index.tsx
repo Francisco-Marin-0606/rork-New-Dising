@@ -1731,7 +1731,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 32.4,
-    fontWeight: '700',
+    fontWeight: Platform.OS === 'android' ? '600' : '700',
     color: '#fbefd9',
   },
   headerRight: {
@@ -1846,7 +1846,7 @@ const styles = StyleSheet.create({
   cardTitle: {
     flex: 1,
     fontSize: 26,
-    fontWeight: '600',
+    fontWeight: Platform.OS === 'android' ? '500' : '600',
     color: '#fbefd9',
     textAlign: 'left',
     lineHeight: 30,
