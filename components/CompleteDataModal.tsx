@@ -665,7 +665,7 @@ const styles = StyleSheet.create({
     ...BUTTON_STYLES.elevatedShadow,
   },
   completeButtonDisabled: {
-    backgroundColor: 'rgba(255, 107, 53, 0.3)',
+    backgroundColor: Platform.OS === 'android' ? '#433935' : 'rgba(255,255,255,0.08)',
   },
   completeButtonText: {
     fontSize: Platform.OS === 'android' ? 19 : 20,
