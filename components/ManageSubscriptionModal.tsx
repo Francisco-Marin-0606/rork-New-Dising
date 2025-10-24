@@ -424,7 +424,7 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
                   ¿Estás seguro que quieres cancelar tu suscripción a Mental?
                 </Text>
                 <Text style={[styles.confirmSubtitle, Platform.OS === 'android' && styles.confirmSubtitleAndroid]}>
-                  El siguiente click abre una línea de tiempo en la que no podrás pedir nuevas hipnosis. Y para escuchar las anteriores, tendrás que renovar tu suscripción.
+                  El siguiente click abre una línea de tiempo en la que no podrás pedir nuevas hipnosis.\n Y para escuchar las anteriores, tendrás que renovar tu suscripción.
                 </Text>
 
                 <View style={styles.confirmButtons}>
@@ -732,7 +732,7 @@ const styles = StyleSheet.create({
     maxWidth: '95%',
   },
   confirmSubtitle: {
-    fontSize: 18,
+    fontSize: 16,
     color: 'rgba(251, 239, 217, 0.7)',
     textAlign: 'center',
     lineHeight: 24,
