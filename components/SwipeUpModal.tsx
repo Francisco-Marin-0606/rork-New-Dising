@@ -335,9 +335,11 @@ export default function SwipeUpModal({ visible, onClose, imageUri, title, downlo
           </Svg>
         </Animated.View>
         <View style={[styles.innerShift, { marginTop: shiftY }]} testID="modal-inner">
-          <View style={styles.dragArea} testID="drag-area">
-            <View style={styles.handle} />
-          </View>
+          {Platform.OS !== 'android' && (
+            <View style={styles.dragArea} testID="drag-area">
+              <View style={styles.handle} />
+            </View>
+          )}
 
           <Animated.ScrollView
             style={styles.scroll}
