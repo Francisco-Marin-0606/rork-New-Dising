@@ -334,7 +334,18 @@ export default function SwipeUpModal({ visible, onClose, imageUri, title, downlo
             <Rect x={0} y={0} width={screenWidth} height={screenHeight * 1.8} fill="url(#modalBg)" />
           </Svg>
         </Animated.View>
-        <View style={[styles.innerShift, { marginTop: shiftY }]} testID="modal-inner">
+        {Platform.OS !== 'android' && (
+          <TouchableOpacity 
+            style={styles.closeButtonFixed} 
+            onPress={closeModal} 
+            testID="close-button" 
+            activeOpacity={0.1}
+          >
+            <X color="#ffffff" size={24} />
+          </TouchableOpacity>
+        )}
+        
+        <View style={[styles.innerShift, { marginTop: Platform.OS === 'android' ? 0 : shiftY }]} testID="modal-inner">
           <View style={styles.dragArea} testID="drag-area">
             <View style={styles.handle} />
           </View>
@@ -357,9 +368,6 @@ export default function SwipeUpModal({ visible, onClose, imageUri, title, downlo
             )}
             scrollEventThrottle={16}
           >
-            <TouchableOpacity style={styles.closeButton} onPress={closeModal} testID="close-button" activeOpacity={0.1}>
-              <X color="#ffffff" size={24} />
-            </TouchableOpacity>
 
             <View style={styles.content}>
               <View style={styles.imageContainer}>
@@ -759,12 +767,13 @@ const styles = StyleSheet.create({
   modalBgImage: { ...StyleSheet.absoluteFillObject, opacity: 0.22 },
   gradientFill: { flex: 1 },
   innerShift: { flex: 1, position: 'relative' },
-  dragArea: { paddingTop: 12, paddingBottom: 8, alignItems: 'center' },
+  dragArea: { paddingTop: Platform.OS === 'android' ? 8 : 12, paddingBottom: 8, alignItems: 'center' },
   handle: { width: 40, height: 4, backgroundColor: 'transparent', borderRadius: 2, marginBottom: 4 },
   closeButton: { position: 'absolute', top: 24, right: 10, width: 40, height: 40, borderRadius: 20, backgroundColor: 'rgba(0, 0, 0, 0.2)', justifyContent: 'center', alignItems: 'center', zIndex: 10, marginRight: 30, marginBottom: 10 },
+  closeButtonFixed: { position: 'absolute', top: 24, right: 40, width: 40, height: 40, borderRadius: 20, backgroundColor: 'rgba(0, 0, 0, 0.2)', justifyContent: 'center', alignItems: 'center', zIndex: 10000 },
   scroll: { flex: 1, backgroundColor: 'transparent' },
   scrollContent: { paddingBottom: 120, position: 'relative' },
-  content: { paddingHorizontal: 24, paddingTop: 56, marginTop: 40 },
+  content: { paddingHorizontal: 24, paddingTop: Platform.OS === 'android' ? 20 : 56, marginTop: Platform.OS === 'android' ? 0 : 40 },
   imageContainer: { alignItems: 'center', marginBottom: 24, alignSelf: 'center', width: '66%', maxWidth: 300, aspectRatio: 4 / 5, position: 'relative' },
   imageShadowContainer: {
     width: '100%', aspectRatio: 4 / 5, shadowColor: '#000000', shadowOffset: { width: 0, height: 10 }, shadowOpacity: 0.45, shadowRadius: 12.5, elevation: 12.5, borderRadius: 16,
