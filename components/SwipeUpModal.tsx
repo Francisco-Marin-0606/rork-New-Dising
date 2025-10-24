@@ -12,6 +12,7 @@ import {
   NativeSyntheticEvent,
   NativeScrollEvent,
   Platform,
+  StatusBar,
 } from 'react-native';
 
 import { X, Download, Check } from 'lucide-react-native';
@@ -38,13 +39,16 @@ export default function SwipeUpModal({ visible, onClose, imageUri, title, downlo
   const [isClient, setIsClient] = useState(Platform.OS !== 'web');
   
   // Initialize animated values with safe defaults for SSR
-  const translateY = useRef(new Animated.Value(isClient ? screenHeight : 1000)).current;
+  const initialHeight = isClient ? (Platform.OS === 'android' ? screenHeight + (StatusBar.currentHeight || 0) : screenHeight) : 1000;
+  const translateY = useRef(new Animated.Value(initialHeight)).current;
   const opacity = useRef(new Animated.Value(0)).current;
   
   useEffect(() => {
     if (Platform.OS === 'web') {
       setIsClient(true);
       translateY.setValue(screenHeight);
+    } else if (Platform.OS === 'android') {
+      translateY.setValue(screenHeight + (StatusBar.currentHeight || 0));
     }
   }, [screenHeight, translateY]);
 
@@ -194,7 +198,7 @@ export default function SwipeUpModal({ visible, onClose, imageUri, title, downlo
         useNativeDriver: true,
       }),
       Animated.timing(translateY, {
-        toValue: screenHeight,
+        toValue: Platform.OS === 'android' ? screenHeight + (StatusBar.currentHeight || 0) : screenHeight,
         duration: DURATION_CLOSE,
         easing: easeInOut,
         useNativeDriver: true,
@@ -286,14 +290,18 @@ export default function SwipeUpModal({ visible, onClose, imageUri, title, downlo
     }
   }, [visible, openModal]);
 
+  const actualScreenHeight = Platform.OS === 'android' ? screenHeight + (StatusBar.currentHeight || 0) : screenHeight;
+
   useEffect(() => {
     if (!visible) {
-      translateY.setValue(screenHeight);
+      translateY.setValue(actualScreenHeight);
       opacity.setValue(0);
     }
-  }, [visible, translateY, opacity, screenHeight]);
+  }, [visible, translateY, opacity, actualScreenHeight]);
 
   if (!visible || !isClient) return null;
+
+  const statusBarHeight = Platform.OS === 'android' ? (StatusBar.currentHeight || 0) : 0;
 
   return (
     <View style={styles.overlay} testID="swipeup-overlay" pointerEvents={audioPlayerVisible ? 'box-none' : 'auto'}>
@@ -302,7 +310,7 @@ export default function SwipeUpModal({ visible, onClose, imageUri, title, downlo
         style={[
           styles.modalContainer,
           {
-            height: screenHeight,
+            height: screenHeight + statusBarHeight,
             transform: [{ translateY }],
           },
         ]}
