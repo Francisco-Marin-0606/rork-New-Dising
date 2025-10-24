@@ -430,11 +430,11 @@ const styles = StyleSheet.create({
     marginBottom: 50,
   },
   infoText: {
-    fontSize: 18,
+    fontSize: Platform.OS === 'android' ? 16 : 18,
     fontWeight: '400' as const,
     color: '#fbefd9',
     textAlign: 'center',
-    lineHeight: 24,
+    lineHeight: Platform.OS === 'android' ? 22 : 24,
     letterSpacing: 0,
     opacity: 0.5,
   },
