@@ -648,8 +648,8 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     paddingHorizontal: 44,
-    paddingTop: 24,
-    paddingBottom: 55,
+    paddingTop: Platform.OS === 'android' ? 0 : 24,
+    paddingBottom: Platform.OS === 'android' ? 0 : 55,
     backgroundColor: '#170501',
   },
   completeButton: {
