@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     paddingHorizontal: 44,
-    paddingTop: Platform.OS === 'android' ? 30 : 100,
+    paddingTop: Platform.OS === 'android' ? 50 : 110,
   },
   title: {
     fontSize: 62,
