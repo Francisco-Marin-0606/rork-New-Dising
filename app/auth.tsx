@@ -467,7 +467,7 @@ const styles = StyleSheet.create({
     ...BUTTON_STYLES.elevatedShadow,
   },
   verifyButtonDisabled: {
-    backgroundColor: Platform.OS === 'android' ? '#4a4a4a' : 'rgba(251, 239, 217, 0.15)',
+    backgroundColor: Platform.OS === 'android' ? '#3d2f28' : 'rgba(251, 239, 217, 0.15)',
   },
   verifyButtonText: {
     fontSize: 20,
