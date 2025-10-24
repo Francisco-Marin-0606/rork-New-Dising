@@ -796,6 +796,7 @@ export default function FormScreen() {
             <Pressable
               onPress={handlePrevious}
               onPressIn={() => {
+                if (isRecording) return;
                 Animated.parallel([
                   Animated.timing(prevButtonScale, {
                     toValue: 0.9,
@@ -810,6 +811,7 @@ export default function FormScreen() {
                 ]).start();
               }}
               onPressOut={() => {
+                if (isRecording) return;
                 Animated.parallel([
                   Animated.timing(prevButtonScale, {
                     toValue: 1,
@@ -824,13 +826,15 @@ export default function FormScreen() {
                 ]).start();
               }}
               style={{ flex: 1 }}
+              disabled={isRecording}
             >
               <Animated.View style={[
                 styles.button, 
                 styles.buttonSecondary,
+                isRecording && styles.buttonDisabledSecondary,
                 {
                   transform: [{ scale: prevButtonScale }], 
-                  opacity: prevButtonOpacity
+                  opacity: isRecording ? 0.3 : prevButtonOpacity
                 }
               ]}>
                 <Text style={[styles.buttonText, styles.buttonTextSecondary]}>Atrás</Text>
@@ -840,6 +844,7 @@ export default function FormScreen() {
             <Pressable
               onPress={handleNext}
               onPressIn={() => {
+                if (isRecording) return;
                 Animated.parallel([
                   Animated.timing(nextButtonScale, {
                     toValue: 0.9,
@@ -854,6 +859,7 @@ export default function FormScreen() {
                 ]).start();
               }}
               onPressOut={() => {
+                if (isRecording) return;
                 Animated.parallel([
                   Animated.timing(nextButtonScale, {
                     toValue: 1,
@@ -868,13 +874,15 @@ export default function FormScreen() {
                 ]).start();
               }}
               style={{ flex: 1 }}
+              disabled={isRecording}
             >
               <Animated.View style={[
                 styles.button, 
                 styles.buttonPrimary,
+                isRecording && styles.buttonDisabled,
                 {
                   transform: [{ scale: nextButtonScale }], 
-                  opacity: nextButtonOpacity
+                  opacity: isRecording ? 0.3 : nextButtonOpacity
                 }
               ]}>
                 <Text style={[styles.buttonText, styles.buttonTextPrimary]}>
@@ -1096,6 +1104,9 @@ const styles = StyleSheet.create({
   },
   buttonDisabled: {
     backgroundColor: 'rgba(255, 107, 53, 0.3)',
+  },
+  buttonDisabledSecondary: {
+    backgroundColor: 'rgba(251, 239, 217, 0.05)',
   },
   buttonText: {
     fontSize: 17,
