@@ -727,11 +727,11 @@ const styles = StyleSheet.create({
     lineHeight: 38,
   },
   confirmTitleAndroid: {
-    fontSize: 26,
+    fontSize: 30,
     lineHeight: 32,
   },
   confirmSubtitle: {
-    fontSize: 16,
+    fontSize: 18,
     color: 'rgba(251, 239, 217, 0.7)',
     textAlign: 'center',
     lineHeight: 24,
