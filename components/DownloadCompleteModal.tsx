@@ -131,7 +131,7 @@ export default function DownloadCompleteModal({ visible, onClose, hypnosisTitle 
           <View style={styles.content}>
             <Text style={styles.title}>Descarga completada</Text>
             <Text style={styles.message}>
-              &ldquo;{hypnosisTitle}&rdquo; se ha descargado correctamente y está disponible offline.
+              &ldquo;{hypnosisTitle}&rdquo; se ha descargado correctamente y está disponible offline, dentro de la app de Mental.
             </Text>
             
             <Animated.View
