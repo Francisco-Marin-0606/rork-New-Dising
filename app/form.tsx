@@ -660,6 +660,7 @@ export default function FormScreen() {
             keyboardDismissMode="interactive"
             overScrollMode="always"
             scrollEnabled={true}
+            nestedScrollEnabled={true}
           >
             <Animated.View 
               style={[
@@ -723,7 +724,7 @@ export default function FormScreen() {
                     textAlignVertical="top"
                     autoFocus={false}
                     editable={!isRecording}
-                    scrollEnabled={false}
+                    scrollEnabled={Platform.OS === 'android' ? true : false}
                   />
                   {inputValue.length > 500 && (
                     <View style={styles.textOverlay} pointerEvents="none">
