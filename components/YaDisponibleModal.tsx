@@ -12,7 +12,6 @@ import {
 import { StatusBar } from 'expo-status-bar';
 import * as Haptics from 'expo-haptics';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { BUTTON_STYLES } from '@/constants/buttonStyles';
 import Svg, { Defs, LinearGradient as SvgLinearGradient, Stop, Rect } from 'react-native-svg';
 
 interface YaDisponibleModalProps {
@@ -234,8 +233,14 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   primaryButton: {
-    ...BUTTON_STYLES.primaryButton,
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: '#fbefd9',
+    paddingVertical: 16,
+    borderRadius: 14,
+    gap: 8,
     overflow: 'hidden',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 0 },
@@ -244,12 +249,20 @@ const styles = StyleSheet.create({
     elevation: 0,
   },
   primaryButtonText: {
-    ...BUTTON_STYLES.primaryButtonText,
+    fontSize: 20,
+    fontWeight: '600' as const,
     color: '#3a2a1a',
+    letterSpacing: -0.3,
   },
   secondaryButton: {
-    ...BUTTON_STYLES.primaryButton,
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: Platform.OS === 'android' ? '#935139' : 'rgba(255, 255, 255, 0.2)',
+    paddingVertical: 16,
+    borderRadius: 14,
+    gap: 8,
     overflow: 'hidden',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 0 },
@@ -258,7 +271,9 @@ const styles = StyleSheet.create({
     elevation: 0,
   },
   secondaryButtonText: {
-    ...BUTTON_STYLES.primaryButtonText,
+    fontSize: 20,
+    fontWeight: '600' as const,
     color: '#fbefd9',
+    letterSpacing: -0.3,
   },
 });

@@ -668,8 +668,8 @@ const styles = StyleSheet.create({
     backgroundColor: Platform.OS === 'android' ? '#433935' : 'rgba(255,255,255,0.08)',
   },
   completeButtonText: {
-    fontSize: Platform.OS === 'android' ? 19 : 20,
-    fontWeight: Platform.OS === 'android' ? '500' : ('600' as const),
+    fontSize: 20,
+    fontWeight: '600' as const,
     color: '#ffffff',
     letterSpacing: -0.3,
   },
