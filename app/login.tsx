@@ -336,7 +336,7 @@ const styles = StyleSheet.create({
     ...BUTTON_STYLES.elevatedShadow,
   },
   enterButtonDisabled: {
-    backgroundColor: 'rgba(251, 239, 217, 0.15)',
+    backgroundColor: Platform.OS === 'android' ? '#935139' : 'rgba(251, 239, 217, 0.15)',
   },
   enterButtonText: {
     fontSize: 20,
