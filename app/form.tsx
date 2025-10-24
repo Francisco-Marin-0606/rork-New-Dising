@@ -705,7 +705,7 @@ export default function FormScreen() {
                     style={[
                       styles.input,
                       validationError && styles.inputError,
-                      inputValue.length > 500 && styles.inputExcess,
+                      inputValue.length > 500 && styles.inputTransparent,
                     ]}
                     value={isRecording && liveTranscript ? `${inputValue}${inputValue ? ' ' : ''}${liveTranscript}` : inputValue}
                     onChangeText={(text) => {
@@ -725,6 +725,14 @@ export default function FormScreen() {
                     editable={!isRecording}
                     scrollEnabled={Platform.OS === 'android'}
                   />
+                  {inputValue.length > 500 && (
+                    <View style={styles.textOverlay} pointerEvents="none">
+                      <Text style={styles.overlayText}>
+                        <Text style={styles.normalText}>{inputValue.slice(0, 500)}</Text>
+                        <Text style={styles.excessText}>{inputValue.slice(500)}</Text>
+                      </Text>
+                    </View>
+                  )}
                 </View>
 
                 {validationError && (
@@ -996,9 +1004,6 @@ const styles = StyleSheet.create({
     borderColor: '#ff6b35',
     borderWidth: 2,
   },
-  inputExcess: {
-    color: '#ff6b35',
-  },
   errorText: {
     fontSize: 13,
     color: '#ff6b35',
@@ -1120,5 +1125,26 @@ const styles = StyleSheet.create({
   },
   textInputWrapper: {
     position: 'relative',
+  },
+  inputTransparent: {
+    color: 'transparent',
+  },
+  textOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    padding: 16,
+  },
+  overlayText: {
+    fontSize: 16,
+    lineHeight: 24,
+  },
+  normalText: {
+    color: '#fbefd9',
+  },
+  excessText: {
+    color: '#ff0000',
   },
 });
