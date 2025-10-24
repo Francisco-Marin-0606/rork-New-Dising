@@ -999,6 +999,7 @@ const styles = StyleSheet.create({
     minHeight: 200,
     borderWidth: 1,
     borderColor: 'rgba(251, 239, 217, 0.2)',
+    ...(Platform.OS === 'android' && { includeFontPadding: false }),
   },
   inputError: {
     borderColor: '#ff6b35',
@@ -1136,10 +1137,12 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     padding: 16,
+    paddingTop: Platform.OS === 'android' ? 17 : 16,
   },
   overlayText: {
     fontSize: 16,
     lineHeight: 24,
+    ...(Platform.OS === 'android' && { includeFontPadding: false, textAlignVertical: 'top' }),
   },
   normalText: {
     color: '#fbefd9',
