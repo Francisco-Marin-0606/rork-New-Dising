@@ -23,6 +23,7 @@ import PlayerModal from '@/components/PlayerModal';
 import SettingsModal from '@/components/SettingsModal';
 import { BUTTON_STYLES } from '@/constants/buttonStyles';
 import YaDisponibleModal from '@/components/YaDisponibleModal';
+import DownloadCompleteModal from '@/components/DownloadCompleteModal';
 
 interface HypnosisSession {
   id: string;
@@ -433,6 +434,8 @@ export default function HomeScreen() {
   const [navSection, setNavSection] = useState<NavSection>('hipnosis');
   const [settingsModalVisible, setSettingsModalVisible] = useState<boolean>(false);
   const [yaDisponibleModalVisible, setYaDisponibleModalVisible] = useState<boolean>(false);
+  const [downloadCompleteModalVisible, setDownloadCompleteModalVisible] = useState<boolean>(false);
+  const [completedDownloadTitle, setCompletedDownloadTitle] = useState<string>('');
   const [isOnline, setIsOnline] = useState<boolean>(true);
   const { width: screenWidth } = useWindowDimensions();
 
@@ -847,12 +850,23 @@ export default function HomeScreen() {
     }
   }, [viewMode, handleOpen]);
 
+  const completedDownloadsRef = useRef<Set<string>>(new Set());
+
   useEffect(() => {
     Object.entries(downloads).forEach(([id, info]) => {
       if (info?.state === 'completed' && timersRef.current[id]) {
         const t = timersRef.current[id];
         if (typeof t === 'number') clearInterval(t as number);
         timersRef.current[id] = 0;
+        
+        if (!completedDownloadsRef.current.has(id)) {
+          completedDownloadsRef.current.add(id);
+          const session = [...HYPNOSIS_SESSIONS, ...HYPNOSIS_PREVIOUS].find(s => s.id === id);
+          if (session) {
+            setCompletedDownloadTitle(session.title);
+            setDownloadCompleteModalVisible(true);
+          }
+        }
       }
     });
   }, [downloads]);
@@ -1506,6 +1520,12 @@ export default function HomeScreen() {
           setYaDisponibleModalVisible(false);
           router.push('/form');
         }}
+      />
+
+      <DownloadCompleteModal
+        visible={downloadCompleteModalVisible}
+        onClose={() => setDownloadCompleteModalVisible(false)}
+        hypnosisTitle={completedDownloadTitle}
       />
 
       {deleteConfirmVisible && sessionToDelete && (
