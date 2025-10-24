@@ -723,15 +723,21 @@ export default function FormScreen() {
                     textAlignVertical="top"
                     autoFocus={false}
                     editable={!isRecording}
-                    scrollEnabled={false}
+                    scrollEnabled={true}
                   />
                   {inputValue.length > 500 && (
-                    <View style={styles.textOverlay} pointerEvents="none">
+                    <ScrollView 
+                      style={styles.textOverlay} 
+                      contentContainerStyle={styles.textOverlayContent}
+                      pointerEvents="none"
+                      showsVerticalScrollIndicator={false}
+                      scrollEnabled={false}
+                    >
                       <Text style={styles.overlayText}>
                         <Text style={styles.normalText}>{inputValue.slice(0, 500)}</Text>
                         <Text style={styles.excessText}>{inputValue.slice(500)}</Text>
                       </Text>
-                    </View>
+                    </ScrollView>
                   )}
                 </View>
 
@@ -1136,6 +1142,8 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
+  },
+  textOverlayContent: {
     padding: 16,
   },
   overlayText: {
