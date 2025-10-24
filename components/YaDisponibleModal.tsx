@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
   },
   secondaryButton: {
     ...BUTTON_STYLES.primaryButton,
-    backgroundColor: Platform.OS === 'android' ? '#935139' : 'rgba(255, 255, 255, 0.2)',
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
     overflow: 'hidden',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 0 },
