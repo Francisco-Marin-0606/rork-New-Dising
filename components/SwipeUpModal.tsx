@@ -866,7 +866,6 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   deleteConfirmCancelButton: {
-    flex: 1,
     paddingVertical: 16,
     backgroundColor: 'rgba(255,255,255,0.12)',
     borderRadius: 14,
@@ -880,7 +879,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0.2,
   },
   deleteConfirmDeleteButton: {
-    flex: 1,
     paddingVertical: 16,
     backgroundColor: '#ff3b30',
     borderRadius: 14,
