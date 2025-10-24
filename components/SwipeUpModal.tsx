@@ -12,7 +12,6 @@ import {
   NativeSyntheticEvent,
   NativeScrollEvent,
   Platform,
-  StatusBar,
 } from 'react-native';
 
 import { X, Download, Check } from 'lucide-react-native';
@@ -37,7 +36,6 @@ interface SwipeUpModalProps {
 export default function SwipeUpModal({ visible, onClose, imageUri, title, downloadInfo, onRequestDownload, onRequestDelete }: SwipeUpModalProps) {
   const { height: screenHeight, width: screenWidth } = useWindowDimensions();
   const [isClient, setIsClient] = useState(Platform.OS !== 'web');
-  const statusBarHeight = Platform.OS === 'android' ? (StatusBar.currentHeight || 0) : 0;
   
   // Initialize animated values with safe defaults for SSR
   const translateY = useRef(new Animated.Value(isClient ? screenHeight : 1000)).current;
@@ -315,7 +313,6 @@ export default function SwipeUpModal({ visible, onClose, imageUri, title, downlo
             styles.modalGradientBg,
             {
               transform: [{ translateY: backgroundTranslateY }],
-              top: Platform.OS === 'android' ? -statusBarHeight : 0,
             },
           ]}
           pointerEvents="none"
@@ -327,14 +324,14 @@ export default function SwipeUpModal({ visible, onClose, imageUri, title, downlo
               resizeMode="cover"
             />
           ) : null}
-          <Svg width={screenWidth} height={(screenHeight + (Platform.OS === 'android' ? statusBarHeight : 0)) * 1.8}>
+          <Svg width={screenWidth} height={screenHeight * 1.8}>
             <Defs>
               <SvgLinearGradient id="modalBg" x1="0%" y1="0%" x2="86.6%" y2="50%">
                 <Stop offset="0%" stopColor="#a2380e" stopOpacity={1} />
                 <Stop offset="100%" stopColor="#7c2709" stopOpacity={1} />
               </SvgLinearGradient>
             </Defs>
-            <Rect x={0} y={0} width={screenWidth} height={(screenHeight + (Platform.OS === 'android' ? statusBarHeight : 0)) * 1.8} fill="url(#modalBg)" />
+            <Rect x={0} y={0} width={screenWidth} height={screenHeight * 1.8} fill="url(#modalBg)" />
           </Svg>
         </Animated.View>
         <View style={[styles.innerShift, { marginTop: shiftY }]} testID="modal-inner">
