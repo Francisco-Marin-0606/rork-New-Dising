@@ -723,6 +723,7 @@ export default function FormScreen() {
                     textAlignVertical="top"
                     autoFocus={false}
                     editable={!isRecording}
+                    scrollEnabled={false}
                   />
                   {inputValue.length > 500 && (
                     <View style={styles.textOverlay} pointerEvents="none">
