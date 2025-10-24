@@ -997,7 +997,6 @@ const styles = StyleSheet.create({
     color: '#fbefd9',
     lineHeight: 24,
     minHeight: 200,
-    maxHeight: 400,
     borderWidth: 1,
     borderColor: 'rgba(251, 239, 217, 0.2)',
   },
