@@ -10,6 +10,9 @@ import {
   Animated,
   FlatList,
   ListRenderItemInfo,
+  PanResponder,
+  GestureResponderEvent,
+  PanResponderGestureState,
 } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import { StatusBar } from 'expo-status-bar';
@@ -466,6 +469,9 @@ export default function HomeScreen() {
   const currentIndexRef = useRef<number>(0);
   const lastHapticIndexRef = useRef<number>(0);
 
+  const initialScale = useRef<number>(1);
+  const isPinching = useRef<boolean>(false);
+
   const carouselScrollOffsetRef = useRef<number>(0);
   const listScrollOffsetRef = useRef<number>(0);
   const previousScrollOffsetRef = useRef<number>(0);
@@ -630,6 +636,59 @@ export default function HomeScreen() {
   }, [navIndicatorAnim]);
 
   const hasPreviousDownloadsRef = useRef<boolean>(true);
+
+  const pinchResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => false,
+      onMoveShouldSetPanResponder: (_evt: GestureResponderEvent, gestureState: PanResponderGestureState) => {
+        if (gestureState.numberActiveTouches === 2) {
+          return true;
+        }
+        return false;
+      },
+      onPanResponderGrant: (_evt: GestureResponderEvent, gestureState: PanResponderGestureState) => {
+        if (gestureState.numberActiveTouches === 2) {
+          isPinching.current = true;
+          initialScale.current = 1;
+        }
+      },
+      onPanResponderMove: (evt: GestureResponderEvent, gestureState: PanResponderGestureState) => {
+        if (gestureState.numberActiveTouches === 2 && isPinching.current) {
+          const touches = evt.nativeEvent.touches;
+          if (touches.length >= 2) {
+            const touch1 = touches[0];
+            const touch2 = touches[1];
+            const distance = Math.sqrt(
+              Math.pow(touch2.pageX - touch1.pageX, 2) +
+              Math.pow(touch2.pageY - touch1.pageY, 2)
+            );
+            
+            if (initialScale.current === 1) {
+              initialScale.current = distance;
+            } else {
+              const scale = distance / initialScale.current;
+              
+              if (scale < 0.7) {
+                isPinching.current = false;
+                if (Platform.OS !== 'web') {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium).catch(() => {});
+                }
+                handleViewModeChange('list');
+              }
+            }
+          }
+        }
+      },
+      onPanResponderRelease: () => {
+        isPinching.current = false;
+        initialScale.current = 1;
+      },
+      onPanResponderTerminate: () => {
+        isPinching.current = false;
+        initialScale.current = 1;
+      },
+    })
+  ).current;
 
   const handleViewModeChange = useCallback(async (mode: ViewMode) => {
     if (Platform.OS !== 'web') {
@@ -1134,7 +1193,7 @@ export default function HomeScreen() {
           )}
 
           {viewMode === 'carousel' ? (
-            <Animated.View style={[styles.carouselContainer, { opacity: fadeAnim, transform: [{ translateX: slideAnim }] }]}>
+            <Animated.View style={[styles.carouselContainer, { opacity: fadeAnim, transform: [{ translateX: slideAnim }] }]} {...pinchResponder.panHandlers}>
               {!isCarouselReady && (
                 <View style={styles.skeletonContainer}>
                   <View style={styles.skeletonCarouselWrapper}>
