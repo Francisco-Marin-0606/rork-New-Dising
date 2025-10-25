@@ -458,6 +458,7 @@ export default function HomeScreen() {
 
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const slideAnim = useRef(new Animated.Value(0)).current;
+  const zoomAnim = useRef(new Animated.Value(1)).current;
 
   // Tamaño/espaciado estilo “foto 1”
   const cardWidth = useMemo(() => Math.min(263.35, screenWidth * 1.725), [screenWidth]);
@@ -673,7 +674,7 @@ export default function HomeScreen() {
                 if (Platform.OS !== 'web') {
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium).catch(() => {});
                 }
-                handleViewModeChange('list');
+                handleViewModeChangeWithZoom('list');
               }
             }
           }
@@ -689,6 +690,61 @@ export default function HomeScreen() {
       },
     })
   ).current;
+
+  const handleViewModeChangeWithZoom = useCallback(async (mode: ViewMode) => {
+    if (Platform.OS !== 'web') {
+      try { await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); } catch {}
+    }
+
+    if (mode === 'previous' && !isOnline && !hasPreviousDownloadsRef.current) {
+      return;
+    }
+
+    const targetPosition = mode === 'carousel' ? 0 : mode === 'list' ? 1 : 2;
+    Animated.spring(toggleIndicatorAnim, {
+      toValue: targetPosition,
+      useNativeDriver: false,
+      tension: 80,
+      friction: 10,
+    }).start();
+
+    Animated.parallel([
+      Animated.timing(zoomAnim, {
+        toValue: 0.85,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+      Animated.timing(fadeAnim, {
+        toValue: 0,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      setViewMode(mode);
+      zoomAnim.setValue(0.85);
+      fadeAnim.setValue(0);
+      slideAnim.setValue(0);
+      
+      requestAnimationFrame(() => {
+        restoreScrollPositions(mode);
+        requestAnimationFrame(() => {
+          Animated.parallel([
+            Animated.spring(zoomAnim, {
+              toValue: 1,
+              useNativeDriver: true,
+              tension: 80,
+              friction: 10,
+            }),
+            Animated.timing(fadeAnim, {
+              toValue: 1,
+              duration: 200,
+              useNativeDriver: true,
+            }),
+          ]).start();
+        });
+      });
+    });
+  }, [fadeAnim, zoomAnim, slideAnim, toggleIndicatorAnim, restoreScrollPositions, isOnline]);
 
   const handleViewModeChange = useCallback(async (mode: ViewMode) => {
     if (Platform.OS !== 'web') {
@@ -1193,7 +1249,7 @@ export default function HomeScreen() {
           )}
 
           {viewMode === 'carousel' ? (
-            <Animated.View style={[styles.carouselContainer, { opacity: fadeAnim, transform: [{ translateX: slideAnim }] }]} {...pinchResponder.panHandlers}>
+            <Animated.View style={[styles.carouselContainer, { opacity: fadeAnim, transform: [{ translateX: slideAnim }, { scale: zoomAnim }] }]} {...pinchResponder.panHandlers}>
               {!isCarouselReady && (
                 <View style={styles.skeletonContainer}>
                   <View style={styles.skeletonCarouselWrapper}>
@@ -1250,7 +1306,7 @@ export default function HomeScreen() {
               )}
             </Animated.View>
           ) : viewMode === 'list' ? (
-            <Animated.View style={[styles.listContainer, { opacity: fadeAnim, transform: [{ translateX: slideAnim }] }]}>
+            <Animated.View style={[styles.listContainer, { opacity: fadeAnim, transform: [{ translateX: slideAnim }, { scale: zoomAnim }] }]}>
               {filteredSessions.length === 0 ? (
                 <View style={styles.emptyStateList}>
                   <Text style={styles.emptyMainTitle}>No tienes hipnosis{"\n"}descargadas</Text>
@@ -1272,7 +1328,7 @@ export default function HomeScreen() {
               )}
             </Animated.View>
           ) : (
-            <Animated.View style={[styles.listContainer, { opacity: fadeAnim, transform: [{ translateX: slideAnim }] }]}>
+            <Animated.View style={[styles.listContainer, { opacity: fadeAnim, transform: [{ translateX: slideAnim }, { scale: zoomAnim }] }]}>
               {filteredPreviousSessions.length === 0 ? (
                 <View style={styles.emptyStateList}>
                   {isOnline ? (
