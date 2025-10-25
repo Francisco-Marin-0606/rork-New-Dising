@@ -10,9 +10,6 @@ import {
   Animated,
   FlatList,
   ListRenderItemInfo,
-  PanResponder,
-  GestureResponderEvent,
-  PanResponderGestureState,
 } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import { StatusBar } from 'expo-status-bar';
@@ -458,7 +455,6 @@ export default function HomeScreen() {
 
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const slideAnim = useRef(new Animated.Value(0)).current;
-  const zoomAnim = useRef(new Animated.Value(1)).current;
 
   // Tamaño/espaciado estilo “foto 1”
   const cardWidth = useMemo(() => Math.min(263.35, screenWidth * 1.725), [screenWidth]);
@@ -469,9 +465,6 @@ export default function HomeScreen() {
   const scrollX = useRef(new Animated.Value(0)).current;
   const currentIndexRef = useRef<number>(0);
   const lastHapticIndexRef = useRef<number>(0);
-
-  const initialScale = useRef<number>(1);
-  const isPinching = useRef<boolean>(false);
 
   const carouselScrollOffsetRef = useRef<number>(0);
   const listScrollOffsetRef = useRef<number>(0);
@@ -637,114 +630,6 @@ export default function HomeScreen() {
   }, [navIndicatorAnim]);
 
   const hasPreviousDownloadsRef = useRef<boolean>(true);
-
-  const pinchResponder = useRef(
-    PanResponder.create({
-      onStartShouldSetPanResponder: () => false,
-      onMoveShouldSetPanResponder: (_evt: GestureResponderEvent, gestureState: PanResponderGestureState) => {
-        if (gestureState.numberActiveTouches === 2) {
-          return true;
-        }
-        return false;
-      },
-      onPanResponderGrant: (_evt: GestureResponderEvent, gestureState: PanResponderGestureState) => {
-        if (gestureState.numberActiveTouches === 2) {
-          isPinching.current = true;
-          initialScale.current = 1;
-        }
-      },
-      onPanResponderMove: (evt: GestureResponderEvent, gestureState: PanResponderGestureState) => {
-        if (gestureState.numberActiveTouches === 2 && isPinching.current) {
-          const touches = evt.nativeEvent.touches;
-          if (touches.length >= 2) {
-            const touch1 = touches[0];
-            const touch2 = touches[1];
-            const distance = Math.sqrt(
-              Math.pow(touch2.pageX - touch1.pageX, 2) +
-              Math.pow(touch2.pageY - touch1.pageY, 2)
-            );
-            
-            if (initialScale.current === 1) {
-              initialScale.current = distance;
-            } else {
-              const scale = distance / initialScale.current;
-              
-              if (scale < 0.7) {
-                isPinching.current = false;
-                if (Platform.OS !== 'web') {
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium).catch(() => {});
-                }
-                handleViewModeChangeWithZoom('list');
-              }
-            }
-          }
-        }
-      },
-      onPanResponderRelease: () => {
-        isPinching.current = false;
-        initialScale.current = 1;
-      },
-      onPanResponderTerminate: () => {
-        isPinching.current = false;
-        initialScale.current = 1;
-      },
-    })
-  ).current;
-
-  const handleViewModeChangeWithZoom = useCallback(async (mode: ViewMode) => {
-    if (Platform.OS !== 'web') {
-      try { await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); } catch {}
-    }
-
-    if (mode === 'previous' && !isOnline && !hasPreviousDownloadsRef.current) {
-      return;
-    }
-
-    const targetPosition = mode === 'carousel' ? 0 : mode === 'list' ? 1 : 2;
-    Animated.spring(toggleIndicatorAnim, {
-      toValue: targetPosition,
-      useNativeDriver: false,
-      tension: 80,
-      friction: 10,
-    }).start();
-
-    Animated.parallel([
-      Animated.timing(zoomAnim, {
-        toValue: 0.85,
-        duration: 200,
-        useNativeDriver: true,
-      }),
-      Animated.timing(fadeAnim, {
-        toValue: 0,
-        duration: 200,
-        useNativeDriver: true,
-      }),
-    ]).start(() => {
-      setViewMode(mode);
-      zoomAnim.setValue(0.85);
-      fadeAnim.setValue(0);
-      slideAnim.setValue(0);
-      
-      requestAnimationFrame(() => {
-        restoreScrollPositions(mode);
-        requestAnimationFrame(() => {
-          Animated.parallel([
-            Animated.spring(zoomAnim, {
-              toValue: 1,
-              useNativeDriver: true,
-              tension: 80,
-              friction: 10,
-            }),
-            Animated.timing(fadeAnim, {
-              toValue: 1,
-              duration: 200,
-              useNativeDriver: true,
-            }),
-          ]).start();
-        });
-      });
-    });
-  }, [fadeAnim, zoomAnim, slideAnim, toggleIndicatorAnim, restoreScrollPositions, isOnline]);
 
   const handleViewModeChange = useCallback(async (mode: ViewMode) => {
     if (Platform.OS !== 'web') {
@@ -1249,7 +1134,7 @@ export default function HomeScreen() {
           )}
 
           {viewMode === 'carousel' ? (
-            <Animated.View style={[styles.carouselContainer, { opacity: fadeAnim, transform: [{ translateX: slideAnim }, { scale: zoomAnim }] }]} {...pinchResponder.panHandlers}>
+            <Animated.View style={[styles.carouselContainer, { opacity: fadeAnim, transform: [{ translateX: slideAnim }] }]}>
               {!isCarouselReady && (
                 <View style={styles.skeletonContainer}>
                   <View style={styles.skeletonCarouselWrapper}>
@@ -1306,7 +1191,7 @@ export default function HomeScreen() {
               )}
             </Animated.View>
           ) : viewMode === 'list' ? (
-            <Animated.View style={[styles.listContainer, { opacity: fadeAnim, transform: [{ translateX: slideAnim }, { scale: zoomAnim }] }]}>
+            <Animated.View style={[styles.listContainer, { opacity: fadeAnim, transform: [{ translateX: slideAnim }] }]}>
               {filteredSessions.length === 0 ? (
                 <View style={styles.emptyStateList}>
                   <Text style={styles.emptyMainTitle}>No tienes hipnosis{"\n"}descargadas</Text>
@@ -1328,7 +1213,7 @@ export default function HomeScreen() {
               )}
             </Animated.View>
           ) : (
-            <Animated.View style={[styles.listContainer, { opacity: fadeAnim, transform: [{ translateX: slideAnim }, { scale: zoomAnim }] }]}>
+            <Animated.View style={[styles.listContainer, { opacity: fadeAnim, transform: [{ translateX: slideAnim }] }]}>
               {filteredPreviousSessions.length === 0 ? (
                 <View style={styles.emptyStateList}>
                   {isOnline ? (
