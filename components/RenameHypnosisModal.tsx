@@ -4,16 +4,12 @@ import {
   Text,
   StyleSheet,
   Animated,
-  TouchableOpacity,
   Pressable,
-  useWindowDimensions,
   Easing,
   Platform,
   TextInput,
 } from 'react-native';
-import { ChevronLeft } from 'lucide-react-native';
 import * as Haptics from 'expo-haptics';
-import { BUTTON_STYLES } from '@/constants/buttonStyles';
 
 interface RenameHypnosisModalProps {
   visible: boolean;
@@ -23,9 +19,7 @@ interface RenameHypnosisModalProps {
 }
 
 export default function RenameHypnosisModal({ visible, onClose, currentName, onSave }: RenameHypnosisModalProps) {
-  const { height: screenHeight } = useWindowDimensions();
-  
-  const translateY = useRef(new Animated.Value(screenHeight)).current;
+  const scale = useRef(new Animated.Value(0.9)).current;
   const opacity = useRef(new Animated.Value(0)).current;
   
   const [name, setName] = useState<string>(currentName);
@@ -34,14 +28,14 @@ export default function RenameHypnosisModal({ visible, onClose, currentName, onS
   const saveButtonScale = useRef(new Animated.Value(1)).current;
   const saveButtonOpacity = useRef(new Animated.Value(1)).current;
 
-  const DURATION_OPEN = 400;
-  const DURATION_CLOSE = 350;
+  const DURATION_OPEN = 300;
+  const DURATION_CLOSE = 250;
   const easeInOut = Easing.bezier(0.4, 0.0, 0.2, 1);
 
   const closeModal = useCallback(async () => {
     if (Platform.OS !== 'web') {
       try {
-        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       } catch (error) {
         console.log('Haptic feedback error:', error);
       }
@@ -54,8 +48,8 @@ export default function RenameHypnosisModal({ visible, onClose, currentName, onS
         easing: easeInOut,
         useNativeDriver: true,
       }),
-      Animated.timing(translateY, {
-        toValue: screenHeight,
+      Animated.timing(scale, {
+        toValue: 0.9,
         duration: DURATION_CLOSE,
         easing: easeInOut,
         useNativeDriver: true,
@@ -63,7 +57,7 @@ export default function RenameHypnosisModal({ visible, onClose, currentName, onS
     ]).start(() => {
       onClose();
     });
-  }, [opacity, translateY, screenHeight, onClose, easeInOut]);
+  }, [opacity, scale, onClose, easeInOut]);
 
   const openModal = useCallback(() => {
     Animated.parallel([
@@ -73,14 +67,14 @@ export default function RenameHypnosisModal({ visible, onClose, currentName, onS
         easing: easeInOut,
         useNativeDriver: true,
       }),
-      Animated.timing(translateY, {
-        toValue: 0,
-        duration: DURATION_OPEN,
-        easing: easeInOut,
+      Animated.spring(scale, {
+        toValue: 1,
         useNativeDriver: true,
+        tension: 65,
+        friction: 10,
       }),
     ]).start();
-  }, [opacity, translateY, easeInOut]);
+  }, [opacity, scale, easeInOut]);
 
   useEffect(() => {
     if (visible) {
@@ -91,11 +85,11 @@ export default function RenameHypnosisModal({ visible, onClose, currentName, onS
 
   useEffect(() => {
     if (!visible) {
-      translateY.setValue(screenHeight);
+      scale.setValue(0.9);
       opacity.setValue(0);
       setIsSaving(false);
     }
-  }, [visible, translateY, opacity, screenHeight]);
+  }, [visible, scale, opacity]);
 
   const handleSave = useCallback(async () => {
     if (isSaving) return;
@@ -150,53 +144,57 @@ export default function RenameHypnosisModal({ visible, onClose, currentName, onS
     ]).start();
   };
 
+  const handleBackdropPress = useCallback(() => {
+    closeModal();
+  }, [closeModal]);
+
   if (!visible) return null;
 
   return (
     <View style={styles.overlay} testID="rename-hypnosis-overlay">
-      <Animated.View style={[styles.backdrop, { opacity }]} pointerEvents="none" />
+      <Animated.View style={[styles.backdrop, { opacity }]}>
+        <Pressable style={StyleSheet.absoluteFill} onPress={handleBackdropPress} />
+      </Animated.View>
       
       <Animated.View
         style={[
-          styles.modalContainer,
+          styles.popupContainer,
           {
-            height: screenHeight,
-            transform: [{ translateY }],
+            opacity,
+            transform: [{ scale }],
           },
         ]}
         testID="rename-hypnosis-container"
       >
-        <View style={styles.modalContent}>
-          <View style={styles.header}>
-            <TouchableOpacity 
-              style={styles.backButton} 
-              onPress={closeModal} 
-              testID="back-button" 
-              activeOpacity={0.6}
-            >
-              <ChevronLeft color="#fbefd9" size={24} strokeWidth={2} />
-            </TouchableOpacity>
+        <View style={styles.popupContent}>
+          <Text style={styles.title}>Cambiar nombre</Text>
+          <Text style={styles.subtitle}>Edita el nombre de tu hipnosis</Text>
+
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              value={name}
+              onChangeText={setName}
+              placeholder="Nombre de la hipnosis"
+              placeholderTextColor="rgba(251, 239, 217, 0.3)"
+              autoFocus
+              maxLength={100}
+              testID="name-input"
+            />
           </View>
 
-          <View style={styles.mainContent}>
-            <Text style={styles.title}>Cambiar nombre</Text>
-            <Text style={styles.subtitle}>Edita el nombre de tu hipnosis</Text>
-
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.input}
-                value={name}
-                onChangeText={setName}
-                placeholder="Nombre de la hipnosis"
-                placeholderTextColor="rgba(251, 239, 217, 0.3)"
-                autoFocus
-                maxLength={100}
-                testID="name-input"
-              />
-            </View>
+          <View style={styles.buttonsContainer}>
+            <Pressable
+              style={styles.cancelButton}
+              onPress={closeModal}
+              testID="cancel-button"
+            >
+              <Text style={styles.cancelButtonText}>Cancelar</Text>
+            </Pressable>
 
             <Animated.View
               style={{
+                flex: 1,
                 transform: [{ scale: saveButtonScale }],
                 opacity: saveButtonOpacity,
               }}
@@ -233,78 +231,101 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     zIndex: 4000,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   backdrop: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: '#000000',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
   },
-  modalContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
+  popupContainer: {
+    width: '85%',
+    maxWidth: 400,
     backgroundColor: '#170501',
-    borderTopLeftRadius: 0,
-    borderTopRightRadius: 0,
-    overflow: 'hidden',
+    borderRadius: 20,
+    padding: 28,
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 8,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 16,
+    elevation: 16,
   },
-  modalContent: {
-    flex: 1,
-    paddingHorizontal: 44,
-    paddingTop: 60,
-    paddingBottom: 40,
-  },
-  header: {
-    paddingBottom: 20,
-    position: 'relative',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 12,
-  },
-  backButton: {
-    position: 'absolute',
-    left: 0,
-    width: 40,
-    height: 40,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-  },
-  mainContent: {
-    flex: 1,
+  popupContent: {
+    alignItems: 'stretch',
   },
   title: {
-    fontSize: 32.4,
+    fontSize: 24,
     fontWeight: '700',
     color: '#fbefd9',
     marginBottom: 8,
+    textAlign: 'center',
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '400',
     color: 'rgba(251, 239, 217, 0.6)',
-    marginBottom: 32,
+    marginBottom: 24,
+    textAlign: 'center',
+    lineHeight: 20,
   },
   inputContainer: {
-    marginBottom: 32,
+    marginBottom: 24,
   },
   input: {
-    ...BUTTON_STYLES.primaryButton,
     backgroundColor: 'rgba(251, 239, 217, 0.08)',
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    fontSize: 16,
+    color: '#fbefd9',
+    borderWidth: 1,
+    borderColor: 'rgba(251, 239, 217, 0.2)',
+  },
+  buttonsContainer: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  cancelButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(251, 239, 217, 0.08)',
+    paddingVertical: 14,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(251, 239, 217, 0.2)',
+  },
+  cancelButtonText: {
     color: '#fbefd9',
     fontSize: 16,
-    fontWeight: '400',
-    textAlign: 'left',
+    fontWeight: '600',
   },
   saveButton: {
-    ...BUTTON_STYLES.primaryButton,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: '#ff6b35',
+    paddingVertical: 14,
+    borderRadius: 12,
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 4,
   },
   saveButtonDisabled: {
     backgroundColor: 'rgba(251, 239, 217, 0.2)',
   },
   saveButtonText: {
-    ...BUTTON_STYLES.primaryButtonText,
     color: '#ffffff',
+    fontSize: 16,
+    fontWeight: '700',
   },
 });
