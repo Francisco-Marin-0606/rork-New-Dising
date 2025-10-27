@@ -24,6 +24,7 @@ import SettingsModal from '@/components/SettingsModal';
 import { BUTTON_STYLES } from '@/constants/buttonStyles';
 import YaDisponibleModal from '@/components/YaDisponibleModal';
 import DownloadCompleteModal from '@/components/DownloadCompleteModal';
+import RenameHypnosisModal from '@/components/RenameHypnosisModal';
 
 interface HypnosisSession {
   id: string;
@@ -437,6 +438,10 @@ export default function HomeScreen() {
   const [downloadCompleteModalVisible, setDownloadCompleteModalVisible] = useState<boolean>(false);
   const [completedDownloadTitle, setCompletedDownloadTitle] = useState<string>('');
   const [isOnline, setIsOnline] = useState<boolean>(true);
+  const [renameModalVisible, setRenameModalVisible] = useState<boolean>(false);
+  const [sessionToRename, setSessionToRename] = useState<HypnosisSession | null>(null);
+  const [hypnosisSessions, setHypnosisSessions] = useState<HypnosisSession[]>(HYPNOSIS_SESSIONS);
+  const [previousSessions, setPreviousSessions] = useState<HypnosisSession[]>(HYPNOSIS_PREVIOUS);
   const { width: screenWidth } = useWindowDimensions();
 
   const menuPrimaryScale = useRef(new Animated.Value(1)).current;
@@ -804,6 +809,12 @@ export default function HomeScreen() {
       router.push('/qa');
     }
 
+    if (action === 'rename') {
+      setMenuModalVisible(false);
+      setSessionToRename(menuSession);
+      setRenameModalVisible(true);
+    }
+
     if (action === 'download') {
       const id = menuSession.id;
       const downloadInfo = downloads[id];
@@ -864,7 +875,7 @@ export default function HomeScreen() {
         
         if (!completedDownloadsRef.current.has(id)) {
           completedDownloadsRef.current.add(id);
-          const session = [...HYPNOSIS_SESSIONS, ...HYPNOSIS_PREVIOUS].find(s => s.id === id);
+          const session = [...hypnosisSessions, ...previousSessions].find(s => s.id === id);
           if (session) {
             console.log('[Download] Completed download for:', session.title);
             setCompletedDownloadTitle(session.title);
@@ -924,17 +935,17 @@ export default function HomeScreen() {
 
   const filteredSessions = useMemo(() => {
     if (isOnline) {
-      return HYPNOSIS_SESSIONS;
+      return hypnosisSessions;
     }
-    return HYPNOSIS_SESSIONS.filter(session => downloads[session.id]?.state === 'completed');
-  }, [isOnline, downloads]);
+    return hypnosisSessions.filter(session => downloads[session.id]?.state === 'completed');
+  }, [isOnline, downloads, hypnosisSessions]);
 
   const filteredPreviousSessions = useMemo(() => {
     if (isOnline) {
-      return HYPNOSIS_PREVIOUS;
+      return previousSessions;
     }
-    return HYPNOSIS_PREVIOUS.filter(session => downloads[session.id]?.state === 'completed');
-  }, [isOnline, downloads]);
+    return previousSessions.filter(session => downloads[session.id]?.state === 'completed');
+  }, [isOnline, downloads, previousSessions]);
 
   const hasPreviousDownloads = useMemo(() => {
     return filteredPreviousSessions.length > 0;
@@ -977,10 +988,10 @@ export default function HomeScreen() {
 
   const showToggle = useMemo(() => {
     if (isOnline) {
-      return HYPNOSIS_PREVIOUS.length > 0;
+      return previousSessions.length > 0;
     }
     return hasPreviousDownloads || hasCarouselListDownloads;
-  }, [isOnline, hasPreviousDownloads, hasCarouselListDownloads]);
+  }, [isOnline, hasPreviousDownloads, hasCarouselListDownloads, previousSessions]);
 
   const headerTitle = useMemo(() => {
     if (!isOnline) {
@@ -1532,6 +1543,32 @@ export default function HomeScreen() {
         onClose={() => setDownloadCompleteModalVisible(false)}
         hypnosisTitle={completedDownloadTitle}
       />
+
+      {renameModalVisible && sessionToRename && (
+        <RenameHypnosisModal
+          visible={renameModalVisible}
+          onClose={() => {
+            setRenameModalVisible(false);
+            setSessionToRename(null);
+          }}
+          currentName={sessionToRename.title}
+          onSave={(newName) => {
+            const isInPrevious = previousSessions.some(s => s.id === sessionToRename.id);
+            
+            if (isInPrevious) {
+              setPreviousSessions(prev => 
+                prev.map(s => s.id === sessionToRename.id ? { ...s, title: newName } : s)
+              );
+            } else {
+              setHypnosisSessions(prev => 
+                prev.map(s => s.id === sessionToRename.id ? { ...s, title: newName } : s)
+              );
+            }
+            
+            console.log('[Rename] Changed name to:', newName);
+          }}
+        />
+      )}
 
       {deleteConfirmVisible && sessionToDelete && (
         <View style={styles.menuOverlay}>
