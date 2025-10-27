@@ -21,7 +21,6 @@ function RootLayoutNav() {
       <Stack.Screen name="login" options={{ headerShown: false, statusBarTranslucent: true, statusBarBackgroundColor: 'transparent' }} />
       <Stack.Screen name="index" options={{ headerShown: false, statusBarTranslucent: true, statusBarBackgroundColor: 'transparent' }} />
       <Stack.Screen name="success" options={{ headerShown: false, statusBarTranslucent: true, statusBarBackgroundColor: 'transparent', animation: 'fade' }} />
-      <Stack.Screen name="contact" options={{ headerShown: false, statusBarTranslucent: true, statusBarBackgroundColor: 'transparent', presentation: 'transparentModal' }} />
     </Stack>
   );
 }
