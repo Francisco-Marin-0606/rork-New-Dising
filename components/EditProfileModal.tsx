@@ -238,7 +238,7 @@ export default function EditProfileModal({ visible, onClose }: EditProfileModalP
         testID="edit-profile-container"
         {...panResponder.panHandlers}
       >
-        <View style={styles.content}>
+        <Pressable style={styles.content} onPress={Keyboard.dismiss}>
           <Pressable style={styles.header} onPress={Keyboard.dismiss}>
             <TouchableOpacity 
               style={styles.closeButton} 
@@ -347,7 +347,7 @@ export default function EditProfileModal({ visible, onClose }: EditProfileModalP
               </Pressable>
             </Animated.View>
           </Pressable>
-        </View>
+        </Pressable>
       </Animated.View>
     </View>
   );
