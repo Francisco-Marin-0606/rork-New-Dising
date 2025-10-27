@@ -25,7 +25,7 @@ export const BUTTON_STYLES = StyleSheet.create({
     overflow: 'hidden',
   },
   primaryButtonText: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: '600' as const,
     color: '#ffffff',
     letterSpacing: -0.3,

@@ -683,7 +683,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   cancelButtonText: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: '600',
     color: '#ef4444',
     letterSpacing: -0.3,
@@ -818,7 +818,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   confirmButtonText: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: '600',
     color: '#ffffff',
     letterSpacing: -0.3,
@@ -840,7 +840,7 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   confirmButtonSecondaryText: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: '600',
     color: '#ffffff',
     letterSpacing: -0.3,

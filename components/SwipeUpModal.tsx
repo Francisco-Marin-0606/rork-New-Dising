@@ -782,12 +782,12 @@ const styles = StyleSheet.create({
     flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: Platform.OS === 'android' ? '#935139' : 'rgba(255, 255, 255, 0.2)', paddingVertical: 10, borderRadius: 10, gap: 8,
     ...BUTTON_STYLES.elevatedShadow, position: 'relative', overflow: 'hidden',
   },
-  explainText: { color: '#FFFFFF', fontSize: 16, fontWeight: '700' },
+  explainText: { color: '#FFFFFF', fontSize: 18, fontWeight: '700' },
   playBtn: {
     flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: '#FFFFFF', paddingVertical: 10, borderRadius: 10, gap: 8,
     ...BUTTON_STYLES.elevatedShadow,
   },
-  playText: { color: '#000000', fontSize: 16, fontWeight: '700' },
+  playText: { color: '#000000', fontSize: 18, fontWeight: '700' },
   actionsSection: { alignSelf: 'stretch', width: '100%', paddingTop: 24, paddingBottom: 24, marginTop: -24 },
   actionsSectionInner: { alignSelf: 'center', width: '80%', maxWidth: 520 },
   tabsSection: { alignSelf: 'stretch', width: '100%', paddingTop: 24, paddingBottom: 24, backgroundColor: 'transparent' },
@@ -814,7 +814,7 @@ const styles = StyleSheet.create({
   downloadBtnLoading: { backgroundColor: '#b36017' },
   downloadBtnCompleted: { backgroundColor: Platform.OS === 'android' ? '#935139' : 'rgba(255, 255, 255, 0.2)' },
   downloadProgress: { position: 'absolute', left: 0, top: 0, bottom: 0, backgroundColor: 'rgba(255, 255, 255, 0.4)', borderRadius: 10 },
-  downloadText: { color: '#FFFFFF', fontSize: 16, fontWeight: '700' },
+  downloadText: { color: '#FFFFFF', fontSize: 18, fontWeight: '700' },
   tabContentContainer: { flex: 1 },
   animatedContentContainer: { flex: 1 },
   deleteOverlay: {
@@ -868,7 +868,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   deleteConfirmCancelText: {
-    fontSize: 17,
+    fontSize: 18,
     fontWeight: '600' as const,
     color: '#ffffff',
     letterSpacing: 0.2,
@@ -886,7 +886,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   deleteConfirmDeleteText: {
-    fontSize: 17,
+    fontSize: 18,
     fontWeight: '600' as const,
     color: '#ffffff',
     letterSpacing: 0.2,

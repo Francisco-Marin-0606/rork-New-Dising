@@ -1111,7 +1111,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(251, 239, 217, 0.05)',
   },
   buttonText: {
-    fontSize: 17,
+    fontSize: 18,
     fontWeight: '600',
     letterSpacing: 0.2,
   },

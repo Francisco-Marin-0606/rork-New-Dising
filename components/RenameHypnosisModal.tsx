@@ -322,7 +322,7 @@ const styles = StyleSheet.create({
   },
   cancelButtonText: {
     color: '#fbefd9',
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '600',
   },
   saveButton: {
@@ -346,7 +346,7 @@ const styles = StyleSheet.create({
   },
   saveButtonText: {
     color: '#ffffff',
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '700',
   },
 });
