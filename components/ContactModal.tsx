@@ -284,16 +284,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 44,
     paddingTop: Platform.OS === 'android' ? 16 : 60,
     paddingBottom: 40,
-    justifyContent: 'center',
   },
   header: {
+    position: 'absolute',
+    top: Platform.OS === 'android' ? 16 : 60,
+    left: 44,
+    right: 44,
     paddingBottom: 20,
-    position: 'relative',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     marginBottom: 12,
     marginTop: Platform.OS === 'android' ? 0 : 30,
+    zIndex: 10,
   },
   backButton: {
     position: 'absolute',
@@ -303,6 +306,8 @@ const styles = StyleSheet.create({
 
   errorContentContainer: {
     alignItems: 'stretch',
+    flex: 1,
+    justifyContent: 'center',
   },
   iconContainer: {
     marginBottom: 32,
