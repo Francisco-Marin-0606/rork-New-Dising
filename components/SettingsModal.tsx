@@ -119,6 +119,11 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
       return;
     }
     
+    if (action === 'contact') {
+      router.push('/contact');
+      return;
+    }
+    
     if (action === 'logout') {
       closeModal();
       setTimeout(() => {
