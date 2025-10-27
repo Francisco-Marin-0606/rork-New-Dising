@@ -20,7 +20,6 @@ import { router, Stack } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { BUTTON_STYLES } from '@/constants/buttonStyles';
 import CompleteDataModal from '@/components/CompleteDataModal';
-import { useUserProfile } from '@/contexts/UserProfileContext';
 
 export default function AuthScreen() {
   const [code, setCode] = useState<string[]>(['', '', '', '']);
@@ -37,7 +36,6 @@ export default function AuthScreen() {
   const scrollViewRef = useRef<ScrollView>(null);
   const resendButtonRef = useRef<View>(null);
   const hasScrolledRef = useRef<boolean>(false);
-  const { saveProfile } = useUserProfile();
 
   useEffect(() => {
     if (timer > 0) {
@@ -163,12 +161,11 @@ export default function AuthScreen() {
 
   const isCodeComplete = code.every(digit => digit !== '');
 
-  const handleCompleteData = useCallback(async (data: { name: string; gender: 'Hombre' | 'Mujer'; birthdate: string }) => {
+  const handleCompleteData = useCallback((data: { name: string; gender: string; birthdate: string }) => {
     console.log('User data completed:', data);
-    await saveProfile(data);
     setShowCompleteDataModal(false);
     router.push('/');
-  }, [saveProfile]);
+  }, []);
 
   return (
     <View style={styles.root}>

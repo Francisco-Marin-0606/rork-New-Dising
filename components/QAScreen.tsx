@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback, useMemo } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import {
   View,
   Text,
@@ -15,12 +15,10 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChevronLeft } from 'lucide-react-native';
 import * as Haptics from 'expo-haptics';
 import { router } from 'expo-router';
-import { useUserProfile } from '@/contexts/UserProfileContext';
 
 export default function QAScreen() {
   const { height: screenHeight, width: screenWidth } = useWindowDimensions();
   const insets = useSafeAreaInsets();
-  const { profile } = useUserProfile();
   
   const translateY = useRef(new Animated.Value(screenHeight)).current;
   const translateX = useRef(new Animated.Value(0)).current;
@@ -130,24 +128,20 @@ export default function QAScreen() {
     })
   ).current;
 
-  const qaData = useMemo(() => {
-    const userName = profile?.name || '¿Cómo quieres que te llame?';
-    
-    return [
-      {
-        question: `${userName}, dime ¿qué situaciones te generan más miedo o estrés últimamente?`,
-        answer: 'La convivencia con mi pareja, nuestra situación financiera, el desorden en el hogar, la maternidad, mi trabajo.',
-      },
-      {
-        question: '¿Qué es eso que definitivamente NO quieres más en tu vida?',
-        answer: 'Que nuestra situación financiera sea un obstáculo para hacer lo que soñamos.',
-      },
-      {
-        question: `${userName}, vamos a jugar un rato a que tus posibilidades son infinitas, sin reglas, sin límites.`,
-        answer: 'Que nuestros ingresos sean tan altos que yo no tenga que preocuparme por el dinero.',
-      },
-    ];
-  }, [profile]);
+  const qaData = [
+    {
+      question: '${name}, dime ¿qué situaciones te generan más miedo o estrés últimamente?',
+      answer: 'La convivencia con mi pareja, nuestra situación financiera, el desorden en el hogar, la maternidad, mi trabajo.',
+    },
+    {
+      question: '¿Qué es eso que definitivamente NO quieres más en tu vida?',
+      answer: 'Que nuestra situación financiera sea un obstáculo para hacer lo que soñamos.',
+    },
+    {
+      question: '${name}, vamos a jugar un rato a que tus posibilidades son infinitas, sin reglas, sin límites.',
+      answer: 'Que nuestros ingresos sean tan altos que yo no tenga que preocuparme por el dinero.',
+    },
+  ];
 
   return (
     <View style={styles.overlay} testID="qa-overlay">
