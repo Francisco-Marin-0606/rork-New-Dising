@@ -60,6 +60,9 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
   const formTranslateY = useRef(new Animated.Value(0)).current;
   const nameInputRef = useRef<View>(null);
   const hasShiftedRef = useRef<boolean>(false);
+  
+  const hombreOpacity = useRef(new Animated.Value(1)).current;
+  const mujerOpacity = useRef(new Animated.Value(0.3)).current;
 
   const DURATION_OPEN = 400;
   const easeInOut = Easing.bezier(0.4, 0.0, 0.2, 1);
@@ -150,12 +153,26 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
     }
     setGender(selectedGender);
     
-    Animated.timing(togglePosition, {
-      toValue: selectedGender === 'Hombre' ? 0 : 1,
-      duration: 350,
-      easing: Easing.bezier(0.4, 0.0, 0.2, 1),
-      useNativeDriver: true,
-    }).start();
+    Animated.parallel([
+      Animated.timing(togglePosition, {
+        toValue: selectedGender === 'Hombre' ? 0 : 1,
+        duration: 350,
+        easing: Easing.bezier(0.4, 0.0, 0.2, 1),
+        useNativeDriver: true,
+      }),
+      Animated.timing(hombreOpacity, {
+        toValue: selectedGender === 'Hombre' ? 1 : 0.3,
+        duration: 300,
+        easing: Easing.bezier(0.4, 0.0, 0.2, 1),
+        useNativeDriver: true,
+      }),
+      Animated.timing(mujerOpacity, {
+        toValue: selectedGender === 'Mujer' ? 1 : 0.3,
+        duration: 300,
+        easing: Easing.bezier(0.4, 0.0, 0.2, 1),
+        useNativeDriver: true,
+      }),
+    ]).start();
   };
 
   const handleDateChange = (event: any, selectedDate?: Date) => {
@@ -387,14 +404,14 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
                         onPress={() => handleGenderPress('Hombre')}
                         testID="gender-hombre-button"
                       >
-                        <Text
+                        <Animated.Text
                           style={[
                             styles.genderButtonText,
-                            gender === 'Hombre' && styles.genderButtonTextActive,
+                            { opacity: hombreOpacity },
                           ]}
                         >
                           Hombre
-                        </Text>
+                        </Animated.Text>
                       </Pressable>
 
                       <Pressable
@@ -402,14 +419,14 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
                         onPress={() => handleGenderPress('Mujer')}
                         testID="gender-mujer-button"
                       >
-                        <Text
+                        <Animated.Text
                           style={[
                             styles.genderButtonText,
-                            gender === 'Mujer' && styles.genderButtonTextActive,
+                            { opacity: mujerOpacity },
                           ]}
                         >
                           Mujer
-                        </Text>
+                        </Animated.Text>
                       </Pressable>
                     </View>
                   </View>
@@ -635,12 +652,9 @@ const styles = StyleSheet.create({
   genderButtonText: {
     fontSize: Platform.OS === 'android' ? 17.1 : 18,
     fontWeight: Platform.OS === 'android' ? '500' : '600',
-    color: 'rgba(255, 255, 255, 0.3)',
+    color: '#fff',
     textAlign: 'center',
     lineHeight: 24,
-  },
-  genderButtonTextActive: {
-    color: '#fff',
   },
   footer: {
     position: 'absolute',
