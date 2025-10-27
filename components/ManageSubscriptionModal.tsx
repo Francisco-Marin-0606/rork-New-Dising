@@ -725,9 +725,8 @@ const styles = StyleSheet.create({
     opacity: 0.3,
   },
   statusBadgePending: {
-    backgroundColor: '#ff6b35',
-    borderColor: 'rgba(255, 107, 53, 0.4)',
-    opacity: 0.5,
+    backgroundColor: 'rgba(201, 132, 30, 0.4)',
+    borderColor: 'rgba(201, 132, 30, 0.3)',
   },
   statusTextPending: {
     color: '#ffffff',

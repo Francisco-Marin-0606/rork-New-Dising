@@ -502,9 +502,8 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255, 107, 53, 0.4)',
   },
   budgetContainerPending: {
-    backgroundColor: '#ff6b35',
-    borderColor: 'rgba(255, 107, 53, 0.4)',
-    opacity: 0.5,
+    backgroundColor: 'rgba(201, 132, 30, 0.4)',
+    borderColor: 'rgba(201, 132, 30, 0.3)',
   },
 
   budgetText: {
