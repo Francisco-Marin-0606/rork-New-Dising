@@ -8,7 +8,9 @@ import {
   Easing,
   Platform,
   TextInput,
+  Keyboard,
 } from 'react-native';
+import { X } from 'lucide-react-native';
 import * as Haptics from 'expo-haptics';
 
 interface RenameHypnosisModalProps {
@@ -145,8 +147,8 @@ export default function RenameHypnosisModal({ visible, onClose, currentName, onS
   };
 
   const handleBackdropPress = useCallback(() => {
-    closeModal();
-  }, [closeModal]);
+    Keyboard.dismiss();
+  }, []);
 
   if (!visible) return null;
 
@@ -167,7 +169,16 @@ export default function RenameHypnosisModal({ visible, onClose, currentName, onS
         testID="rename-hypnosis-container"
       >
         <View style={styles.popupContent}>
-          <Text style={styles.title}>Cambiar nombre</Text>
+          <View style={styles.header}>
+            <Text style={styles.title}>Cambiar nombre</Text>
+            <Pressable
+              style={styles.closeButton}
+              onPress={closeModal}
+              testID="close-button"
+            >
+              <X size={24} color="#fbefd9" strokeWidth={2} />
+            </Pressable>
+          </View>
           <Text style={styles.subtitle}>Edita el nombre de tu hipnosis</Text>
 
           <View style={styles.inputContainer}>
@@ -231,8 +242,9 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     zIndex: 4000,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
+    paddingTop: 120,
   },
   backdrop: {
     ...StyleSheet.absoluteFillObject,
@@ -256,11 +268,21 @@ const styles = StyleSheet.create({
   popupContent: {
     alignItems: 'stretch',
   },
+  header: {
+    position: 'relative',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  closeButton: {
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    padding: 4,
+  },
   title: {
     fontSize: 24,
-    fontWeight: '700',
+    fontWeight: '700' as const,
     color: '#fbefd9',
-    marginBottom: 8,
     textAlign: 'center',
   },
   subtitle: {
