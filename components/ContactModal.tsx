@@ -304,11 +304,11 @@ const styles = StyleSheet.create({
   errorContentContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 20,
+    alignItems: 'stretch',
   },
   iconContainer: {
     marginBottom: 32,
+    alignSelf: 'center',
   },
   errorTitle: {
     fontSize: 32,
@@ -317,12 +317,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 20,
     lineHeight: 38,
+    width: '100%',
   },
   errorSubtitle: {
     fontSize: 16,
     color: 'rgba(251, 239, 217, 0.7)',
     textAlign: 'center',
     lineHeight: 24,
+    width: '100%',
   },
 
   backButtonFooter: {
