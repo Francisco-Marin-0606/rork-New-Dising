@@ -220,7 +220,6 @@ export default function ContactModal({ visible, onClose }: ContactModalProps) {
             >
               <ChevronLeft color="#fbefd9" size={37.8} strokeWidth={1.5} />
             </TouchableOpacity>
-            <Text style={styles.title}>Contacto</Text>
           </View>
 
           <View style={styles.errorContentContainer}>
@@ -230,14 +229,13 @@ export default function ContactModal({ visible, onClose }: ContactModalProps) {
 
             <Text style={styles.errorTitle}>Es broma, algo falló en el sistema. Intenta de nuevo.</Text>
             <Text style={styles.errorSubtitle}>Sí, ya sé... tienes que escribir todo otra vez. Pero si pasó, es por algo. Confía.</Text>
-          </View>
-
-          <View style={styles.footer}>
+            
             <Animated.View
               style={{
                 transform: [{ scale: buttonAnimation.scale }],
                 opacity: buttonAnimation.opacity,
                 width: '100%',
+                marginTop: 40,
               }}
             >
               <Pressable
@@ -292,7 +290,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     marginBottom: 12,
     marginTop: Platform.OS === 'android' ? 0 : 30,
   },
@@ -301,12 +299,7 @@ const styles = StyleSheet.create({
     left: -10,
     alignSelf: 'flex-start',
   },
-  title: {
-    fontSize: 20.16,
-    fontWeight: '700',
-    color: '#fbefd9',
-    lineHeight: 37.8,
-  },
+
   errorContentContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -330,16 +323,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 24,
   },
-  footer: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    paddingHorizontal: 44,
-    paddingTop: 24,
-    paddingBottom: 55,
-    backgroundColor: '#2a1410',
-  },
+
   backButtonFooter: {
     width: '100%',
     flexDirection: 'row',
