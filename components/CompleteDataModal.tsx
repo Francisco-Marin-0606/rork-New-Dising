@@ -635,12 +635,12 @@ const styles = StyleSheet.create({
   genderButtonText: {
     fontSize: Platform.OS === 'android' ? 17.1 : 18,
     fontWeight: Platform.OS === 'android' ? '500' : '600',
-    color: 'rgba(251, 239, 217, 0.6)',
+    color: 'rgba(255, 255, 255, 0.3)',
     textAlign: 'center',
     lineHeight: 24,
   },
   genderButtonTextActive: {
-    color: '#fbefd9',
+    color: '#fff',
   },
   footer: {
     position: 'absolute',
