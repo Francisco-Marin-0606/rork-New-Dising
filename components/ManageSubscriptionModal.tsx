@@ -734,10 +734,10 @@ const styles = StyleSheet.create({
     color: '#ffffff',
   },
   infoLabelPending: {
-    color: '#ff6b35',
+    color: '#ef4444',
   },
   infoValuePending: {
-    color: '#ff6b35',
+    color: '#ef4444',
   },
   confirmOverlay: {
     position: 'absolute',
