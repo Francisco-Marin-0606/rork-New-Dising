@@ -394,7 +394,8 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
                   >
                     <Text style={[
                       styles.cancelButtonText,
-                      isCancelled && styles.cancelButtonTextDisabled
+                      isCancelled && styles.cancelButtonTextDisabled,
+                      !subscriptionActive && styles.cancelButtonTextActive
                     ]}>
                       {subscriptionActive ? 'Cancelar suscripción' : 'Suscribirse'}
                     </Text>
@@ -693,6 +694,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 16,
     lineHeight: 18,
+  },
+  cancelButtonTextActive: {
+    color: '#ffffff',
   },
   infoLabelInactive: {
     opacity: 0.3,
