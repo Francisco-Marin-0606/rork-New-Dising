@@ -727,6 +727,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 20,
     lineHeight: 38,
+    maxWidth: '90%',
   },
   confirmTitleAndroid: {
     fontSize: 28,
