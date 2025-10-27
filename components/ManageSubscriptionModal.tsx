@@ -652,7 +652,7 @@ const styles = StyleSheet.create({
   cancelButtonText: {
     fontSize: 20,
     fontWeight: '600',
-    color: '#ffffff',
+    color: '#ef4444',
     letterSpacing: -0.3,
   },
   cancelButtonDisabled: {
