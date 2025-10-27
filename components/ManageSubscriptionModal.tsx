@@ -407,6 +407,11 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
                     Seguirá activa hasta que finalice tu periodo de pago.
                   </Text>
                 )}
+                {subscriptionStatus === 'pending' && (
+                  <Text style={styles.pendingText}>
+                    Tu pago está pendiente. Intentamos realizar el cobro, pero no pasó. Lo volveremos a intentar, asegúrate de tener saldo suficiente.
+                  </Text>
+                )}
               </View>
             )}
           </View>
@@ -695,6 +700,15 @@ const styles = StyleSheet.create({
     marginTop: 16,
     lineHeight: 18,
   },
+  pendingText: {
+    fontSize: 14,
+    fontWeight: '400',
+    color: '#fbefd9',
+    textAlign: 'center',
+    marginTop: 16,
+    lineHeight: 20,
+    opacity: 0.8,
+  },
   cancelButtonTextActive: {
     color: '#ffffff',
   },
@@ -705,8 +719,8 @@ const styles = StyleSheet.create({
     opacity: 0.3,
   },
   statusBadgePending: {
-    backgroundColor: '#ff6b35',
-    borderColor: 'rgba(255, 107, 53, 0.4)',
+    backgroundColor: '#CC5529',
+    borderColor: 'rgba(204, 85, 41, 0.4)',
   },
   statusTextPending: {
     color: '#ffffff',
