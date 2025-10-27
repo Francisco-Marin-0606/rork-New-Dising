@@ -149,6 +149,7 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
 
   const [isCancelled, setIsCancelled] = useState<boolean>(false);
   const [subscriptionActive, setSubscriptionActive] = useState<boolean>(true);
+  const [currentStatus, setCurrentStatus] = useState<'active' | 'cancelled' | 'pending' | 'subscribe'>(subscriptionStatus);
   const [showCancelConfirm, setShowCancelConfirm] = useState<boolean>(false);
   const cancelConfirmTranslateY = useRef(new Animated.Value(screenHeight)).current;
   const cancelConfirmOpacity = useRef(new Animated.Value(0)).current;
@@ -305,9 +306,9 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
               <Pressable 
                 style={[
                   styles.statusBadge,
-                  subscriptionStatus === 'cancelled' && styles.statusBadgeInactive,
-                  subscriptionStatus === 'pending' && styles.statusBadgePending,
-                  subscriptionStatus === 'subscribe' && styles.statusBadgePending
+                  currentStatus === 'cancelled' && styles.statusBadgeInactive,
+                  currentStatus === 'pending' && styles.statusBadgePending,
+                  currentStatus === 'subscribe' && styles.statusBadgePending
                 ]}
                 onPress={async () => {
                   if (Platform.OS !== 'web') {
@@ -317,17 +318,24 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
                       console.log('Haptic feedback error:', error);
                     }
                   }
-                  setSubscriptionActive(!subscriptionActive);
+                  
+                  const statusOrder: Array<'active' | 'cancelled' | 'pending' | 'subscribe'> = ['active', 'cancelled', 'pending', 'subscribe'];
+                  const currentIndex = statusOrder.indexOf(currentStatus);
+                  const nextIndex = (currentIndex + 1) % statusOrder.length;
+                  const newStatus = statusOrder[nextIndex];
+                  
+                  setCurrentStatus(newStatus);
+                  setSubscriptionActive(newStatus !== 'cancelled' && newStatus !== 'subscribe');
                 }}
               >
                 <Text style={[
                   styles.statusText,
-                  subscriptionStatus === 'cancelled' && styles.statusTextInactive,
-                  (subscriptionStatus === 'pending' || subscriptionStatus === 'subscribe') && styles.statusTextPending
+                  currentStatus === 'cancelled' && styles.statusTextInactive,
+                  (currentStatus === 'pending' || currentStatus === 'subscribe') && styles.statusTextPending
                 ]}>
-                  {subscriptionStatus === 'active' ? 'ACTIVA' : 
-                   subscriptionStatus === 'pending' ? 'PAGO PENDIENTE' : 
-                   subscriptionStatus === 'cancelled' ? 'CANCELADA' : 'SUSCRIBIRSE'}
+                  {currentStatus === 'active' ? 'ACTIVA' : 
+                   currentStatus === 'pending' ? 'PAGO PENDIENTE' : 
+                   currentStatus === 'cancelled' ? 'CANCELADA' : 'SUSCRIBIRSE'}
                 </Text>
               </Pressable>
             </View>
@@ -345,14 +353,14 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
               <Text style={[
                 styles.infoLabel, 
                 !subscriptionActive && styles.infoLabelInactive,
-                subscriptionStatus === 'pending' && styles.infoLabelPending
+                currentStatus === 'pending' && styles.infoLabelPending
               ]}>
                 Próximo pago:
               </Text>
               <Text style={[
                 styles.infoValue, 
                 !subscriptionActive && styles.infoValueInactive,
-                subscriptionStatus === 'pending' && styles.infoValuePending
+                currentStatus === 'pending' && styles.infoValuePending
               ]}>
                 {subscriptionActive ? '12 de Octubre' : '-'}
               </Text>
@@ -407,7 +415,7 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
                     Seguirá activa hasta que finalice tu periodo de pago.
                   </Text>
                 )}
-                {subscriptionStatus === 'pending' && (
+                {currentStatus === 'pending' && (
                   <Text style={styles.pendingText}>
                     Tu pago está pendiente. Intentamos realizar el cobro, pero no pasó. Lo volveremos a intentar, asegúrate de tener saldo suficiente.
                   </Text>
@@ -719,8 +727,8 @@ const styles = StyleSheet.create({
     opacity: 0.3,
   },
   statusBadgePending: {
-    backgroundColor: '#CC5529',
-    borderColor: 'rgba(204, 85, 41, 0.4)',
+    backgroundColor: '#ff6b35',
+    borderColor: 'rgba(255, 107, 53, 0.4)',
   },
   statusTextPending: {
     color: '#ffffff',
