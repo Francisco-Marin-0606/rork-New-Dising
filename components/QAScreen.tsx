@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 12,
-    marginTop: Platform.OS === 'android' ? 8 : 30,
+    marginTop: Platform.OS === 'android' ? 8 : 15,
   },
   closeButton: {
     position: 'absolute',
