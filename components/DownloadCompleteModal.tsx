@@ -9,7 +9,7 @@ import {
   Modal,
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
-import Svg, { Defs, LinearGradient as SvgLinearGradient, Stop, Rect } from 'react-native-svg';
+
 
 interface DownloadCompleteModalProps {
   visible: boolean;
@@ -116,17 +116,7 @@ export default function DownloadCompleteModal({ visible, onClose, hypnosisTitle 
             },
           ]}
         >
-          <View style={styles.gradientBg}>
-            <Svg width="100%" height="100%" style={StyleSheet.absoluteFillObject}>
-              <Defs>
-                <SvgLinearGradient id="downloadCompleteBg" x1="0%" y1="0%" x2="86.6%" y2="50%">
-                  <Stop offset="0%" stopColor="#a2380e" stopOpacity={1} />
-                  <Stop offset="100%" stopColor="#7c2709" stopOpacity={1} />
-                </SvgLinearGradient>
-              </Defs>
-              <Rect x={0} y={0} width="100%" height="100%" fill="url(#downloadCompleteBg)" />
-            </Svg>
-          </View>
+
           
           <View style={styles.content}>
             <Text style={styles.title}>Descarga completada</Text>
@@ -183,10 +173,9 @@ const styles = StyleSheet.create({
     elevation: 24,
     overflow: 'hidden',
     position: 'relative',
+    backgroundColor: '#170501',
   },
-  gradientBg: {
-    ...StyleSheet.absoluteFillObject,
-  },
+
   content: {
     paddingVertical: 32,
     paddingHorizontal: 24,
