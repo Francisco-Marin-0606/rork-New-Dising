@@ -31,9 +31,10 @@ interface SwipeUpModalProps {
   downloadInfo?: ModalDownloadInfo;
   onRequestDownload?: () => void;
   onRequestDelete?: () => void;
+  isOnline?: boolean;
 }
 
-export default function SwipeUpModal({ visible, onClose, imageUri, title, downloadInfo, onRequestDownload, onRequestDelete }: SwipeUpModalProps) {
+export default function SwipeUpModal({ visible, onClose, imageUri, title, downloadInfo, onRequestDownload, onRequestDelete, isOnline = true }: SwipeUpModalProps) {
   const { height: screenHeight, width: screenWidth } = useWindowDimensions();
   const [isClient, setIsClient] = useState(Platform.OS !== 'web');
   
@@ -448,30 +449,32 @@ export default function SwipeUpModal({ visible, onClose, imageUri, title, downlo
                     </TouchableOpacity>
                   </View>
 
-                  <TouchableOpacity
-                    style={styles.explainBtnWide}
-                    activeOpacity={0.2}
-                    onPress={async () => {
-                      // Add haptic feedback
-                      if (Platform.OS !== 'web') {
-                        try {
-                          await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-                        } catch (error) {
-                          console.log('Haptic feedback error:', error);
+                  {isOnline && (
+                    <TouchableOpacity
+                      style={styles.explainBtnWide}
+                      activeOpacity={0.2}
+                      onPress={async () => {
+                        // Add haptic feedback
+                        if (Platform.OS !== 'web') {
+                          try {
+                            await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+                          } catch (error) {
+                            console.log('Haptic feedback error:', error);
+                          }
                         }
-                      }
-                      console.log('Explicación pressed');
-                    }}
-                    testID="explain-button"
-                    accessibilityRole="button"
-                    accessibilityLabel="Ver explicación"
-                  >
-                    <Image
-                      source={{ uri: 'https://mental-app-images.nyc3.cdn.digitaloceanspaces.com/Mental%20%7C%20Aura_v2/Netflix/Explicacion.png' }}
-                      style={styles.icon}
-                    />
-                    <Text style={styles.explainText}>Ver explicación</Text>
-                  </TouchableOpacity>
+                        console.log('Explicación pressed');
+                      }}
+                      testID="explain-button"
+                      accessibilityRole="button"
+                      accessibilityLabel="Ver explicación"
+                    >
+                      <Image
+                        source={{ uri: 'https://mental-app-images.nyc3.cdn.digitaloceanspaces.com/Mental%20%7C%20Aura_v2/Netflix/Explicacion.png' }}
+                        style={styles.icon}
+                      />
+                      <Text style={styles.explainText}>Ver explicación</Text>
+                    </TouchableOpacity>
+                  )}
                 </View>
               </View>
             </View>

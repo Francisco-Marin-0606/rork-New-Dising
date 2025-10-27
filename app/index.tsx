@@ -1315,6 +1315,7 @@ export default function HomeScreen() {
             });
           }
         }}
+        isOnline={isOnline}
       />
 
       {menuModalVisible && (
