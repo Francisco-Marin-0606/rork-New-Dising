@@ -432,8 +432,7 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
                   <Animated.View style={{ transform: [{ scale: yesCancelScale }], opacity: yesCancelOpacity, marginBottom: 12 }}>
                     <Pressable
                       style={styles.confirmButton}
-                      onPress={handleConfirmCancel}
-                      onPressIn={async () => {
+                      onPress={async () => {
                         if (Platform.OS !== 'web') {
                           try {
                             await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
@@ -441,6 +440,9 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
                             console.log('Haptic feedback error:', error);
                           }
                         }
+                        handleConfirmCancel();
+                      }}
+                      onPressIn={() => {
                         Animated.parallel([
                           Animated.spring(yesCancelScale, {
                             toValue: 0.9,
@@ -479,8 +481,7 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
                   <Animated.View style={{ transform: [{ scale: noContinueScale }], opacity: noContinueOpacity }}>
                     <Pressable
                       style={styles.confirmButtonSecondary}
-                      onPress={handleCloseCancelConfirm}
-                      onPressIn={async () => {
+                      onPress={async () => {
                         if (Platform.OS !== 'web') {
                           try {
                             await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
@@ -488,6 +489,9 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
                             console.log('Haptic feedback error:', error);
                           }
                         }
+                        handleCloseCancelConfirm();
+                      }}
+                      onPressIn={() => {
                         Animated.parallel([
                           Animated.spring(noContinueScale, {
                             toValue: 0.9,
