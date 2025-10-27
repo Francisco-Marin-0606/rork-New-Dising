@@ -339,7 +339,7 @@ const styles = StyleSheet.create({
     backgroundColor: Platform.OS === 'android' ? '#3d2f28' : 'rgba(251, 239, 217, 0.15)',
   },
   enterButtonText: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: '600' as const,
     color: '#000000',
     letterSpacing: -0.3,

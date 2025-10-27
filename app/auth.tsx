@@ -470,7 +470,7 @@ const styles = StyleSheet.create({
     backgroundColor: Platform.OS === 'android' ? '#3d2f28' : 'rgba(251, 239, 217, 0.15)',
   },
   verifyButtonText: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: '600' as const,
     color: '#000000',
     letterSpacing: -0.3,
@@ -482,7 +482,7 @@ const styles = StyleSheet.create({
     marginTop: 24,
   },
   resendText: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: '600' as const,
     color: '#fbefd9',
     textAlign: 'center',
