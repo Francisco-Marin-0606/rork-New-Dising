@@ -267,6 +267,7 @@ export default function EditProfileModal({ visible, onClose }: EditProfileModalP
                   style={styles.input}
                   value={nombre}
                   onChangeText={setNombre}
+                  placeholder="Escríbelo aquí…"
                   placeholderTextColor="rgba(251, 239, 217, 0.3)"
                   testID="nombre-input"
                 />
@@ -278,6 +279,7 @@ export default function EditProfileModal({ visible, onClose }: EditProfileModalP
                   style={styles.input}
                   value={apellido}
                   onChangeText={setApellido}
+                  placeholder="Escríbelo aquí…"
                   placeholderTextColor="rgba(251, 239, 217, 0.3)"
                   testID="apellido-input"
                 />
@@ -297,6 +299,7 @@ export default function EditProfileModal({ visible, onClose }: EditProfileModalP
                       setValidationError('');
                     }
                   }}
+                  placeholder="Escríbelo aquí…"
                   placeholderTextColor="rgba(251, 239, 217, 0.3)"
                   testID="nombre-preferido-input"
                 />
