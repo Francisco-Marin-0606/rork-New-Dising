@@ -20,6 +20,7 @@ function RootLayoutNav() {
     <Stack screenOptions={{ headerBackTitle: "Back", contentStyle: { backgroundColor: 'transparent' } }}>
       <Stack.Screen name="login" options={{ headerShown: false, statusBarTranslucent: true, statusBarBackgroundColor: 'transparent' }} />
       <Stack.Screen name="index" options={{ headerShown: false, statusBarTranslucent: true, statusBarBackgroundColor: 'transparent' }} />
+      <Stack.Screen name="confirmation" options={{ headerShown: false, statusBarTranslucent: true, statusBarBackgroundColor: 'transparent', animation: 'slide_from_right', gestureEnabled: true, gestureDirection: 'horizontal' }} />
       <Stack.Screen name="success" options={{ headerShown: false, statusBarTranslucent: true, statusBarBackgroundColor: 'transparent', animation: 'fade' }} />
     </Stack>
   );

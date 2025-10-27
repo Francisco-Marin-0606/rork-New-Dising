@@ -6,6 +6,8 @@ import {
   Pressable,
   Platform,
   Animated,
+  PanResponder,
+  useWindowDimensions,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { router, Stack } from 'expo-router';
@@ -18,6 +20,7 @@ const TITLE_CHARS = ['¿', 'T', 'o', 'd', 'o', ' ', 'l', 'i', 's', 't', 'o', '?'
 
 export default function ConfirmationScreen() {
   const insets = useSafeAreaInsets();
+  const { width: screenWidth } = useWindowDimensions();
   const submitButtonScale = useRef(new Animated.Value(1)).current;
   const submitButtonOpacity = useRef(new Animated.Value(1)).current;
   const reviewButtonScale = useRef(new Animated.Value(1)).current;
@@ -25,6 +28,7 @@ export default function ConfirmationScreen() {
   const textEraseProgress = useRef(new Animated.Value(0)).current;
   const textRevealProgress = useRef(new Animated.Value(0)).current;
   const buttonEnterProgress = useRef(new Animated.Value(0)).current;
+  const translateX = useRef(new Animated.Value(0)).current;
   const [isErasing, setIsErasing] = React.useState(false);
 
   React.useEffect(() => {
@@ -67,6 +71,37 @@ export default function ConfirmationScreen() {
     }
     router.back();
   }, []);
+
+  const panResponder = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: (_, gestureState) => {
+        return Math.abs(gestureState.dx) > Math.abs(gestureState.dy) && gestureState.dx > 10;
+      },
+      onPanResponderMove: (_, gestureState) => {
+        if (gestureState.dx > 0) {
+          translateX.setValue(gestureState.dx);
+        }
+      },
+      onPanResponderRelease: (_, gestureState) => {
+        if (gestureState.dx > screenWidth * 0.3) {
+          Animated.timing(translateX, {
+            toValue: screenWidth,
+            duration: 250,
+            useNativeDriver: true,
+          }).start(() => {
+            router.back();
+          });
+        } else {
+          Animated.spring(translateX, {
+            toValue: 0,
+            useNativeDriver: true,
+            tension: 65,
+            friction: 10,
+          }).start();
+        }
+      },
+    })
+  ).current;
 
   const handleSubmitPressIn = useCallback(() => {
     Animated.parallel([
@@ -133,7 +168,7 @@ export default function ConfirmationScreen() {
   const totalChars = TITLE_CHARS.length;
 
   return (
-    <View style={styles.root}>
+    <Animated.View style={[styles.root, { transform: [{ translateX }] }]} {...panResponder.panHandlers}>
       <Stack.Screen options={{ headerShown: false }} />
       <StatusBar style="light" translucent backgroundColor="transparent" />
 
@@ -262,7 +297,7 @@ export default function ConfirmationScreen() {
           </View>
         </View>
       </View>
-    </View>
+    </Animated.View>
   );
 }
 
