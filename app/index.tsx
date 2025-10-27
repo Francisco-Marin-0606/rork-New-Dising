@@ -2107,7 +2107,7 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   deleteConfirmGradientBg: { ...StyleSheet.absoluteFillObject },
-  deleteConfirmContent: { paddingVertical: 32, paddingHorizontal: 24, position: 'relative', zIndex: 1 },
+  deleteConfirmContent: { backgroundColor: '#2a1410', paddingVertical: 32, paddingHorizontal: 24, position: 'relative', zIndex: 1 },
   deleteConfirmTitle: {
     fontSize: 24,
     fontWeight: '700' as const,
