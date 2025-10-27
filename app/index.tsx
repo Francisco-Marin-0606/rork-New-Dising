@@ -862,10 +862,12 @@ export default function HomeScreen() {
     }
   }, [viewMode, handleOpen]);
 
-  const completedDownloadsRef = useRef<Set<string>>(new Set());
+  const previousDownloadsRef = useRef<Record<string, DownloadState>>({});
 
   useEffect(() => {
     Object.entries(downloads).forEach(([id, info]) => {
+      const previousState = previousDownloadsRef.current[id];
+      
       if (info?.state === 'completed') {
         if (timersRef.current[id]) {
           const t = timersRef.current[id];
@@ -873,8 +875,7 @@ export default function HomeScreen() {
           timersRef.current[id] = 0;
         }
         
-        if (!completedDownloadsRef.current.has(id)) {
-          completedDownloadsRef.current.add(id);
+        if (previousState !== 'completed') {
           const session = [...hypnosisSessions, ...previousSessions].find(s => s.id === id);
           if (session) {
             console.log('[Download] Completed download for:', session.title);
@@ -883,8 +884,10 @@ export default function HomeScreen() {
           }
         }
       }
+      
+      previousDownloadsRef.current[id] = info?.state ?? 'idle';
     });
-  }, [downloads]);
+  }, [downloads, hypnosisSessions, previousSessions]);
 
   const menuDownload: DownloadInfo | undefined = menuSession ? downloads[menuSession.id] : undefined;
 
