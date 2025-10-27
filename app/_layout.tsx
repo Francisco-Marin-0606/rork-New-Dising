@@ -3,6 +3,7 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import React, { useEffect } from "react";
 import * as SystemUI from "expo-system-ui";
+import * as ScreenOrientation from "expo-screen-orientation";
 import { StyleSheet, Platform } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
@@ -29,6 +30,7 @@ export default function RootLayout() {
       try {
         if (Platform.OS !== 'web') {
           await SystemUI.setBackgroundColorAsync("transparent").catch((e) => console.log("SystemUI error", e));
+          await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
           await SplashScreen.hideAsync();
         }
       } catch (error) {
