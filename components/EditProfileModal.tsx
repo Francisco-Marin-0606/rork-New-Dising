@@ -13,7 +13,6 @@ import {
   ScrollView,
   PanResponder,
   Keyboard,
-  TouchableWithoutFeedback,
 } from 'react-native';
 import { ChevronLeft } from 'lucide-react-native';
 import * as Haptics from 'expo-haptics';
@@ -73,7 +72,7 @@ export default function EditProfileModal({ visible, onClose }: EditProfileModalP
       translateX.setValue(0);
       onClose();
     });
-  }, [opacity, translateY, screenHeight, onClose, easeInOut]);
+  }, [opacity, translateY, translateX, screenHeight, onClose, easeInOut]);
 
   const openModal = useCallback(() => {
     Animated.parallel([
@@ -239,29 +238,28 @@ export default function EditProfileModal({ visible, onClose }: EditProfileModalP
         testID="edit-profile-container"
         {...panResponder.panHandlers}
       >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View style={styles.content}>
-            <View style={styles.header}>
-              <TouchableOpacity 
-                style={styles.closeButton} 
-                onPress={closeModal} 
-                testID="close-button" 
-                activeOpacity={0.6}
-              >
-                <ChevronLeft color="#fbefd9" size={37.8} strokeWidth={1.5} />
-              </TouchableOpacity>
-              <Text style={styles.title}>Editar mi perfil</Text>
-            </View>
-
-            <ScrollView 
-              style={styles.scrollView}
-              contentContainerStyle={styles.scrollContent}
-              showsVerticalScrollIndicator={false}
-              keyboardShouldPersistTaps="handled"
-              nestedScrollEnabled={Platform.OS === 'android'}
-              keyboardDismissMode={Platform.OS === 'ios' ? 'on-drag' : 'none'}
-              scrollEventThrottle={16}
+        <View style={styles.content}>
+          <Pressable style={styles.header} onPress={Keyboard.dismiss}>
+            <TouchableOpacity 
+              style={styles.closeButton} 
+              onPress={closeModal} 
+              testID="close-button" 
+              activeOpacity={0.6}
             >
+              <ChevronLeft color="#fbefd9" size={37.8} strokeWidth={1.5} />
+            </TouchableOpacity>
+            <Text style={styles.title}>Editar mi perfil</Text>
+          </Pressable>
+
+          <ScrollView 
+            style={styles.scrollView}
+            contentContainerStyle={styles.scrollContent}
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+            nestedScrollEnabled={Platform.OS === 'android'}
+            keyboardDismissMode="none"
+            scrollEventThrottle={16}
+          >
             <View style={styles.formContainer}>
               <View style={styles.fieldContainer}>
                 <Text style={styles.label}>Nombre</Text>
@@ -324,9 +322,9 @@ export default function EditProfileModal({ visible, onClose }: EditProfileModalP
                 </View>
               </View>
             </View>
-            </ScrollView>
+          </ScrollView>
 
-            <View style={styles.footer}>
+          <Pressable style={styles.footer} onPress={Keyboard.dismiss}>
             <Animated.View
               style={{
                 transform: [{ scale: buttonAnimation.scale }],
@@ -345,9 +343,8 @@ export default function EditProfileModal({ visible, onClose }: EditProfileModalP
                 <Text style={styles.saveButtonText}>Listo</Text>
               </Pressable>
             </Animated.View>
-            </View>
-          </View>
-        </TouchableWithoutFeedback>
+          </Pressable>
+        </View>
       </Animated.View>
     </View>
   );
