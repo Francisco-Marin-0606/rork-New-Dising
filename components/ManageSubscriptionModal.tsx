@@ -18,7 +18,7 @@ interface ManageSubscriptionModalProps {
   visible: boolean;
   onClose: () => void;
   isOnline?: boolean;
-  subscriptionStatus?: 'active' | 'cancelled' | 'pending' | 'subscribe';
+  subscriptionStatus?: 'active' | 'cancelled' | 'pending';
 }
 
 export default function ManageSubscriptionModal({ visible, onClose, isOnline = true, subscriptionStatus = 'active' }: ManageSubscriptionModalProps) {
@@ -149,7 +149,7 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
 
   const [isCancelled, setIsCancelled] = useState<boolean>(false);
   const [subscriptionActive, setSubscriptionActive] = useState<boolean>(true);
-  const [currentStatus, setCurrentStatus] = useState<'active' | 'cancelled' | 'pending' | 'subscribe'>(subscriptionStatus);
+  const [currentStatus, setCurrentStatus] = useState<'active' | 'cancelled' | 'pending'>(subscriptionStatus);
   const [showCancelConfirm, setShowCancelConfirm] = useState<boolean>(false);
   const cancelConfirmTranslateY = useRef(new Animated.Value(screenHeight)).current;
   const cancelConfirmOpacity = useRef(new Animated.Value(0)).current;
@@ -307,8 +307,7 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
                 style={[
                   styles.statusBadge,
                   currentStatus === 'cancelled' && styles.statusBadgeInactive,
-                  currentStatus === 'pending' && styles.statusBadgePending,
-                  currentStatus === 'subscribe' && styles.statusBadgePending
+                  currentStatus === 'pending' && styles.statusBadgePending
                 ]}
                 onPress={async () => {
                   if (Platform.OS !== 'web') {
@@ -319,23 +318,22 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
                     }
                   }
                   
-                  const statusOrder: Array<'active' | 'cancelled' | 'pending' | 'subscribe'> = ['active', 'cancelled', 'pending', 'subscribe'];
+                  const statusOrder: Array<'active' | 'cancelled' | 'pending'> = ['active', 'cancelled', 'pending'];
                   const currentIndex = statusOrder.indexOf(currentStatus);
                   const nextIndex = (currentIndex + 1) % statusOrder.length;
                   const newStatus = statusOrder[nextIndex];
                   
                   setCurrentStatus(newStatus);
-                  setSubscriptionActive(newStatus !== 'cancelled' && newStatus !== 'subscribe');
+                  setSubscriptionActive(newStatus !== 'cancelled');
                 }}
               >
                 <Text style={[
                   styles.statusText,
                   currentStatus === 'cancelled' && styles.statusTextInactive,
-                  (currentStatus === 'pending' || currentStatus === 'subscribe') && styles.statusTextPending
+                  currentStatus === 'pending' && styles.statusTextPending
                 ]}>
                   {currentStatus === 'active' ? 'ACTIVA' : 
-                   currentStatus === 'pending' ? 'PAGO PENDIENTE' : 
-                   currentStatus === 'cancelled' ? 'CANCELADA' : 'SUSCRIBIRSE'}
+                   currentStatus === 'pending' ? 'PAGO PENDIENTE' : 'CANCELADA'}
                 </Text>
               </Pressable>
             </View>
