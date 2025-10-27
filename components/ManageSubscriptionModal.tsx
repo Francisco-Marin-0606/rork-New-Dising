@@ -727,12 +727,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 20,
     lineHeight: 38,
-    maxWidth: '90%',
+    maxWidth: '100%',
   },
   confirmTitleAndroid: {
     fontSize: 28,
     lineHeight: 32,
-    maxWidth: '95%',
+    maxWidth: '100%',
   },
   confirmSubtitle: {
     fontSize: 16,
