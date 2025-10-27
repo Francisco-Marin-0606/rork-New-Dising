@@ -378,7 +378,10 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
                     testID="cancel-subscription-button"
                     disabled={isCancelled}
                   >
-                    <Text style={styles.cancelButtonText}>
+                    <Text style={[
+                      styles.cancelButtonText,
+                      isCancelled && styles.cancelButtonTextDisabled
+                    ]}>
                       {subscriptionActive ? 'Cancelar suscripción' : 'Suscribirse'}
                     </Text>
                   </Pressable>
@@ -658,6 +661,9 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#ef4444',
     letterSpacing: -0.3,
+  },
+  cancelButtonTextDisabled: {
+    color: 'rgba(251, 239, 217, 0.4)',
   },
   cancelButtonDisabled: {
     backgroundColor: '#808080',
