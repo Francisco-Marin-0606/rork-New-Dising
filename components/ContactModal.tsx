@@ -229,7 +229,6 @@ export default function ContactModal({ visible, onClose }: ContactModalProps) {
 
             <Text style={styles.errorTitle}>Fallo en la matrix</Text>
             <Text style={styles.errorSubtitle}>Es broma, algo falló en el sistema.{"\n\n"}Pero si pasó, es por algo. Intenta de nuevo.</Text>
-            <Text style={[styles.errorSubtitle, { marginTop: 16 }]}>Sí, ya sé... tienes que escribir todo otra vez.{"\n"}Pero si pasó, es por algo. Confía.</Text>
             
             <Animated.View
               style={{
