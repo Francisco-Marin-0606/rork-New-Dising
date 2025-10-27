@@ -16,6 +16,7 @@ import { BUTTON_STYLES } from '@/constants/buttonStyles';
 import { router } from 'expo-router';
 import EditProfileModal from './EditProfileModal';
 import ManageSubscriptionModal from './ManageSubscriptionModal';
+import ContactModal from './ContactModal';
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -36,6 +37,7 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
   
   const [editProfileModalVisible, setEditProfileModalVisible] = useState<boolean>(false);
   const [manageSubscriptionModalVisible, setManageSubscriptionModalVisible] = useState<boolean>(false);
+  const [contactModalVisible, setContactModalVisible] = useState<boolean>(false);
   const [isSubscriptionActive, setIsSubscriptionActive] = useState<boolean>(true);
 
   const DURATION_OPEN = 400;
@@ -116,6 +118,11 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
 
     if (action === 'manage-subscription') {
       setManageSubscriptionModalVisible(true);
+      return;
+    }
+
+    if (action === 'contact') {
+      setContactModalVisible(true);
       return;
     }
     
@@ -381,6 +388,13 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
           visible={manageSubscriptionModalVisible}
           onClose={() => setManageSubscriptionModalVisible(false)}
           isOnline={isOnline}
+        />
+      )}
+
+      {contactModalVisible && (
+        <ContactModal
+          visible={contactModalVisible}
+          onClose={() => setContactModalVisible(false)}
         />
       )}
     </View>
