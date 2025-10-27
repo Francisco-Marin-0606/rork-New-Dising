@@ -483,8 +483,9 @@ const styles = StyleSheet.create({
   },
   resendText: {
     fontSize: 20,
-    fontWeight: '500' as const,
+    fontWeight: '600' as const,
     color: '#fbefd9',
     textAlign: 'center',
+    letterSpacing: -0.3,
   },
 });
