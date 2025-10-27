@@ -227,8 +227,9 @@ export default function ContactModal({ visible, onClose }: ContactModalProps) {
               <AlertCircle color="#fbefd9" size={64} strokeWidth={2} />
             </View>
 
-            <Text style={styles.errorTitle}>Es broma, algo falló en el sistema. Intenta de nuevo.</Text>
-            <Text style={styles.errorSubtitle}>Sí, ya sé... tienes que escribir todo otra vez. Pero si pasó, es por algo. Confía.</Text>
+            <Text style={styles.errorTitle}>Fallo en la matrix</Text>
+            <Text style={styles.errorSubtitle}>Es broma, algo falló en el sistema. Intenta de nuevo</Text>
+            <Text style={styles.errorSubtitle}>Sí, ya sé... tienes que escribir todo otra vez.{"\n"}Pero si pasó, es por algo. Confía.</Text>
             
             <Animated.View
               style={{
