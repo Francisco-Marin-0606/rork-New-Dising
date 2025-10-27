@@ -572,7 +572,7 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     position: 'absolute',
-    left: 0,
+    left: -10,
     alignSelf: 'flex-start',
   },
   title: {
@@ -712,6 +712,7 @@ const styles = StyleSheet.create({
   },
   confirmCloseButton: {
     alignSelf: 'flex-start',
+    marginLeft: -10,
   },
   confirmBody: {
     flex: 1,
