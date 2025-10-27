@@ -168,14 +168,12 @@ const styles = StyleSheet.create({
     maxWidth: 400,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 12 },
-    shadowOpacity: 0.3,
-    shadowRadius: 12,
-    elevation: 12,
+    shadowOpacity: 0.6,
+    shadowRadius: 24,
+    elevation: 24,
     overflow: 'hidden',
     position: 'relative',
     backgroundColor: '#170501',
-    borderWidth: 1.5,
-    borderColor: '#fbefd9',
   },
 
   content: {
