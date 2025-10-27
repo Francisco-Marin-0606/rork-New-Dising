@@ -16,7 +16,6 @@ import {
 } from 'react-native';
 import { ChevronLeft } from 'lucide-react-native';
 import * as Haptics from 'expo-haptics';
-import { useUserProfile } from '@/constants/UserProfile';
 
 interface EditProfileModalProps {
   visible: boolean;
@@ -25,18 +24,17 @@ interface EditProfileModalProps {
 
 export default function EditProfileModal({ visible, onClose }: EditProfileModalProps) {
   const { height: screenHeight, width: screenWidth } = useWindowDimensions();
-  const { profile, updateProfile } = useUserProfile();
   
   const translateY = useRef(new Animated.Value(screenHeight)).current;
   const translateX = useRef(new Animated.Value(0)).current;
   const opacity = useRef(new Animated.Value(0)).current;
   
-  const [nombre, setNombre] = useState<string>(profile.nombre);
-  const [apellido, setApellido] = useState<string>(profile.apellido);
-  const [nombrePreferido, setNombrePreferido] = useState<string>(profile.nombrePreferido);
-  const [email] = useState<string>(profile.email);
-  const [fechaNacimiento] = useState<string>(profile.fechaNacimiento);
-  const [genero] = useState<string>(profile.genero);
+  const [nombre, setNombre] = useState<string>('Pancho');
+  const [apellido, setApellido] = useState<string>('Noo');
+  const [nombrePreferido, setNombrePreferido] = useState<string>('Paco');
+  const [email] = useState<string>('panchito.contacto@gmail.com');
+  const [fechaNacimiento] = useState<string>('26 septiembre 2009');
+  const [genero] = useState<string>('Hombre');
   const [validationError, setValidationError] = useState<string>('');
 
   const buttonAnimation = useRef({
@@ -104,12 +102,8 @@ export default function EditProfileModal({ visible, onClose }: EditProfileModalP
       translateY.setValue(screenHeight);
       translateX.setValue(0);
       opacity.setValue(0);
-    } else {
-      setNombre(profile.nombre);
-      setApellido(profile.apellido);
-      setNombrePreferido(profile.nombrePreferido);
     }
-  }, [visible, translateY, translateX, opacity, screenHeight, profile]);
+  }, [visible, translateY, translateX, opacity, screenHeight]);
 
   const panResponder = useRef(
     PanResponder.create({
@@ -191,14 +185,9 @@ export default function EditProfileModal({ visible, onClose }: EditProfileModalP
     }
     const trimmedNombre = nombre.trim();
     const trimmedApellido = apellido.trim();
-    await updateProfile({
-      nombre: trimmedNombre,
-      apellido: trimmedApellido,
-      nombrePreferido: trimmedNombrePreferido,
-    });
-    console.log('Profile saved:', { nombre: trimmedNombre, apellido: trimmedApellido, nombrePreferido: trimmedNombrePreferido });
+    console.log('Saving profile:', { nombre: trimmedNombre, apellido: trimmedApellido, nombrePreferido: trimmedNombrePreferido, email, fechaNacimiento, genero });
     closeModal();
-  }, [nombre, apellido, nombrePreferido, updateProfile, closeModal]);
+  }, [nombre, apellido, nombrePreferido, email, fechaNacimiento, genero, closeModal]);
 
   const handlePressIn = () => {
     Animated.parallel([
