@@ -223,7 +223,8 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
                 style={[
                   styles.budgetContainer,
                   subscriptionStatus === 'active' && styles.budgetContainerActive,
-                  (subscriptionStatus === 'cancelled' || subscriptionStatus === 'pending') && styles.budgetContainerInactive
+                  subscriptionStatus === 'cancelled' && styles.budgetContainerCancelled,
+                  subscriptionStatus === 'pending' && styles.budgetContainerPending
                 ]}
                 onPress={async () => {
                   if (Platform.OS !== 'web') {
@@ -496,7 +497,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#fbefd9',
     borderColor: 'rgba(201, 132, 30, 0.4)',
   },
-  budgetContainerInactive: {
+  budgetContainerCancelled: {
+    backgroundColor: '#ff6b35',
+    borderColor: 'rgba(255, 107, 53, 0.4)',
+  },
+  budgetContainerPending: {
     backgroundColor: '#ff6b35',
     borderColor: 'rgba(255, 107, 53, 0.4)',
     opacity: 0.5,
