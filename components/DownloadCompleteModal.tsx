@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
   },
   backdrop: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    backgroundColor: 'rgba(0, 0, 0, 0.85)',
   },
   modalContainer: {
     borderRadius: 20,
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
     elevation: 24,
     overflow: 'hidden',
     position: 'relative',
-    backgroundColor: '#170501',
+    backgroundColor: '#2a1410',
   },
 
   content: {

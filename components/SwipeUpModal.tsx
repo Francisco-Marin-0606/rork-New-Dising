@@ -614,17 +614,7 @@ export default function SwipeUpModal({ visible, onClose, imageUri, title, downlo
               transform: [{ scale: deleteAlertScale }],
             },
           ]}>
-            <View style={styles.deleteConfirmGradientBg}>
-              <Svg width="100%" height="100%" style={StyleSheet.absoluteFillObject}>
-                <Defs>
-                  <SvgLinearGradient id="deleteBg" x1="0%" y1="0%" x2="86.6%" y2="50%">
-                    <Stop offset="0%" stopColor="#a2380e" stopOpacity={1} />
-                    <Stop offset="100%" stopColor="#7c2709" stopOpacity={1} />
-                  </SvgLinearGradient>
-                </Defs>
-                <Rect x={0} y={0} width="100%" height="100%" fill="url(#deleteBg)" />
-              </Svg>
-            </View>
+            <View style={styles.deleteConfirmGradientBg} />
             <View style={styles.deleteConfirmContent}>
               <Text style={styles.deleteConfirmTitle}>Eliminar descarga</Text>
               <Text style={styles.deleteConfirmMessage}>¿Estás seguro que deseas eliminar esta hipnosis de tus descargas?</Text>
@@ -834,7 +824,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  deleteBackdrop: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0, 0, 0, 0.7)' },
+  deleteBackdrop: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0, 0, 0, 0.85)' },
   deleteConfirmContainer: {
     borderRadius: 20,
     width: '92%',
@@ -847,7 +837,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     position: 'relative',
   },
-  deleteConfirmGradientBg: { ...StyleSheet.absoluteFillObject },
+  deleteConfirmGradientBg: { ...StyleSheet.absoluteFillObject, backgroundColor: '#2a1410' },
   deleteConfirmContent: { paddingVertical: 32, paddingHorizontal: 24, position: 'relative', zIndex: 1 },
   deleteConfirmTitle: {
     fontSize: 24,
