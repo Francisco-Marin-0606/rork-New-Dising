@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   buttonText: {
-    fontSize: 17,
+    fontSize: 18,
     fontWeight: '600' as const,
     color: '#ffffff',
     letterSpacing: 0.2,
