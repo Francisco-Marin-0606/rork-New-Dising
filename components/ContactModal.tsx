@@ -288,13 +288,12 @@ const styles = StyleSheet.create({
   },
   header: {
     paddingBottom: 20,
-    position: 'absolute',
-    top: Platform.OS === 'android' ? 16 : 60,
-    left: 44,
-    right: 44,
+    position: 'relative',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
+    marginBottom: 12,
+    marginTop: Platform.OS === 'android' ? 0 : 30,
   },
   backButton: {
     position: 'absolute',
