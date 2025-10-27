@@ -38,7 +38,7 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
   const [editProfileModalVisible, setEditProfileModalVisible] = useState<boolean>(false);
   const [manageSubscriptionModalVisible, setManageSubscriptionModalVisible] = useState<boolean>(false);
   const [errorModalVisible, setErrorModalVisible] = useState<boolean>(false);
-  const [isSubscriptionActive, setIsSubscriptionActive] = useState<boolean>(true);
+  const [subscriptionStatus, setSubscriptionStatus] = useState<'active' | 'cancelled' | 'pending' | 'subscribe'>('active');
 
   const DURATION_OPEN = 400;
   const DURATION_CLOSE = 350;
@@ -222,7 +222,9 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
               <Pressable 
                 style={[
                   styles.budgetContainer,
-                  isSubscriptionActive ? styles.budgetContainerActive : styles.budgetContainerInactive
+                  subscriptionStatus === 'active' && styles.budgetContainerActive,
+                  subscriptionStatus === 'cancelled' && styles.budgetContainerCancelled,
+                  (subscriptionStatus === 'subscribe' || subscriptionStatus === 'pending') && styles.budgetContainerInactive
                 ]}
                 onPress={async () => {
                   if (Platform.OS !== 'web') {
@@ -232,14 +234,21 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
                       console.log('Haptic feedback error:', error);
                     }
                   }
-                  setIsSubscriptionActive(!isSubscriptionActive);
+                  const statusCycle: ('active' | 'cancelled' | 'pending' | 'subscribe')[] = ['active', 'pending', 'cancelled', 'subscribe'];
+                  const currentIndex = statusCycle.indexOf(subscriptionStatus);
+                  const nextIndex = (currentIndex + 1) % statusCycle.length;
+                  setSubscriptionStatus(statusCycle[nextIndex]);
                 }}
               >
                 <Text style={[
                   styles.budgetText,
-                  isSubscriptionActive ? styles.budgetTextActive : styles.budgetTextInactive
+                  subscriptionStatus === 'active' && styles.budgetTextActive,
+                  subscriptionStatus === 'cancelled' && styles.budgetTextCancelled,
+                  (subscriptionStatus === 'subscribe' || subscriptionStatus === 'pending') && styles.budgetTextInactive
                 ]}>
-                  {isSubscriptionActive ? 'ACTIVA' : 'SUSCRIBIRSE'}
+                  {subscriptionStatus === 'active' ? 'ACTIVA' : 
+                   subscriptionStatus === 'pending' ? 'PAGO PENDIENTE' : 
+                   subscriptionStatus === 'cancelled' ? 'CANCELADA' : 'SUSCRIBIRSE'}
                 </Text>
               </Pressable>
             </View>
@@ -340,7 +349,7 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
             <Pressable
               style={[
                 styles.logoutButton,
-                isSubscriptionActive ? styles.logoutButtonActive : styles.logoutButtonInactive
+                subscriptionStatus === 'active' ? styles.logoutButtonActive : styles.logoutButtonInactive
               ]}
               onPress={() => handleMenuAction('logout')}
               onPressIn={() => handlePressIn('logout')}
@@ -350,7 +359,7 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
             >
               <Text style={[
                 styles.logoutButtonText,
-                !isSubscriptionActive && styles.logoutButtonTextInactive
+                subscriptionStatus !== 'active' && styles.logoutButtonTextInactive
               ]}>Cerrar sesión</Text>
             </Pressable>
           </Animated.View>
@@ -388,6 +397,7 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
           visible={manageSubscriptionModalVisible}
           onClose={() => setManageSubscriptionModalVisible(false)}
           isOnline={isOnline}
+          subscriptionStatus={subscriptionStatus}
         />
       )}
 
@@ -493,6 +503,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#ff6b35',
     borderColor: 'rgba(255, 107, 53, 0.4)',
   },
+  budgetContainerCancelled: {
+    backgroundColor: '#808080',
+    borderColor: 'rgba(128, 128, 128, 0.4)',
+  },
   budgetText: {
     fontSize: 11,
     fontWeight: '800',
@@ -503,6 +517,9 @@ const styles = StyleSheet.create({
   },
   budgetTextInactive: {
     color: '#ffffff',
+  },
+  budgetTextCancelled: {
+    color: '#fbefd9',
   },
 
   menuSection: {

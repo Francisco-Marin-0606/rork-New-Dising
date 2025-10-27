@@ -18,9 +18,10 @@ interface ManageSubscriptionModalProps {
   visible: boolean;
   onClose: () => void;
   isOnline?: boolean;
+  subscriptionStatus?: 'active' | 'cancelled' | 'pending' | 'subscribe';
 }
 
-export default function ManageSubscriptionModal({ visible, onClose, isOnline = true }: ManageSubscriptionModalProps) {
+export default function ManageSubscriptionModal({ visible, onClose, isOnline = true, subscriptionStatus = 'active' }: ManageSubscriptionModalProps) {
   const { height: screenHeight, width: screenWidth } = useWindowDimensions();
   
   const translateY = useRef(new Animated.Value(screenHeight)).current;
@@ -304,7 +305,9 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
               <Pressable 
                 style={[
                   styles.statusBadge,
-                  !subscriptionActive && styles.statusBadgeInactive
+                  subscriptionStatus === 'cancelled' && styles.statusBadgeInactive,
+                  subscriptionStatus === 'pending' && styles.statusBadgePending,
+                  subscriptionStatus === 'subscribe' && styles.statusBadgePending
                 ]}
                 onPress={async () => {
                   if (Platform.OS !== 'web') {
@@ -319,9 +322,12 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
               >
                 <Text style={[
                   styles.statusText,
-                  !subscriptionActive && styles.statusTextInactive
+                  subscriptionStatus === 'cancelled' && styles.statusTextInactive,
+                  (subscriptionStatus === 'pending' || subscriptionStatus === 'subscribe') && styles.statusTextPending
                 ]}>
-                  {subscriptionActive ? 'ACTIVA' : 'CANCELADA'}
+                  {subscriptionStatus === 'active' ? 'ACTIVA' : 
+                   subscriptionStatus === 'pending' ? 'PAGO PENDIENTE' : 
+                   subscriptionStatus === 'cancelled' ? 'CANCELADA' : 'SUSCRIBIRSE'}
                 </Text>
               </Pressable>
             </View>
@@ -336,10 +342,18 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
             </View>
 
             <View style={styles.infoRow}>
-              <Text style={[styles.infoLabel, !subscriptionActive && styles.infoLabelInactive]}>
+              <Text style={[
+                styles.infoLabel, 
+                !subscriptionActive && styles.infoLabelInactive,
+                subscriptionStatus === 'pending' && styles.infoLabelPending
+              ]}>
                 Próximo pago:
               </Text>
-              <Text style={[styles.infoValue, !subscriptionActive && styles.infoValueInactive]}>
+              <Text style={[
+                styles.infoValue, 
+                !subscriptionActive && styles.infoValueInactive,
+                subscriptionStatus === 'pending' && styles.infoValuePending
+              ]}>
                 {subscriptionActive ? '12 de Octubre' : '-'}
               </Text>
             </View>
@@ -685,6 +699,19 @@ const styles = StyleSheet.create({
   },
   infoValueInactive: {
     opacity: 0.3,
+  },
+  statusBadgePending: {
+    backgroundColor: '#ff6b35',
+    borderColor: 'rgba(255, 107, 53, 0.4)',
+  },
+  statusTextPending: {
+    color: '#ffffff',
+  },
+  infoLabelPending: {
+    color: '#ff6b35',
+  },
+  infoValuePending: {
+    color: '#ff6b35',
   },
   confirmOverlay: {
     position: 'absolute',
