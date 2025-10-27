@@ -499,6 +499,7 @@ const styles = StyleSheet.create({
   budgetContainerInactive: {
     backgroundColor: '#ff6b35',
     borderColor: 'rgba(255, 107, 53, 0.4)',
+    opacity: 0.5,
   },
 
   budgetText: {
