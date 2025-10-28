@@ -35,8 +35,8 @@ export default function EditProfileModal({ visible, onClose }: EditProfileModalP
   const [apellido, setApellido] = useState<string>('Noo');
   const [nombrePreferido, setNombrePreferido] = useState<string>('Paco');
   const [email] = useState<string>('panchito.contacto@gmail.com');
-  const [fechaNacimiento] = useState<string>('26 septiembre 2009');
-  const [genero] = useState<string>('Hombre');
+  const [fechaNacimiento] = useState<string>('September 26, 2009');
+  const [genero] = useState<string>('Male');
   const [validationError, setValidationError] = useState<string>('');
 
   const buttonAnimation = useRef({
