@@ -13,6 +13,7 @@ import {
   NativeScrollEvent,
   Platform,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { X, Download, Check } from 'lucide-react-native';
 import Svg, { Defs, LinearGradient as SvgLinearGradient, Stop, Rect } from 'react-native-svg';
@@ -35,6 +36,7 @@ interface SwipeUpModalProps {
 }
 
 export default function SwipeUpModal({ visible, onClose, imageUri, title, downloadInfo, onRequestDownload, onRequestDelete, isOnline = true }: SwipeUpModalProps) {
+  const { t } = useTranslation();
   const { height: screenHeight, width: screenWidth } = useWindowDimensions();
   const [isClient, setIsClient] = useState(Platform.OS !== 'web');
   
@@ -379,7 +381,7 @@ export default function SwipeUpModal({ visible, onClose, imageUri, title, downlo
 
               <View style={styles.textContainer}>
                 <Text style={styles.title}>{title || 'El reloj quieto\nen la mesa'}</Text>
-                <Text style={styles.durationText}>Duración: <Text style={styles.durationLight}>22:53</Text></Text>
+                <Text style={styles.durationText}>{t('swipeUpModal.duration')} <Text style={styles.durationLight}>22:53</Text></Text>
               </View>
             </View>
 
@@ -404,13 +406,13 @@ export default function SwipeUpModal({ visible, onClose, imageUri, title, downlo
                       }}
                       testID="play-button"
                       accessibilityRole="button"
-                      accessibilityLabel="Reproducir"
+                      accessibilityLabel={t('swipeUpModal.playButton')}
                     >
                       <Image
                         source={{ uri: 'https://mental-app-images.nyc3.cdn.digitaloceanspaces.com/Mental%20%7C%20Aura_v2/Netflix/Reproducir.png' }}
                         style={styles.icon}
                       />
-                      <Text style={styles.playText}>Reproducir</Text>
+                      <Text style={styles.playText}>{t('swipeUpModal.playButton')}</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
@@ -424,8 +426,8 @@ export default function SwipeUpModal({ visible, onClose, imageUri, title, downlo
                       testID="download-button"
                       accessibilityRole="button"
                       accessibilityLabel={
-                        isDownloaded ? 'Descargada' : 
-                        isDownloading ? `${downloadProgress}%` : 'Descargar'
+                        isDownloaded ? t('swipeUpModal.downloaded') : 
+                        isDownloading ? t('swipeUpModal.downloadProgress', { progress: downloadProgress }) : t('swipeUpModal.downloadButton')
                       }
                       disabled={isDownloading}
                     >
@@ -443,8 +445,8 @@ export default function SwipeUpModal({ visible, onClose, imageUri, title, downlo
                         <Download color="#FFFFFF" size={18} />
                       )}
                       <Text style={styles.downloadText}>
-                        {isDownloaded ? 'Descargada' : 
-                         isDownloading ? `${downloadProgress}%` : 'Descargar'}
+                        {isDownloaded ? t('swipeUpModal.downloaded') : 
+                         isDownloading ? t('swipeUpModal.downloadProgress', { progress: downloadProgress }) : t('swipeUpModal.downloadButton')}
                       </Text>
                     </TouchableOpacity>
                   </View>
@@ -466,13 +468,13 @@ export default function SwipeUpModal({ visible, onClose, imageUri, title, downlo
                       }}
                       testID="explain-button"
                       accessibilityRole="button"
-                      accessibilityLabel="Ver explicación"
+                      accessibilityLabel={t('swipeUpModal.explainButton')}
                     >
                       <Image
                         source={{ uri: 'https://mental-app-images.nyc3.cdn.digitaloceanspaces.com/Mental%20%7C%20Aura_v2/Netflix/Explicacion.png' }}
                         style={styles.icon}
                       />
-                      <Text style={styles.explainText}>Ver explicación</Text>
+                      <Text style={styles.explainText}>{t('swipeUpModal.explainButton')}</Text>
                     </TouchableOpacity>
                   )}
                 </View>
@@ -489,7 +491,7 @@ export default function SwipeUpModal({ visible, onClose, imageUri, title, downlo
                       style={styles.tabButton}
                       testID="tab-mensaje"
                       accessibilityRole="button"
-                      accessibilityLabel="Mensaje Para Ti"
+                      accessibilityLabel={t('swipeUpModal.tabs.message')}
                       onLayout={(event) => {
                         const { width, x } = event.nativeEvent.layout;
                         setTabWidths(prev => ({ ...prev, mensaje: width }));
@@ -500,7 +502,7 @@ export default function SwipeUpModal({ visible, onClose, imageUri, title, downlo
                         }
                       }}
                     >
-                      <Text style={[styles.tabText, { opacity: activeTab === 'mensaje' ? 1 : 0.3 }]}>Mensaje Para Ti</Text>
+                      <Text style={[styles.tabText, { opacity: activeTab === 'mensaje' ? 1 : 0.3 }]}>{t('swipeUpModal.tabs.message')}</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
@@ -509,7 +511,7 @@ export default function SwipeUpModal({ visible, onClose, imageUri, title, downlo
                       style={styles.tabButton}
                       testID="tab-respuestas"
                       accessibilityRole="button"
-                      accessibilityLabel="Mis respuestas"
+                      accessibilityLabel={t('swipeUpModal.tabs.answers')}
                       onLayout={(event) => {
                         const { width, x } = event.nativeEvent.layout;
                         setTabWidths(prev => ({ ...prev, respuestas: width }));
@@ -520,7 +522,7 @@ export default function SwipeUpModal({ visible, onClose, imageUri, title, downlo
                         }
                       }}
                     >
-                      <Text style={[styles.tabText, { opacity: activeTab === 'respuestas' ? 1 : 0.3 }]}>Mis respuestas</Text>
+                      <Text style={[styles.tabText, { opacity: activeTab === 'respuestas' ? 1 : 0.3 }]}>{t('swipeUpModal.tabs.answers')}</Text>
                     </TouchableOpacity>
                   </View>
 
@@ -619,8 +621,8 @@ export default function SwipeUpModal({ visible, onClose, imageUri, title, downlo
           ]}>
             <View style={styles.deleteConfirmGradientBg} />
             <View style={styles.deleteConfirmContent}>
-              <Text style={styles.deleteConfirmTitle}>Eliminar descarga</Text>
-              <Text style={styles.deleteConfirmMessage}>¿Estás seguro que deseas eliminar esta hipnosis de tus descargas?</Text>
+              <Text style={styles.deleteConfirmTitle}>{t('swipeUpModal.deleteConfirm.title')}</Text>
+              <Text style={styles.deleteConfirmMessage}>{t('swipeUpModal.deleteConfirm.message')}</Text>
               <View style={styles.deleteConfirmButtons}>
                 <Animated.View style={{ flex: 1, transform: [{ scale: deleteCancelButtonScale }], opacity: deleteCancelButtonOpacity }}>
                   <TouchableOpacity
@@ -676,7 +678,7 @@ export default function SwipeUpModal({ visible, onClose, imageUri, title, downlo
                     }}
                     activeOpacity={1}
                   >
-                    <Text style={styles.deleteConfirmCancelText}>Cancelar</Text>
+                    <Text style={styles.deleteConfirmCancelText}>{t('swipeUpModal.deleteConfirm.cancel')}</Text>
                   </TouchableOpacity>
                 </Animated.View>
                 <Animated.View style={{ flex: 1, transform: [{ scale: deleteConfirmButtonScale }], opacity: deleteConfirmButtonOpacity }}>
@@ -734,7 +736,7 @@ export default function SwipeUpModal({ visible, onClose, imageUri, title, downlo
                     }}
                     activeOpacity={1}
                   >
-                    <Text style={styles.deleteConfirmDeleteText}>Eliminar</Text>
+                    <Text style={styles.deleteConfirmDeleteText}>{t('swipeUpModal.deleteConfirm.delete')}</Text>
                   </TouchableOpacity>
                 </Animated.View>
               </View>
