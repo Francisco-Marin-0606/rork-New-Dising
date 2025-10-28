@@ -19,8 +19,10 @@ import { ChevronLeft } from 'lucide-react-native';
 import { router, Stack } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { BUTTON_STYLES } from '@/constants/buttonStyles';
+import { useTranslation } from 'react-i18next';
 
 export default function LoginScreen() {
+  const { t } = useTranslation();
   const [email, setEmail] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const backButtonScale = useRef(new Animated.Value(1)).current;
@@ -170,7 +172,7 @@ export default function LoginScreen() {
             keyboardVerticalOffset={0}
           >
           <Animated.View style={[styles.formContainer, { transform: [{ translateY: formTranslateY }] }]} testID="login-animated-container">
-            <Text style={styles.title}>Iniciar sesión</Text>
+            <Text style={styles.title}>{t('login.title')}</Text>
 
             <View ref={controlsRef} collapsable={false} style={styles.controlsWrap}>
               <View style={styles.inputContainer}>
@@ -178,7 +180,7 @@ export default function LoginScreen() {
                 style={styles.input}
                 value={email}
                 onChangeText={handleEmailChange}
-                placeholder="Correo electrónico"
+                placeholder={t('login.emailPlaceholder')}
                 placeholderTextColor="rgba(251, 239, 217, 0.4)"
                 keyboardType="email-address"
                 autoCapitalize="none"
@@ -242,7 +244,7 @@ export default function LoginScreen() {
                   styles.enterButtonText,
                   !isEmailValid && styles.enterButtonTextDisabled,
                 ]}>
-                  Entrar
+                  {t('login.enterButton')}
                 </Text>
               </Pressable>
             </Animated.View>

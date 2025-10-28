@@ -128,6 +128,11 @@ const initI18n = async () => {
                   },
                 },
               },
+              login: {
+                title: 'Iniciar sesión',
+                emailPlaceholder: 'Correo electrónico',
+                enterButton: 'Entrar',
+              },
             },
           },
           en: {
@@ -250,6 +255,11 @@ const initI18n = async () => {
                     message: 'Could not access the microphone.',
                   },
                 },
+              },
+              login: {
+                title: 'Log in',
+                emailPlaceholder: 'Email address',
+                enterButton: 'Enter',
               },
             },
           },
