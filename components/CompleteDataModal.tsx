@@ -18,6 +18,7 @@ import {
 import * as Haptics from 'expo-haptics';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { BUTTON_STYLES } from '@/constants/buttonStyles';
+import { useTranslation } from 'react-i18next';
 
 interface CompleteDataModalProps {
   visible: boolean;
@@ -31,6 +32,7 @@ interface UserData {
 }
 
 export default function CompleteDataModal({ visible, onComplete }: CompleteDataModalProps) {
+  const { t } = useTranslation();
   const { height: screenHeight } = useWindowDimensions();
   
   const translateY = useRef(new Animated.Value(screenHeight)).current;
@@ -186,9 +188,9 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
         
         if (selectedDate > threeYearsAgo) {
           Alert.alert(
-            '¿Seguro que eres tan joven?',
-            'No me cuadra...\nDale otra vez.',
-            [{ text: 'OK', style: 'default' }]
+            t('completeData.ageAlert.title'),
+            t('completeData.ageAlert.message'),
+            [{ text: t('completeData.ageAlert.button'), style: 'default' }]
           );
           return;
         }
@@ -256,9 +258,9 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
     
     if (date > threeYearsAgo) {
       Alert.alert(
-        '¿Seguro que eres tan joven?',
-        'No me cuadra...\nDale otra vez.',
-        [{ text: 'OK', style: 'default' }]
+        t('completeData.ageAlert.title'),
+        t('completeData.ageAlert.message'),
+        [{ text: t('completeData.ageAlert.button'), style: 'default' }]
       );
       animateDatePickerOut();
       return;
@@ -356,24 +358,24 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
             scrollEventThrottle={16}
           >
             <Animated.View style={[styles.formContainer, { transform: [{ translateY: formTranslateY }] }]}>
-                <Text style={styles.mainTitle}>Completa tus datos antes de pedir tu hipnosis</Text>
+                <Text style={styles.mainTitle}>{t('completeData.title')}</Text>
 
                 <View style={styles.infoBox}>
                   <Text style={styles.infoText}>
-                    Antes de pedir tu primera hipnosis personalizada, y para que sea de verdad personalizada, deja aquí tus datos.
+                    {t('completeData.infoText')}
                   </Text>
                 </View>
 
                 <View style={styles.fieldContainer} ref={nameInputRef} collapsable={false}>
-                  <Text style={styles.label}>¿Cómo quieres que te llamen?</Text>
+                  <Text style={styles.label}>{t('completeData.preferredName')}</Text>
                   <Text style={styles.helperText}>
-                    Escríbelo como se lee, y si tiene algún acento raro, márcalo. (Que no es lo mismo Julián, que Julian, o Yulian).
+                    {t('completeData.preferredNameHelper')}
                   </Text>
                   <TextInput
                     style={styles.input}
                     value={name}
                     onChangeText={handleNameChange}
-                    placeholder="Ingresa tu apodo"
+                    placeholder={t('completeData.preferredNamePlaceholder')}
                     placeholderTextColor="rgba(251, 239, 217, 0.3)"
                     maxLength={25}
                     testID="name-input"
@@ -381,7 +383,7 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
                 </View>
 
                 <View style={styles.fieldContainer}>
-                  <Text style={styles.label}>Eres...</Text>
+                  <Text style={styles.label}>{t('completeData.gender')}</Text>
                   <View style={styles.genderToggleWrapper}>
                     <Animated.View
                       style={[
@@ -410,7 +412,7 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
                             { opacity: hombreOpacity },
                           ]}
                         >
-                          Hombre
+                          {t('completeData.genderOptions.male')}
                         </Animated.Text>
                       </Pressable>
 
@@ -425,7 +427,7 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
                             { opacity: mujerOpacity },
                           ]}
                         >
-                          Mujer
+                          {t('completeData.genderOptions.female')}
                         </Animated.Text>
                       </Pressable>
                     </View>
@@ -433,11 +435,11 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
                 </View>
 
                 <View style={styles.fieldContainer}>
-                  <Text style={styles.label}>Fecha de nacimiento</Text>
+                  <Text style={styles.label}>{t('completeData.dateOfBirth')}</Text>
                   <Pressable onPress={handleDatePress} style={styles.dateInputWrapper}>
                     <View style={styles.dateInput} pointerEvents="none">
                       <Text style={[styles.inputText, !birthdate && styles.placeholderText]}>
-                        {birthdate || 'dd/mm/aaaa'}
+                        {birthdate || t('completeData.datePlaceholder')}
                       </Text>
                     </View>
                   </Pressable>
@@ -481,7 +483,7 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
                       />
                       <View style={styles.datePickerFooter}>
                         <Pressable onPress={handleDatePickerDone}>
-                          <Text style={styles.datePickerDoneText}>CONFIRMAR</Text>
+                          <Text style={styles.datePickerDoneText}>{t('completeData.confirmButton')}</Text>
                         </Pressable>
                       </View>
                     </Animated.View>
@@ -525,7 +527,7 @@ export default function CompleteDataModal({ visible, onComplete }: CompleteDataM
                     styles.completeButtonText,
                     !isFormValid && styles.completeButtonTextDisabled,
                   ]}>
-                    Siguiente
+                    {t('completeData.nextButton')}
                   </Text>
                 </Pressable>
               </Animated.View>
