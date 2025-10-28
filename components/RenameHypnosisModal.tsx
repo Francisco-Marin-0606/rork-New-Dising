@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { X } from 'lucide-react-native';
 import * as Haptics from 'expo-haptics';
+import { useTranslation } from 'react-i18next';
 
 interface RenameHypnosisModalProps {
   visible: boolean;
@@ -21,6 +22,7 @@ interface RenameHypnosisModalProps {
 }
 
 export default function RenameHypnosisModal({ visible, onClose, currentName, onSave }: RenameHypnosisModalProps) {
+  const { t } = useTranslation();
   const scale = useRef(new Animated.Value(0.9)).current;
   const opacity = useRef(new Animated.Value(0)).current;
   
@@ -170,7 +172,7 @@ export default function RenameHypnosisModal({ visible, onClose, currentName, onS
       >
         <View style={styles.popupContent}>
           <View style={styles.header}>
-            <Text style={styles.title}>Cambiar nombre</Text>
+            <Text style={styles.title}>{t('renameHypnosis.title')}</Text>
             <Pressable
               style={styles.closeButton}
               onPress={closeModal}
@@ -179,14 +181,14 @@ export default function RenameHypnosisModal({ visible, onClose, currentName, onS
               <X size={24} color="#fbefd9" strokeWidth={2} />
             </Pressable>
           </View>
-          <Text style={styles.subtitle}>Edita el nombre de tu hipnosis</Text>
+          <Text style={styles.subtitle}>{t('renameHypnosis.subtitle')}</Text>
 
           <View style={styles.inputContainer}>
             <TextInput
               style={styles.input}
               value={name}
               onChangeText={setName}
-              placeholder="Nombre de la hipnosis"
+              placeholder={t('renameHypnosis.placeholder')}
               placeholderTextColor="rgba(251, 239, 217, 0.3)"
               autoFocus
               maxLength={100}
@@ -200,7 +202,7 @@ export default function RenameHypnosisModal({ visible, onClose, currentName, onS
               onPress={closeModal}
               testID="cancel-button"
             >
-              <Text style={styles.cancelButtonText}>Cancelar</Text>
+              <Text style={styles.cancelButtonText}>{t('renameHypnosis.cancelButton')}</Text>
             </Pressable>
 
             <Animated.View
@@ -223,7 +225,7 @@ export default function RenameHypnosisModal({ visible, onClose, currentName, onS
                 testID="save-button"
               >
                 <Text style={styles.saveButtonText}>
-                  {isSaving ? 'Guardando...' : 'Guardar'}
+                  {isSaving ? t('renameHypnosis.saving') : t('renameHypnosis.saveButton')}
                 </Text>
               </Pressable>
             </Animated.View>
