@@ -10,13 +10,15 @@ import {
   Easing,
   Platform,
 } from 'react-native';
-import { X, User, Edit3, HelpCircle, Mail } from 'lucide-react-native';
+import { X, User, Edit3, HelpCircle, Mail, Globe } from 'lucide-react-native';
 import * as Haptics from 'expo-haptics';
 import { BUTTON_STYLES } from '@/constants/buttonStyles';
 import { router } from 'expo-router';
 import EditProfileModal from './EditProfileModal';
 import ManageSubscriptionModal from './ManageSubscriptionModal';
 import ErrorModal from './ErrorModal';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { getTranslations } from '@/constants/translations';
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -29,11 +31,14 @@ interface SettingsModalProps {
 export default function SettingsModal({ visible, onClose, isOnline = true }: SettingsModalProps) {
   const { height: screenHeight } = useWindowDimensions();
   const insets = useSafeAreaInsets();
+  const { language, setLanguage } = useLanguage();
+  const t = getTranslations(language);
   
   const translateY = useRef(new Animated.Value(screenHeight)).current;
   const opacity = useRef(new Animated.Value(0)).current;
   
   const buttonAnimations = useRef<{ [key: string]: { scale: Animated.Value; opacity: Animated.Value } }>({}).current;
+  const languageToggleAnim = useRef(new Animated.Value(language === 'es' ? 0 : 1)).current;
   
   const [editProfileModalVisible, setEditProfileModalVisible] = useState<boolean>(false);
   const [manageSubscriptionModalVisible, setManageSubscriptionModalVisible] = useState<boolean>(false);
@@ -125,6 +130,18 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
       setErrorModalVisible(true);
       return;
     }
+
+    if (action === 'language') {
+      const newLanguage = language === 'es' ? 'en' : 'es';
+      setLanguage(newLanguage);
+      Animated.spring(languageToggleAnim, {
+        toValue: newLanguage === 'es' ? 0 : 1,
+        useNativeDriver: false,
+        tension: 80,
+        friction: 10,
+      }).start();
+      return;
+    }
     
     if (action === 'logout') {
       closeModal();
@@ -132,7 +149,7 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
         router.push('/login');
       }, 400);
     }
-  }, [closeModal]);
+  }, [closeModal, language, setLanguage, languageToggleAnim]);
 
   const getButtonAnimation = (buttonId: string) => {
     if (!buttonAnimations[buttonId]) {
@@ -211,13 +228,13 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
             </View>
           </TouchableOpacity>
 
-          <Text style={styles.title}>Mi cuenta</Text>
+          <Text style={styles.title}>{t.settings.title}</Text>
 
           <View style={styles.subscriptionSection}>
             <View style={styles.subscriptionRow}>
               <View style={styles.subscriptionInfo}>
-                <Text style={styles.subscriptionLabel}>Suscripción</Text>
-                <Text style={styles.subscriptionType}>Mensual</Text>
+                <Text style={styles.subscriptionLabel}>{t.settings.subscription}</Text>
+                <Text style={styles.subscriptionType}>{t.settings.subscriptionType}</Text>
               </View>
               <Pressable 
                 style={[
@@ -245,8 +262,8 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
                   subscriptionStatus === 'active' && styles.budgetTextActive,
                   (subscriptionStatus === 'cancelled' || subscriptionStatus === 'pending') && styles.budgetTextInactive
                 ]}>
-                  {subscriptionStatus === 'active' ? 'ACTIVA' : 
-                   subscriptionStatus === 'pending' ? 'PAGO PENDIENTE' : 'SUSCRIBIRSE'}
+                  {subscriptionStatus === 'active' ? t.settings.statusActive : 
+                   subscriptionStatus === 'pending' ? t.settings.statusPending : t.settings.statusSubscribe}
                 </Text>
               </Pressable>
             </View>
@@ -270,7 +287,7 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
                 <View style={styles.menuIconContainer}>
                   <User color="#ffffff" size={20} />
                 </View>
-                <Text style={styles.menuItemText}>Gestionar suscripción</Text>
+                <Text style={styles.menuItemText}>{t.settings.manageSubscription}</Text>
               </Pressable>
             </Animated.View>
 
@@ -291,7 +308,7 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
                 <View style={styles.menuIconContainer}>
                   <Edit3 color="#ffffff" size={20} />
                 </View>
-                <Text style={styles.menuItemText}>Editar mi perfil</Text>
+                <Text style={styles.menuItemText}>{t.settings.editProfile}</Text>
               </Pressable>
             </Animated.View>
 
@@ -312,7 +329,7 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
                 <View style={styles.menuIconContainer}>
                   <HelpCircle color="#ffffff" size={20} />
                 </View>
-                <Text style={styles.menuItemText}>Preguntas frecuentes</Text>
+                <Text style={styles.menuItemText}>{t.settings.faq}</Text>
               </Pressable>
             </Animated.View>
 
@@ -333,7 +350,45 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
                 <View style={styles.menuIconContainer}>
                   <Mail color="#ffffff" size={20} />
                 </View>
-                <Text style={styles.menuItemText}>Contacto</Text>
+                <Text style={styles.menuItemText}>{t.settings.contact}</Text>
+              </Pressable>
+            </Animated.View>
+
+            <Animated.View
+              style={{
+                transform: [{ scale: getButtonAnimation('language').scale }],
+                opacity: getButtonAnimation('language').opacity,
+              }}
+            >
+              <Pressable
+                style={styles.menuItem}
+                onPress={() => handleMenuAction('language')}
+                onPressIn={() => handlePressIn('language')}
+                onPressOut={() => handlePressOut('language')}
+                android_ripple={Platform.OS === 'android' ? { color: 'transparent' } : undefined}
+                testID="menu-language"
+              >
+                <View style={styles.menuIconContainer}>
+                  <Globe color="#ffffff" size={20} />
+                </View>
+                <Text style={styles.menuItemText}>{t.settings.language}</Text>
+                <View style={styles.languageToggleContainer}>
+                  <Animated.View
+                    style={[
+                      styles.languageToggleIndicator,
+                      {
+                        transform: [{
+                          translateX: languageToggleAnim.interpolate({
+                            inputRange: [0, 1],
+                            outputRange: [0, 36],
+                          }),
+                        }],
+                      },
+                    ]}
+                  />
+                  <Text style={[styles.languageToggleText, language === 'es' && styles.languageToggleTextActive]}>ES</Text>
+                  <Text style={[styles.languageToggleText, language === 'en' && styles.languageToggleTextActive]}>EN</Text>
+                </View>
               </Pressable>
             </Animated.View>
           </View>
@@ -358,11 +413,11 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
               <Text style={[
                 styles.logoutButtonText,
                 subscriptionStatus !== 'active' && styles.logoutButtonTextInactive
-              ]}>Cerrar sesión</Text>
+              ]}>{t.settings.logout}</Text>
             </Pressable>
           </Animated.View>
 
-          <Text style={styles.versionText}>Versión de la app 3.1.63</Text>
+          <Text style={styles.versionText}>{t.settings.version} 3.1.63</Text>
 
           <View style={styles.footerContainer}>
             <View style={styles.footerLinks}>
@@ -370,13 +425,13 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
               onPress={() => handleMenuAction('terms')}
               android_ripple={Platform.OS === 'android' ? { color: 'rgba(255,255,255,0.1)', borderless: true } : undefined}
             >
-              <Text style={styles.footerLinkText}>Términos de uso</Text>
+              <Text style={styles.footerLinkText}>{t.settings.termsOfUse}</Text>
             </Pressable>
             <Pressable
               onPress={() => handleMenuAction('privacy')}
               android_ripple={Platform.OS === 'android' ? { color: 'rgba(255,255,255,0.1)', borderless: true } : undefined}
             >
-              <Text style={styles.footerLinkText}>Políticas de privacidad</Text>
+              <Text style={styles.footerLinkText}>{t.settings.privacyPolicy}</Text>
             </Pressable>
             </View>
           </View>
@@ -581,5 +636,36 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: 'rgba(251, 239, 217, 0.3)',
     textAlign: 'center',
+  },
+  languageToggleContainer: {
+    flexDirection: 'row',
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    borderRadius: 20,
+    padding: 4,
+    gap: 4,
+    alignItems: 'center',
+    position: 'relative',
+    width: 80,
+    height: 32,
+    marginLeft: 'auto',
+  },
+  languageToggleIndicator: {
+    position: 'absolute',
+    width: 36,
+    height: 24,
+    backgroundColor: '#c9841e',
+    borderRadius: 16,
+    left: 4,
+  },
+  languageToggleText: {
+    fontSize: 12,
+    fontWeight: '700' as const,
+    color: 'rgba(255, 255, 255, 0.5)',
+    width: 36,
+    textAlign: 'center',
+    zIndex: 1,
+  },
+  languageToggleTextActive: {
+    color: '#ffffff',
   },
 });
