@@ -12,12 +12,15 @@ import { router, Stack } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BUTTON_STYLES } from '@/constants/buttonStyles';
+import { useTranslation } from 'react-i18next';
 
 const EPS = 0.0001;
-const TITLE_CHARS = ['¿', 'T', 'o', 'd', 'o', ' ', 'l', 'i', 's', 't', 'o', '?'];
 
 export default function ConfirmationScreen() {
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
+  const title = t('confirmation.title');
+  const titleChars = title.split('');
   const submitButtonScale = useRef(new Animated.Value(1)).current;
   const submitButtonOpacity = useRef(new Animated.Value(1)).current;
   const reviewButtonScale = useRef(new Animated.Value(1)).current;
@@ -130,7 +133,7 @@ export default function ConfirmationScreen() {
     ]).start();
   }, [reviewButtonScale, reviewButtonOpacity]);
 
-  const totalChars = TITLE_CHARS.length;
+  const totalChars = titleChars.length;
 
   return (
     <View style={styles.root}>
@@ -141,7 +144,7 @@ export default function ConfirmationScreen() {
         <View style={styles.container}>
           <View style={styles.content}>
             <View style={styles.titleContainer}>
-              {TITLE_CHARS.map((char, index) => {
+              {titleChars.map((char, index) => {
                 // Delays “simétricos”
                 const revealDelay =
                   index < totalChars / 2
@@ -221,7 +224,7 @@ export default function ConfirmationScreen() {
                     : undefined
                 }
               >
-                <Text style={styles.submitButtonText}>Enviar sin miedo</Text>
+                <Text style={styles.submitButtonText}>{t('confirmation.submitButton')}</Text>
               </Pressable>
             </Animated.View>
 
@@ -256,7 +259,7 @@ export default function ConfirmationScreen() {
                     : undefined
                 }
               >
-                <Text style={styles.reviewButtonText}>Revisar respuestas</Text>
+                <Text style={styles.reviewButtonText}>{t('confirmation.reviewButton')}</Text>
               </Pressable>
             </Animated.View>
           </View>

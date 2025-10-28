@@ -75,6 +75,11 @@ const initI18n = async () => {
                 primaryButton: 'Pedir mi hipnosis ahora',
                 secondaryButton: 'Pedir más tarde',
               },
+              confirmation: {
+                title: '¿Todo listo?',
+                submitButton: 'Enviar sin miedo',
+                reviewButton: 'Revisar respuestas',
+              },
             },
           },
           en: {
@@ -144,6 +149,11 @@ const initI18n = async () => {
                 subtitle: 'I\'m back again: to ask you who you want to become.\n\nThere\'s no way to do it wrong.\n\nLook deep inside and reach what you really want.',
                 primaryButton: 'Request my hypnosis now',
                 secondaryButton: 'Request later',
+              },
+              confirmation: {
+                title: 'All set?',
+                submitButton: 'Submit without fear',
+                reviewButton: 'Review answers',
               },
             },
           },
