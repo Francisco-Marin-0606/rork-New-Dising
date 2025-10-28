@@ -202,6 +202,9 @@ const initI18n = async () => {
                 subtitle: 'Cierra los ojos…',
                 skipLabel: '10 segs',
               },
+              qaScreen: {
+                title: 'Preguntas y respuestas',
+              },
             },
           },
           en: {
@@ -398,6 +401,9 @@ const initI18n = async () => {
                 defaultTitleAudio: 'Audio',
                 subtitle: 'Close your eyes…',
                 skipLabel: '10 secs',
+              },
+              qaScreen: {
+                title: 'Questions and answers',
               },
             },
           },

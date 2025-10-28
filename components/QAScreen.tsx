@@ -15,8 +15,10 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChevronLeft } from 'lucide-react-native';
 import * as Haptics from 'expo-haptics';
 import { router } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 
 export default function QAScreen() {
+  const { t } = useTranslation();
   const { height: screenHeight, width: screenWidth } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   
@@ -171,7 +173,7 @@ export default function QAScreen() {
             >
               <ChevronLeft color="#fbefd9" size={37.8} strokeWidth={1.5} />
             </TouchableOpacity>
-            <Text style={styles.title}>Preguntas y respuestas</Text>
+            <Text style={styles.title}>{t('qaScreen.title')}</Text>
           </View>
 
           <View style={styles.hypnosisCard}>
