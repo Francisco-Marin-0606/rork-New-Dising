@@ -8,10 +8,62 @@ const initI18n = async () => {
       .init({
         resources: {
           es: {
-            translation: {},
+            translation: {
+              settings: {
+                title: 'Mi cuenta',
+                subscription: {
+                  label: 'Suscripción',
+                  type: 'Mensual',
+                  status: {
+                    active: 'ACTIVA',
+                    pending: 'PAGO PENDIENTE',
+                    cancelled: 'SUSCRIBIRSE',
+                  },
+                },
+                menu: {
+                  manageSubscription: 'Gestionar suscripción',
+                  editProfile: 'Editar mi perfil',
+                  faq: 'Preguntas frecuentes',
+                  contact: 'Contacto',
+                  language: 'Idioma',
+                },
+                logout: 'Cerrar sesión',
+                version: 'Versión de la app',
+                footer: {
+                  terms: 'Términos de uso',
+                  privacy: 'Políticas de privacidad',
+                },
+              },
+            },
           },
           en: {
-            translation: {},
+            translation: {
+              settings: {
+                title: 'My Account',
+                subscription: {
+                  label: 'Subscription',
+                  type: 'Monthly',
+                  status: {
+                    active: 'ACTIVE',
+                    pending: 'PAYMENT PENDING',
+                    cancelled: 'SUBSCRIBE',
+                  },
+                },
+                menu: {
+                  manageSubscription: 'Manage subscription',
+                  editProfile: 'Edit my profile',
+                  faq: 'Frequently asked questions',
+                  contact: 'Contact',
+                  language: 'Language',
+                },
+                logout: 'Log out',
+                version: 'App version',
+                footer: {
+                  terms: 'Terms of use',
+                  privacy: 'Privacy policy',
+                },
+              },
+            },
           },
         },
         lng: 'es',

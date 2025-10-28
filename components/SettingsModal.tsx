@@ -31,7 +31,7 @@ interface SettingsModalProps {
 export default function SettingsModal({ visible, onClose, isOnline = true }: SettingsModalProps) {
   const { height: screenHeight } = useWindowDimensions();
   const insets = useSafeAreaInsets();
-  const { i18n: i18nHook } = useTranslation();
+  const { t, i18n: i18nHook } = useTranslation();
   const i18nInstance = i18nHook || i18n;
   
   const translateY = useRef(new Animated.Value(screenHeight)).current;
@@ -223,13 +223,13 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
             </View>
           </TouchableOpacity>
 
-          <Text style={styles.title}>Mi cuenta</Text>
+          <Text style={styles.title}>{t('settings.title')}</Text>
 
           <View style={styles.subscriptionSection}>
             <View style={styles.subscriptionRow}>
               <View style={styles.subscriptionInfo}>
-                <Text style={styles.subscriptionLabel}>Suscripción</Text>
-                <Text style={styles.subscriptionType}>Mensual</Text>
+                <Text style={styles.subscriptionLabel}>{t('settings.subscription.label')}</Text>
+                <Text style={styles.subscriptionType}>{t('settings.subscription.type')}</Text>
               </View>
               <Pressable 
                 style={[
@@ -257,8 +257,8 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
                   subscriptionStatus === 'active' && styles.budgetTextActive,
                   (subscriptionStatus === 'cancelled' || subscriptionStatus === 'pending') && styles.budgetTextInactive
                 ]}>
-                  {subscriptionStatus === 'active' ? 'ACTIVA' : 
-                   subscriptionStatus === 'pending' ? 'PAGO PENDIENTE' : 'SUSCRIBIRSE'}
+                  {subscriptionStatus === 'active' ? t('settings.subscription.status.active') : 
+                   subscriptionStatus === 'pending' ? t('settings.subscription.status.pending') : t('settings.subscription.status.cancelled')}
                 </Text>
               </Pressable>
             </View>
@@ -282,7 +282,7 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
                 <View style={styles.menuIconContainer}>
                   <User color="#ffffff" size={20} />
                 </View>
-                <Text style={styles.menuItemText}>Gestionar suscripción</Text>
+                <Text style={styles.menuItemText}>{t('settings.menu.manageSubscription')}</Text>
               </Pressable>
             </Animated.View>
 
@@ -303,7 +303,7 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
                 <View style={styles.menuIconContainer}>
                   <Edit3 color="#ffffff" size={20} />
                 </View>
-                <Text style={styles.menuItemText}>Editar mi perfil</Text>
+                <Text style={styles.menuItemText}>{t('settings.menu.editProfile')}</Text>
               </Pressable>
             </Animated.View>
 
@@ -324,7 +324,7 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
                 <View style={styles.menuIconContainer}>
                   <HelpCircle color="#ffffff" size={20} />
                 </View>
-                <Text style={styles.menuItemText}>Preguntas frecuentes</Text>
+                <Text style={styles.menuItemText}>{t('settings.menu.faq')}</Text>
               </Pressable>
             </Animated.View>
 
@@ -345,7 +345,7 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
                 <View style={styles.menuIconContainer}>
                   <Mail color="#ffffff" size={20} />
                 </View>
-                <Text style={styles.menuItemText}>Contacto</Text>
+                <Text style={styles.menuItemText}>{t('settings.menu.contact')}</Text>
               </Pressable>
             </Animated.View>
 
@@ -367,7 +367,7 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
                   <Globe color="#ffffff" size={20} />
                 </View>
                 <Text style={styles.menuItemText}>
-                  Idioma: {(i18nInstance.language || 'es') === 'es' ? 'Español' : 'English'}
+                  {t('settings.menu.language')}: {(i18nInstance.language || 'es') === 'es' ? 'Español' : 'English'}
                 </Text>
               </Pressable>
             </Animated.View>
@@ -393,11 +393,11 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
               <Text style={[
                 styles.logoutButtonText,
                 subscriptionStatus !== 'active' && styles.logoutButtonTextInactive
-              ]}>Cerrar sesión</Text>
+              ]}>{t('settings.logout')}</Text>
             </Pressable>
           </Animated.View>
 
-          <Text style={styles.versionText}>Versión de la app 3.1.63</Text>
+          <Text style={styles.versionText}>{t('settings.version')} 3.1.63</Text>
 
           <View style={styles.footerContainer}>
             <View style={styles.footerLinks}>
@@ -405,13 +405,13 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
               onPress={() => handleMenuAction('terms')}
               android_ripple={Platform.OS === 'android' ? { color: 'rgba(255,255,255,0.1)', borderless: true } : undefined}
             >
-              <Text style={styles.footerLinkText}>Términos de uso</Text>
+              <Text style={styles.footerLinkText}>{t('settings.footer.terms')}</Text>
             </Pressable>
             <Pressable
               onPress={() => handleMenuAction('privacy')}
               android_ripple={Platform.OS === 'android' ? { color: 'rgba(255,255,255,0.1)', borderless: true } : undefined}
             >
-              <Text style={styles.footerLinkText}>Políticas de privacidad</Text>
+              <Text style={styles.footerLinkText}>{t('settings.footer.privacy')}</Text>
             </Pressable>
             </View>
           </View>
