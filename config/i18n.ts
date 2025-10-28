@@ -17,7 +17,7 @@ const initI18n = async () => {
                   status: {
                     active: 'ACTIVA',
                     pending: 'PAGO PENDIENTE',
-                    cancelled: 'SUSCRIBIRSE',
+                    cancelled: 'CANCELADA',
                   },
                 },
                 menu: {
@@ -39,6 +39,7 @@ const initI18n = async () => {
                 subscription: 'Suscripción:',
                 currentPlan: 'Plan actual:',
                 nextPayment: 'Próximo pago:',
+                nextPaymentDate: '12 de Octubre',
                 monthly: 'Mensual',
                 cancelButton: 'Cancelar suscripción',
                 subscribeButton: 'Suscribirse',
@@ -254,7 +255,7 @@ const initI18n = async () => {
                   status: {
                     active: 'ACTIVE',
                     pending: 'PAYMENT PENDING',
-                    cancelled: 'SUBSCRIBE',
+                    cancelled: 'CANCELLED',
                   },
                 },
                 menu: {
@@ -276,6 +277,7 @@ const initI18n = async () => {
                 subscription: 'Subscription:',
                 currentPlan: 'Current plan:',
                 nextPayment: 'Next payment:',
+                nextPaymentDate: 'October 12',
                 monthly: 'Monthly',
                 cancelButton: 'Cancel subscription',
                 subscribeButton: 'Subscribe',

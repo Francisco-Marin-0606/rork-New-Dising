@@ -335,7 +335,7 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
                   currentStatus === 'pending' && styles.statusTextPending
                 ]}>
                   {currentStatus === 'active' ? t('settings.subscription.status.active') : 
-                   currentStatus === 'pending' ? t('settings.subscription.status.pending') : 'CANCELADA'}
+                   currentStatus === 'pending' ? t('settings.subscription.status.pending') : t('settings.subscription.status.cancelled')}
                 </Text>
               </Pressable>
             </View>
@@ -362,7 +362,7 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
                 !subscriptionActive && styles.infoValueInactive,
                 currentStatus === 'pending' && styles.infoValuePending
               ]}>
-                {subscriptionActive ? '12 de Octubre' : '-'}
+                {subscriptionActive ? t('manageSubscription.nextPaymentDate') : '-'}
               </Text>
             </View>
 
