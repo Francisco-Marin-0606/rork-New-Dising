@@ -16,6 +16,7 @@ import {
 } from 'react-native';
 import { ChevronLeft } from 'lucide-react-native';
 import * as Haptics from 'expo-haptics';
+import { useTranslation } from 'react-i18next';
 
 interface EditProfileModalProps {
   visible: boolean;
@@ -23,6 +24,7 @@ interface EditProfileModalProps {
 }
 
 export default function EditProfileModal({ visible, onClose }: EditProfileModalProps) {
+  const { t } = useTranslation();
   const { height: screenHeight, width: screenWidth } = useWindowDimensions();
   
   const translateY = useRef(new Animated.Value(screenHeight)).current;
@@ -165,7 +167,7 @@ export default function EditProfileModal({ visible, onClose }: EditProfileModalP
     const trimmedNombrePreferido = nombrePreferido.trim();
     
     if (trimmedNombrePreferido.length === 0) {
-      setValidationError('Este campo es obligatorio');
+      setValidationError(t('editProfile.requiredField'));
       if (Platform.OS !== 'web') {
         try {
           await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
@@ -248,7 +250,7 @@ export default function EditProfileModal({ visible, onClose }: EditProfileModalP
             >
               <ChevronLeft color="#fbefd9" size={37.8} strokeWidth={1.5} />
             </TouchableOpacity>
-            <Text style={styles.title}>Editar mi perfil</Text>
+            <Text style={styles.title}>{t('editProfile.title')}</Text>
           </Pressable>
 
           <ScrollView 
@@ -262,33 +264,33 @@ export default function EditProfileModal({ visible, onClose }: EditProfileModalP
           >
             <View style={styles.formContainer}>
               <View style={styles.fieldContainer}>
-                <Text style={styles.label}>Nombre</Text>
+                <Text style={styles.label}>{t('editProfile.firstName')}</Text>
                 <TextInput
                   style={styles.input}
                   value={nombre}
                   onChangeText={setNombre}
-                  placeholder="Escríbelo aquí…"
+                  placeholder={t('editProfile.placeholder')}
                   placeholderTextColor="rgba(251, 239, 217, 0.3)"
                   testID="nombre-input"
                 />
               </View>
 
               <View style={styles.fieldContainer}>
-                <Text style={styles.label}>Apellido</Text>
+                <Text style={styles.label}>{t('editProfile.lastName')}</Text>
                 <TextInput
                   style={styles.input}
                   value={apellido}
                   onChangeText={setApellido}
-                  placeholder="Escríbelo aquí…"
+                  placeholder={t('editProfile.placeholder')}
                   placeholderTextColor="rgba(251, 239, 217, 0.3)"
                   testID="apellido-input"
                 />
               </View>
 
               <View style={styles.fieldContainer}>
-                <Text style={styles.label}>¿Cómo quieres que te llamen?</Text>
+                <Text style={styles.label}>{t('editProfile.preferredName')}</Text>
                 <Text style={styles.helperText}>
-                  Escríbelo como se lee, y si tiene algún acento raro, márcalo. (Que no es lo mismo Julián, que Julian, o Yulian).
+                  {t('editProfile.preferredNameHelper')}
                 </Text>
                 <TextInput
                   style={[styles.input, validationError && styles.inputError]}
@@ -299,7 +301,7 @@ export default function EditProfileModal({ visible, onClose }: EditProfileModalP
                       setValidationError('');
                     }
                   }}
-                  placeholder="Escríbelo aquí…"
+                  placeholder={t('editProfile.placeholder')}
                   placeholderTextColor="rgba(251, 239, 217, 0.3)"
                   testID="nombre-preferido-input"
                 />
@@ -309,18 +311,18 @@ export default function EditProfileModal({ visible, onClose }: EditProfileModalP
               </View>
 
               <View style={styles.fieldContainer}>
-                <Text style={styles.label}>Tu correo electrónico</Text>
+                <Text style={styles.label}>{t('editProfile.email')}</Text>
                 <Text style={styles.readOnlyText}>{email}</Text>
               </View>
 
               <View style={styles.rowContainer}>
                 <View style={[styles.fieldContainer, styles.halfField]}>
-                  <Text style={styles.label} numberOfLines={1}>Fecha de nacimiento</Text>
+                  <Text style={styles.label} numberOfLines={1}>{t('editProfile.dateOfBirth')}</Text>
                   <Text style={styles.readOnlyText}>{fechaNacimiento}</Text>
                 </View>
 
                 <View style={[styles.fieldContainer, styles.halfFieldSmaller]}>
-                  <Text style={styles.label}>Género</Text>
+                  <Text style={styles.label}>{t('editProfile.gender')}</Text>
                   <Text style={styles.readOnlyText}>{genero}</Text>
                 </View>
               </View>
@@ -343,7 +345,7 @@ export default function EditProfileModal({ visible, onClose }: EditProfileModalP
                 android_ripple={Platform.OS === 'android' ? { color: 'transparent' } : undefined}
                 testID="save-button"
               >
-                <Text style={styles.saveButtonText}>Listo</Text>
+                <Text style={styles.saveButtonText}>{t('editProfile.saveButton')}</Text>
               </Pressable>
             </Animated.View>
           </Pressable>

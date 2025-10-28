@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { ChevronLeft } from 'lucide-react-native';
 import * as Haptics from 'expo-haptics';
+import { useTranslation } from 'react-i18next';
 
 interface ManageSubscriptionModalProps {
   visible: boolean;
@@ -22,6 +23,7 @@ interface ManageSubscriptionModalProps {
 }
 
 export default function ManageSubscriptionModal({ visible, onClose, isOnline = true, subscriptionStatus = 'active' }: ManageSubscriptionModalProps) {
+  const { t } = useTranslation();
   const { height: screenHeight, width: screenWidth } = useWindowDimensions();
   
   const translateY = useRef(new Animated.Value(screenHeight)).current;
@@ -297,12 +299,12 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
             >
               <ChevronLeft color="#fbefd9" size={37.8} strokeWidth={1.5} />
             </TouchableOpacity>
-            <Text style={styles.title}>Gestionar Suscripción</Text>
+            <Text style={styles.title}>{t('manageSubscription.title')}</Text>
           </View>
 
           <View style={styles.infoSection}>
             <View style={styles.infoRow}>
-              <Text style={styles.infoLabel}>Suscripción:</Text>
+              <Text style={styles.infoLabel}>{t('manageSubscription.subscription')}</Text>
               <Pressable 
                 style={[
                   styles.statusBadge,
@@ -332,18 +334,18 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
                   currentStatus === 'cancelled' && styles.statusTextInactive,
                   currentStatus === 'pending' && styles.statusTextPending
                 ]}>
-                  {currentStatus === 'active' ? 'ACTIVA' : 
-                   currentStatus === 'pending' ? 'PAGO PENDIENTE' : 'CANCELADA'}
+                  {currentStatus === 'active' ? t('settings.subscription.status.active') : 
+                   currentStatus === 'pending' ? t('settings.subscription.status.pending') : 'CANCELADA'}
                 </Text>
               </Pressable>
             </View>
 
             <View style={styles.infoRow}>
               <Text style={[styles.infoLabel, !subscriptionActive && styles.infoLabelInactive]}>
-                Plan actual:
+                {t('manageSubscription.currentPlan')}
               </Text>
               <Text style={[styles.infoValue, !subscriptionActive && styles.infoValueInactive]}>
-                {subscriptionActive ? 'Mensual' : '-'}
+                {subscriptionActive ? t('manageSubscription.monthly') : '-'}
               </Text>
             </View>
 
@@ -353,7 +355,7 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
                 !subscriptionActive && styles.infoLabelInactive,
                 currentStatus === 'pending' && styles.infoLabelPending
               ]}>
-                Próximo pago:
+                {t('manageSubscription.nextPayment')}
               </Text>
               <Text style={[
                 styles.infoValue, 
@@ -403,19 +405,18 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
                       isCancelled && styles.cancelButtonTextDisabled,
                       !subscriptionActive && styles.cancelButtonTextActive
                     ]}>
-                      {subscriptionActive ? 'Cancelar suscripción' : 'Suscribirse'}
+                      {subscriptionActive ? t('manageSubscription.cancelButton') : t('manageSubscription.subscribeButton')}
                     </Text>
                   </Pressable>
                 </Animated.View>
                 {isCancelled && (
                   <Text style={styles.cancelledText}>
-                    Ya has cancelado tu suscripción.{"\n"}
-                    Seguirá activa hasta que finalice tu periodo de pago.
+                    {t('manageSubscription.cancelledMessage')}
                   </Text>
                 )}
                 {currentStatus === 'pending' && (
                   <Text style={styles.pendingText}>
-                    Tu pago está pendiente. Intentamos realizar el cobro, pero no pasó. Lo volveremos a intentar, asegúrate de tener saldo suficiente.
+                    {t('manageSubscription.pendingMessage')}
                   </Text>
                 )}
               </View>
@@ -450,12 +451,11 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
 
               <View style={styles.confirmBody}>
                 <Text style={[styles.confirmTitle, Platform.OS === 'android' && styles.confirmTitleAndroid]}>
-                  ¿Estás seguro que quieres cancelar tu suscripción a Mental?
+                  {t('manageSubscription.confirmCancel.title')}
                 </Text>
               <Text style={[styles.confirmSubtitle, Platform.OS === 'android' && styles.confirmSubtitleAndroid]}>
-  El siguiente click abre una línea de tiempo en la que no podrás pedir nuevas hipnosis.{"\n"}{"\n"}
-  Y para escuchar las anteriores, tendrás que renovar tu suscripción.
-</Text>
+                {t('manageSubscription.confirmCancel.subtitle')}
+              </Text>
 
                 <View style={styles.confirmButtons}>
                   <Animated.View style={{ transform: [{ scale: yesCancelScale }], opacity: yesCancelOpacity, marginBottom: 12 }}>
@@ -503,7 +503,7 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
                       }}
                       android_ripple={Platform.OS === 'android' ? { color: 'transparent' } : undefined}
                     >
-                      <Text style={styles.confirmButtonText}>Sí, quiero cancelar</Text>
+                      <Text style={styles.confirmButtonText}>{t('manageSubscription.confirmCancel.confirmButton')}</Text>
                     </Pressable>
                   </Animated.View>
 
@@ -552,7 +552,7 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
                       }}
                       android_ripple={Platform.OS === 'android' ? { color: 'transparent' } : undefined}
                     >
-                      <Text style={styles.confirmButtonSecondaryText}>No, deseo continuar</Text>
+                      <Text style={styles.confirmButtonSecondaryText}>{t('manageSubscription.confirmCancel.cancelButton')}</Text>
                     </Pressable>
                   </Animated.View>
                 </View>
