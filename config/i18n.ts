@@ -163,6 +163,11 @@ const initI18n = async () => {
                   button: 'OK',
                 },
               },
+              downloadComplete: {
+                title: 'Descarga completada',
+                message: '"{{hypnosisTitle}}" se ha descargado correctamente y está disponible offline, dentro de la app de Mental.',
+                button: 'Aceptar',
+              },
             },
           },
           en: {
@@ -320,6 +325,11 @@ const initI18n = async () => {
                   message: 'Doesn\'t add up...\nTry again.',
                   button: 'OK',
                 },
+              },
+              downloadComplete: {
+                title: 'Download complete',
+                message: '"{{hypnosisTitle}}" has been successfully downloaded and is available offline within the Mental app.',
+                button: 'Accept',
               },
             },
           },

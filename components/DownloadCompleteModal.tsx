@@ -9,6 +9,8 @@ import {
   Modal,
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
+import { useTranslation } from 'react-i18next';
+import '@/config/i18n';
 
 
 interface DownloadCompleteModalProps {
@@ -18,6 +20,7 @@ interface DownloadCompleteModalProps {
 }
 
 export default function DownloadCompleteModal({ visible, onClose, hypnosisTitle }: DownloadCompleteModalProps) {
+  const { t } = useTranslation();
   const buttonScale = useRef(new Animated.Value(1)).current;
   const buttonOpacity = useRef(new Animated.Value(1)).current;
   const modalScale = useRef(new Animated.Value(0.85)).current;
@@ -119,9 +122,9 @@ export default function DownloadCompleteModal({ visible, onClose, hypnosisTitle 
 
           
           <View style={styles.content}>
-            <Text style={styles.title}>Descarga completada</Text>
+            <Text style={styles.title}>{t('downloadComplete.title')}</Text>
             <Text style={styles.message}>
-              &ldquo;{hypnosisTitle}&rdquo; se ha descargado correctamente y está disponible offline, dentro de la app de Mental.
+              {t('downloadComplete.message', { hypnosisTitle })}
             </Text>
             
             <Animated.View
@@ -137,7 +140,7 @@ export default function DownloadCompleteModal({ visible, onClose, hypnosisTitle 
                 onPressOut={handleButtonPressOut}
                 android_ripple={Platform.OS === 'android' ? { color: 'rgba(255,255,255,0.1)' } : undefined}
               >
-                <Text style={styles.buttonText}>Aceptar</Text>
+                <Text style={styles.buttonText}>{t('downloadComplete.button')}</Text>
               </Pressable>
             </Animated.View>
           </View>
