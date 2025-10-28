@@ -1,4 +1,5 @@
 import React, { useRef, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   StyleSheet,
   View,
@@ -22,6 +23,7 @@ interface YaDisponibleModalProps {
 }
 
 export default function YaDisponibleModal({ visible, onClose, onRequestNow }: YaDisponibleModalProps) {
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const { height: screenHeight, width: screenWidth } = useWindowDimensions();
   const primaryButtonScale = useRef(new Animated.Value(1)).current;
@@ -140,11 +142,9 @@ export default function YaDisponibleModal({ visible, onClose, onRequestNow }: Ya
         <View style={styles.safe}>
           <View style={styles.container}>
             <View style={styles.content}>
-              <Text style={styles.title}>Ya puedes pedir tu siguiente hipnosis</Text>
+              <Text style={styles.title}>{t('yaDisponible.title')}</Text>
               <Text style={styles.subtitle}>
-                Vuelvo otra vez: para preguntarte en quién te quieres convertir.{'\n\n'}
-                No hay forma de hacerlo mal.{'\n\n'}
-                Mira muy adentro y llega a lo que realmente quieres.
+                {t('yaDisponible.subtitle')}
               </Text>
             </View>
 
@@ -162,7 +162,7 @@ export default function YaDisponibleModal({ visible, onClose, onRequestNow }: Ya
                   onPressOut={handlePrimaryPressOut}
                   android_ripple={Platform.OS === 'android' ? { color: 'transparent' } : undefined}
                 >
-                  <Text style={styles.primaryButtonText}>Pedir mi hipnosis ahora</Text>
+                  <Text style={styles.primaryButtonText}>{t('yaDisponible.primaryButton')}</Text>
                 </Pressable>
               </Animated.View>
 
@@ -179,7 +179,7 @@ export default function YaDisponibleModal({ visible, onClose, onRequestNow }: Ya
                   onPressOut={handleSecondaryPressOut}
                   android_ripple={Platform.OS === 'android' ? { color: 'transparent' } : undefined}
                 >
-                  <Text style={styles.secondaryButtonText}>Pedir más tarde</Text>
+                  <Text style={styles.secondaryButtonText}>{t('yaDisponible.secondaryButton')}</Text>
                 </Pressable>
               </Animated.View>
             </View>

@@ -69,6 +69,12 @@ const initI18n = async () => {
                 subtitle: 'Es broma, algo falló en el sistema.\n\nPero si pasó, es por algo. Intenta de nuevo.',
                 button: 'Volver',
               },
+              yaDisponible: {
+                title: 'Ya puedes pedir tu siguiente hipnosis',
+                subtitle: 'Vuelvo otra vez: para preguntarte en quién te quieres convertir.\n\nNo hay forma de hacerlo mal.\n\nMira muy adentro y llega a lo que realmente quieres.',
+                primaryButton: 'Pedir mi hipnosis ahora',
+                secondaryButton: 'Pedir más tarde',
+              },
             },
           },
           en: {
@@ -132,6 +138,12 @@ const initI18n = async () => {
                 title: 'Matrix failure',
                 subtitle: 'Just kidding, something failed in the system.\n\nBut if it happened, it\'s for a reason. Try again.',
                 button: 'Go back',
+              },
+              yaDisponible: {
+                title: 'You can now request your next hypnosis',
+                subtitle: 'I\'m back again: to ask you who you want to become.\n\nThere\'s no way to do it wrong.\n\nLook deep inside and reach what you really want.',
+                primaryButton: 'Request my hypnosis now',
+                secondaryButton: 'Request later',
               },
             },
           },
