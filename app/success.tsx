@@ -15,7 +15,7 @@ import { BUTTON_STYLES } from '@/constants/buttonStyles';
 import { useTranslation } from 'react-i18next';
 
 export default function SuccessScreen() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const insets = useSafeAreaInsets();
   const buttonScale = useRef(new Animated.Value(1)).current;
   const buttonOpacity = useRef(new Animated.Value(1)).current;
@@ -117,10 +117,13 @@ export default function SuccessScreen() {
                         outputRange: [0, 0, 1, 1],
                       });
 
+                      const baseFontSize = Platform.OS === 'android' ? 49.6 : 62;
+                      const fontSize = i18n.language === 'en' ? baseFontSize * 0.9 : baseFontSize;
+                      
                       return (
                         <Animated.Text
                           key={`title-${lineIndex}-${charIndex}`}
-                          style={[styles.titleChar, { opacity }]}
+                          style={[styles.titleChar, { opacity, fontSize, lineHeight: fontSize }]}
                         >
                           {char}
                         </Animated.Text>
@@ -224,11 +227,9 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap' as const,
   },
   titleChar: {
-    fontSize: Platform.OS === 'android' ? 49.6 : 62,
     fontWeight: '600' as const,
     color: '#fbefd9',
     letterSpacing: -2.5,
-    lineHeight: Platform.OS === 'android' ? 49.6 : 62,
   },
   infoChar: {
     fontSize: Platform.OS === 'android' ? 16 : 20,
