@@ -64,6 +64,11 @@ const initI18n = async () => {
                 saveButton: 'Listo',
                 requiredField: 'Este campo es obligatorio',
               },
+              errorModal: {
+                title: 'Fallo en la matrix',
+                subtitle: 'Es broma, algo falló en el sistema.\n\nPero si pasó, es por algo. Intenta de nuevo.',
+                button: 'Volver',
+              },
             },
           },
           en: {
@@ -122,6 +127,11 @@ const initI18n = async () => {
                 placeholder: 'Write it here…',
                 saveButton: 'Done',
                 requiredField: 'This field is required',
+              },
+              errorModal: {
+                title: 'Matrix failure',
+                subtitle: 'Just kidding, something failed in the system.\n\nBut if it happened, it\'s for a reason. Try again.',
+                button: 'Go back',
               },
             },
           },

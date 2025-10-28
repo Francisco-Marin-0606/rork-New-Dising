@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { ChevronLeft, AlertCircle } from 'lucide-react-native';
 import * as Haptics from 'expo-haptics';
+import { useTranslation } from 'react-i18next';
 
 interface ErrorModalProps {
   visible: boolean;
@@ -20,6 +21,7 @@ interface ErrorModalProps {
 }
 
 export default function ErrorModal({ visible, onClose }: ErrorModalProps) {
+  const { t } = useTranslation();
   const { height: screenHeight, width: screenWidth } = useWindowDimensions();
   
   const translateY = useRef(new Animated.Value(screenHeight)).current;
@@ -227,8 +229,8 @@ export default function ErrorModal({ visible, onClose }: ErrorModalProps) {
               <AlertCircle color="#fbefd9" size={64} strokeWidth={2} />
             </View>
 
-            <Text style={styles.errorTitle}>Fallo en la matrix</Text>
-            <Text style={styles.errorSubtitle}>Es broma, algo falló en el sistema.{"\n\n"}Pero si pasó, es por algo. Intenta de nuevo.</Text>
+            <Text style={styles.errorTitle}>{t('errorModal.title')}</Text>
+            <Text style={styles.errorSubtitle}>{t('errorModal.subtitle')}</Text>
             
             <Animated.View
               style={{
@@ -246,7 +248,7 @@ export default function ErrorModal({ visible, onClose }: ErrorModalProps) {
                 android_ripple={Platform.OS === 'android' ? { color: 'transparent' } : undefined}
                 testID="back-footer-button"
               >
-                <Text style={styles.backButtonText}>Volver</Text>
+                <Text style={styles.backButtonText}>{t('errorModal.button')}</Text>
               </Pressable>
             </Animated.View>
           </View>
