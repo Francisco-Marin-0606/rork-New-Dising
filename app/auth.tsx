@@ -15,6 +15,7 @@ import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ChevronLeft } from 'lucide-react-native';
 import type { TextInput as RNTextInput } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { router, Stack } from 'expo-router';
 import * as Haptics from 'expo-haptics';
@@ -22,6 +23,7 @@ import { BUTTON_STYLES } from '@/constants/buttonStyles';
 import CompleteDataModal from '@/components/CompleteDataModal';
 
 export default function AuthScreen() {
+  const { t } = useTranslation();
   const [code, setCode] = useState<string[]>(['', '', '', '']);
   const [timer, setTimer] = useState<number>(555);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -215,14 +217,14 @@ export default function AuthScreen() {
                 </View>
 
                 <View style={styles.textContainer}>
-                  <Text style={styles.title}>Ingresa el código</Text>
-                  <Text style={styles.title}>que llegó a tu correo</Text>
+                  <Text style={styles.title}>{t('auth.title1')}</Text>
+                  <Text style={styles.title}>{t('auth.title2')}</Text>
                 </View>
 
                 <View style={styles.infoContainer}>
-                  <Text style={styles.infoText}>Tiene cuatro dígitos.</Text>
-                  <Text style={styles.infoText}>Y una duración de {timer} segundos.</Text>
-                  <Text style={styles.infoText}>(No hagas la cuenta, te sobra tiempo)</Text>
+                  <Text style={styles.infoText}>{t('auth.info1')}</Text>
+                  <Text style={styles.infoText}>{t('auth.info2', { timer })}</Text>
+                  <Text style={styles.infoText}>{t('auth.info3')}</Text>
                 </View>
 
                 <View style={styles.codeContainer}>
@@ -305,7 +307,7 @@ export default function AuthScreen() {
                       styles.verifyButtonText,
                       !isCodeComplete && styles.verifyButtonTextDisabled,
                     ]}>
-                      Verificar
+                      {t('auth.verifyButton')}
                     </Text>
                   </Pressable>
                 </Animated.View>
@@ -356,7 +358,7 @@ export default function AuthScreen() {
                       hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                       testID="resend-button"
                     >
-                      <Text style={styles.resendText}>Reenviar código</Text>
+                      <Text style={styles.resendText}>{t('auth.resendButton')}</Text>
                     </Pressable>
                   </Animated.View>
                 </View>
