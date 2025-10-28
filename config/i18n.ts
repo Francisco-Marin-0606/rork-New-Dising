@@ -205,6 +205,43 @@ const initI18n = async () => {
               qaScreen: {
                 title: 'Preguntas y respuestas',
               },
+              index: {
+                headerTitle: 'Mis hipnosis',
+                headerTitleOffline: 'Mis descargas',
+                badge: 'NUEVA',
+                creating: 'Tu hipnosis está siendo creada...',
+                duration: 'Duración',
+                nextButton: 'Pedir mi nueva hipnosis',
+                toggle: {
+                  previous: 'Anteriores',
+                },
+                menu: {
+                  playNow: 'Reproducir ahora',
+                  download: 'Descargar',
+                  downloaded: 'Descargada',
+                  qa: 'Preguntas y respuestas',
+                  rename: 'Cambiar nombre',
+                },
+                delete: {
+                  title: 'Eliminar descarga',
+                  message: '¿Estás seguro que deseas eliminar esta hipnosis de tus descargas?',
+                  cancel: 'Cancelar',
+                  confirm: 'Eliminar',
+                },
+                empty: {
+                  title: 'No tienes hipnosis\ndescargadas',
+                  subtitle: 'No es culpa del universo. Es que no te has\nconectado a internet.',
+                  subtitle2: 'Conéctate y descarga tus hipnosis para\nescucharlas en el avión o en la Luna.',
+                  noPrevious: 'Sin anteriores',
+                },
+                offline: {
+                  banner: 'No tienes conexión a Internet.',
+                },
+                nav: {
+                  hypnosis: 'Hipnosis',
+                  aura: 'Aura',
+                },
+              },
             },
           },
           en: {
@@ -404,6 +441,43 @@ const initI18n = async () => {
               },
               qaScreen: {
                 title: 'Questions and answers',
+              },
+              index: {
+                headerTitle: 'My hypnosis',
+                headerTitleOffline: 'My downloads',
+                badge: 'NEW',
+                creating: 'Your hypnosis is being created...',
+                duration: 'Duration',
+                nextButton: 'Request my new hypnosis',
+                toggle: {
+                  previous: 'Previous',
+                },
+                menu: {
+                  playNow: 'Play now',
+                  download: 'Download',
+                  downloaded: 'Downloaded',
+                  qa: 'Questions and answers',
+                  rename: 'Change name',
+                },
+                delete: {
+                  title: 'Delete download',
+                  message: 'Are you sure you want to delete this hypnosis from your downloads?',
+                  cancel: 'Cancel',
+                  confirm: 'Delete',
+                },
+                empty: {
+                  title: 'You don\'t have downloaded\nhypnosis',
+                  subtitle: 'It\'s not the universe\'s fault. You just haven\'t\nconnected to the internet.',
+                  subtitle2: 'Connect and download your hypnosis to\nlisten on the plane or on the Moon.',
+                  noPrevious: 'No previous',
+                },
+                offline: {
+                  banner: 'You have no Internet connection.',
+                },
+                nav: {
+                  hypnosis: 'Hypnosis',
+                  aura: 'Aura',
+                },
               },
             },
           },

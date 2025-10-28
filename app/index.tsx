@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useRef, useMemo, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   StyleSheet,
   View,
@@ -91,6 +92,7 @@ function weservProxy(url: string, opts?: { grayscale?: boolean }) {
 }
 
 function ListItem({ item, onPress, onMenuPress, viewMode, downloadInfo }: ListItemProps) {
+  const { t } = useTranslation();
   const pressScale = useRef(new Animated.Value(1)).current;
   const [isRevealing, setIsRevealing] = useState<boolean>(false);
   const [revealProgress, setRevealProgress] = useState<number>(0);
@@ -154,7 +156,7 @@ function ListItem({ item, onPress, onMenuPress, viewMode, downloadInfo }: ListIt
             </View>
             <View style={[styles.listItemContent, pressed && { opacity: 0.2 }]}>
               <Text style={styles.listItemTitle} numberOfLines={2}>
-                {item.isGrayscale && revealProgress < 100 ? 'Tu hipnosis está siendo creada...' : item.title}
+                {item.isGrayscale && revealProgress < 100 ? t('index.creating') : item.title}
               </Text>
               {!(item.isGrayscale && revealProgress < 100) && (
                 <View style={styles.durationRow}>
@@ -169,7 +171,7 @@ function ListItem({ item, onPress, onMenuPress, viewMode, downloadInfo }: ListIt
                       <ArrowDown size={10.2} color="#ffffff" strokeWidth={3} />
                     </View>
                   )}
-                  <Text style={styles.durationText}>Duración {formatDuration(item.durationSec)}</Text>
+                  <Text style={styles.durationText}>{t('index.duration')} {formatDuration(item.durationSec)}</Text>
                 </View>
               )}
             </View>
@@ -191,6 +193,7 @@ function ListItem({ item, onPress, onMenuPress, viewMode, downloadInfo }: ListIt
 }
 
 function CarouselItem({ item, index, cardWidth, cardSpacing, snapInterval, scrollX, onPress, downloadInfo, totalItems }: CarouselItemProps) {
+  const { t } = useTranslation();
   const inputRange = [
     (index - 1) * snapInterval,
     index * snapInterval,
@@ -291,14 +294,14 @@ function CarouselItem({ item, index, cardWidth, cardSpacing, snapInterval, scrol
           </View>
           {index === 1 && (
             <View style={styles.badge} testID="listen-badge">
-              <Text style={styles.badgeText}>NUEVA</Text>
+              <Text style={styles.badgeText}>{t('index.badge')}</Text>
             </View>
           )}
         </View>
 
         <View style={[styles.cardTitleContainer, { width: cardWidth }]}>
           <Text style={styles.cardTitle} numberOfLines={3}>
-            {item.isGrayscale && revealProgress < 100 ? 'Tu hipnosis está siendo creada...' : item.title}
+            {item.isGrayscale && revealProgress < 100 ? t('index.creating') : item.title}
           </Text>
         </View>
       </Pressable>
@@ -424,6 +427,7 @@ function RevealFromBottom({ grayscaleUri, colorUri, onRevealChange, onProgressCh
 }
 
 export default function HomeScreen() {
+  const { t } = useTranslation();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [selectedSession, setSelectedSession] = useState<HypnosisSession | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>('carousel');
@@ -998,10 +1002,10 @@ export default function HomeScreen() {
 
   const headerTitle = useMemo(() => {
     if (!isOnline) {
-      return 'Mis descargas';
+      return t('index.headerTitleOffline');
     }
-    return 'Mis hipnosis';
-  }, [isOnline]);
+    return t('index.headerTitle');
+  }, [isOnline, t]);
 
   const renderItem = useCallback(
     ({ item, index }: ListRenderItemInfo<HypnosisSession>) => (
@@ -1140,7 +1144,7 @@ export default function HomeScreen() {
                       setToggleButtonLayouts(prev => ({ ...prev, previous: { x, width } }));
                     }}
                   >
-                    <Text numberOfLines={1} style={[styles.toggleText, viewMode === 'previous' && styles.toggleTextActive]}>Anteriores</Text>
+                    <Text numberOfLines={1} style={[styles.toggleText, viewMode === 'previous' && styles.toggleTextActive]}>{t('index.toggle.previous')}</Text>
                   </Pressable>
                 )}
               </View>
@@ -1164,9 +1168,9 @@ export default function HomeScreen() {
               )}
               {filteredSessions.length === 0 ? (
                 <View style={styles.emptyStateCarousel}>
-                  <Text style={styles.emptyMainTitle}>No tienes hipnosis{"\n"}descargadas</Text>
-                  <Text style={styles.emptySubtitle}>No es culpa del universo. Es que no te has{"\n"}conectado a internet.</Text>
-                  <Text style={styles.emptySubtitle2}>Conéctate y descarga tus hipnosis para{"\n"}escucharlas en el avión o en la Luna.</Text>
+                  <Text style={styles.emptyMainTitle}>{t('index.empty.title')}</Text>
+                  <Text style={styles.emptySubtitle}>{t('index.empty.subtitle')}</Text>
+                  <Text style={styles.emptySubtitle2}>{t('index.empty.subtitle2')}</Text>
                 </View>
               ) : (
                 <Animated.FlatList
@@ -1208,9 +1212,9 @@ export default function HomeScreen() {
             <Animated.View style={[styles.listContainer, { opacity: fadeAnim, transform: [{ translateX: slideAnim }] }]}>
               {filteredSessions.length === 0 ? (
                 <View style={styles.emptyStateList}>
-                  <Text style={styles.emptyMainTitle}>No tienes hipnosis{"\n"}descargadas</Text>
-                  <Text style={styles.emptySubtitle}>No es culpa del universo. Es que no te has{"\n"}conectado a internet.</Text>
-                  <Text style={styles.emptySubtitle2}>Conéctate y descarga tus hipnosis para{"\n"}escucharlas en el avión o en la Luna.</Text>
+                  <Text style={styles.emptyMainTitle}>{t('index.empty.title')}</Text>
+                  <Text style={styles.emptySubtitle}>{t('index.empty.subtitle')}</Text>
+                  <Text style={styles.emptySubtitle2}>{t('index.empty.subtitle2')}</Text>
                 </View>
               ) : (
                 <FlatList
@@ -1231,12 +1235,12 @@ export default function HomeScreen() {
               {filteredPreviousSessions.length === 0 ? (
                 <View style={styles.emptyStateList}>
                   {isOnline ? (
-                    <Text style={styles.emptyMainTitle}>Sin anteriores</Text>
+                    <Text style={styles.emptyMainTitle}>{t('index.empty.noPrevious')}</Text>
                   ) : (
                     <>
-                      <Text style={styles.emptyMainTitle}>No tienes hipnosis{"\n"}descargadas</Text>
-                      <Text style={styles.emptySubtitle}>No es culpa del universo. Es que no te has{"\n"}conectado a internet.</Text>
-                      <Text style={styles.emptySubtitle2}>Conéctate y descarga tus hipnosis para{"\n"}escucharlas en el avión o en la Luna.</Text>
+                      <Text style={styles.emptyMainTitle}>{t('index.empty.title')}</Text>
+                      <Text style={styles.emptySubtitle}>{t('index.empty.subtitle')}</Text>
+                      <Text style={styles.emptySubtitle2}>{t('index.empty.subtitle2')}</Text>
                     </>
                   )}
                 </View>
@@ -1272,7 +1276,7 @@ export default function HomeScreen() {
                 onPressOut={handleNextHypnosisPressOut}
                 android_ripple={Platform.OS === 'android' ? { color: 'rgba(255,255,255,0.08)' } : undefined}
               >
-                <Text style={styles.nextButtonText}>Pedir mi nueva hipnosis</Text>
+                <Text style={styles.nextButtonText}>{t('index.nextButton')}</Text>
               </Pressable>
             </Animated.View>
           </View>
@@ -1282,7 +1286,7 @@ export default function HomeScreen() {
 
       {!isOnline && (
         <View style={styles.offlineBanner}>
-          <Text style={styles.offlineBannerText}>No tienes conexión a Internet.</Text>
+          <Text style={styles.offlineBannerText}>{t('index.offline.banner')}</Text>
         </View>
       )}
 
@@ -1295,7 +1299,7 @@ export default function HomeScreen() {
             testID="nav-hipnosis"
             accessibilityLabel="Hipnosis"
           >
-            <Text style={[styles.navToggleTextLabel, navSection === 'hipnosis' && styles.navToggleTextLabelActive]}>Hipnosis</Text>
+            <Text style={[styles.navToggleTextLabel, navSection === 'hipnosis' && styles.navToggleTextLabelActive]}>{t('index.nav.hypnosis')}</Text>
           </Pressable>
           <Pressable
             style={styles.navToggleOption}
@@ -1304,7 +1308,7 @@ export default function HomeScreen() {
             testID="nav-aura"
             accessibilityLabel="Aura"
           >
-            <Text style={[styles.navToggleTextLabel, navSection === 'aura' && styles.navToggleTextLabelActive]}>Aura</Text>
+            <Text style={[styles.navToggleTextLabel, navSection === 'aura' && styles.navToggleTextLabelActive]}>{t('index.nav.aura')}</Text>
           </Pressable>
         </View>
       </View>
@@ -1390,7 +1394,7 @@ export default function HomeScreen() {
               >
                 <Animated.View style={[styles.menuPrimary, { transform: [{ scale: menuPrimaryScale }], opacity: menuPrimaryScale.interpolate({ inputRange: [0.9, 1], outputRange: [0.2, 1] }) }]}>
                   <Play color="#1a0d08" size={22} fill="#1a0d08" />
-                  <Text style={styles.menuPrimaryText}>Reproducir ahora</Text>
+                  <Text style={styles.menuPrimaryText}>{t('index.menu.playNow')}</Text>
                 </Animated.View>
               </Pressable>
 
@@ -1442,7 +1446,7 @@ export default function HomeScreen() {
                         )}
                       </View>
                       <Text style={styles.menuItemText}>
-                        {menuDownload?.state === 'completed' ? 'Descargada' : 'Descargar'}
+                        {menuDownload?.state === 'completed' ? t('index.menu.downloaded') : t('index.menu.download')}
                       </Text>
                     </>
                   )}
@@ -1478,7 +1482,7 @@ export default function HomeScreen() {
                       <View style={styles.menuIconContainer}>
                         <MessageCircle color="#ffffff" size={20} />
                       </View>
-                      <Text style={styles.menuItemText}>Preguntas y respuestas</Text>
+                      <Text style={styles.menuItemText}>{t('index.menu.qa')}</Text>
                     </Animated.View>
                   </Pressable>
 
@@ -1508,7 +1512,7 @@ export default function HomeScreen() {
                       <View style={styles.menuIconContainer}>
                         <Edit3 color="#ffffff" size={20} />
                       </View>
-                      <Text style={styles.menuItemText}>Cambiar nombre</Text>
+                      <Text style={styles.menuItemText}>{t('index.menu.rename')}</Text>
                     </Animated.View>
                   </Pressable>
                 </>
@@ -1613,8 +1617,8 @@ export default function HomeScreen() {
               </Svg>
             </View>
             <View style={styles.deleteConfirmContent}>
-              <Text style={styles.deleteConfirmTitle}>Eliminar descarga</Text>
-              <Text style={styles.deleteConfirmMessage}>¿Estás seguro que deseas eliminar esta hipnosis de tus descargas?</Text>
+              <Text style={styles.deleteConfirmTitle}>{t('index.delete.title')}</Text>
+              <Text style={styles.deleteConfirmMessage}>{t('index.delete.message')}</Text>
               <View style={styles.deleteConfirmButtons}>
                 <Animated.View style={{ flex: 1, transform: [{ scale: deleteCancelButtonScale }], opacity: deleteCancelButtonOpacity }}>
                   <Pressable
@@ -1669,7 +1673,7 @@ export default function HomeScreen() {
                       ]).start();
                     }}
                   >
-                    <Text style={styles.deleteConfirmCancelText}>Cancelar</Text>
+                    <Text style={styles.deleteConfirmCancelText}>{t('index.delete.cancel')}</Text>
                   </Pressable>
                 </Animated.View>
                 <Animated.View style={{ flex: 1, transform: [{ scale: deleteConfirmButtonScale }], opacity: deleteConfirmButtonOpacity }}>
@@ -1731,7 +1735,7 @@ export default function HomeScreen() {
                       ]).start();
                     }}
                   >
-                    <Text style={styles.deleteConfirmDeleteText}>Eliminar</Text>
+                    <Text style={styles.deleteConfirmDeleteText}>{t('index.delete.confirm')}</Text>
                   </Pressable>
                 </Animated.View>
               </View>
