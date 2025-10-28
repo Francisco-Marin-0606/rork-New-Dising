@@ -80,6 +80,11 @@ const initI18n = async () => {
                 submitButton: 'Enviar sin miedo',
                 reviewButton: 'Revisar respuestas',
               },
+              success: {
+                title: ['Tu hipnosis ', 'está siendo ', 'creada.'],
+                subtitle: ['En menos de 1140 minutos (24hs)', 'te enviaré tu hipnosis.'],
+                button: 'Volver',
+              },
             },
           },
           en: {
@@ -154,6 +159,11 @@ const initI18n = async () => {
                 title: 'All set?',
                 submitButton: 'Submit without fear',
                 reviewButton: 'Review answers',
+              },
+              success: {
+                title: ['Your hypnosis ', 'is being ', 'created.'],
+                subtitle: ['In less than 1140 minutes (24hrs)', 'I will send you your hypnosis.'],
+                button: 'Go back',
               },
             },
           },

@@ -12,14 +12,19 @@ import { router, Stack } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BUTTON_STYLES } from '@/constants/buttonStyles';
+import { useTranslation } from 'react-i18next';
 
 export default function SuccessScreen() {
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const buttonScale = useRef(new Animated.Value(1)).current;
   const buttonOpacity = useRef(new Animated.Value(1)).current;
   const titleRevealProgress = useRef(new Animated.Value(0)).current;
   const infoRevealProgress = useRef(new Animated.Value(0)).current;
   const buttonEnterProgress = useRef(new Animated.Value(0)).current;
+
+  const titleLines = t('success.title', { returnObjects: true }) as string[];
+  const subtitleLines = t('success.subtitle', { returnObjects: true }) as string[];
 
   useEffect(() => {
     Animated.parallel([
@@ -96,8 +101,8 @@ export default function SuccessScreen() {
         <View style={styles.container}>
           <View style={styles.content}>
             <View style={styles.textContainer}>
-              {['Tu hipnosis ', 'está siendo ', 'creada.'].map((line, lineIndex) => {
-                const maxChars = Math.max('Tu hipnosis '.length, ' está siendo '.length, '  creada.'.length);
+              {titleLines.map((line: string, lineIndex: number) => {
+                const maxChars = Math.max(...titleLines.map((l: string) => l.length));
                 
                 return (
                   <View key={`title-line-${lineIndex}`} style={styles.textLineContainer}>
@@ -127,8 +132,8 @@ export default function SuccessScreen() {
             </View>
             
             <View style={styles.infoTextContainer}>
-              {['En menos de 1140 minutos (24hs)', 'te enviaré tu hipnosis.'].map((line, lineIndex) => {
-                const maxChars = Math.max('En menos de 1140 minutos (24hs)'.length, 'te enviaré tu hipnosis.'.length);
+              {subtitleLines.map((line: string, lineIndex: number) => {
+                const maxChars = Math.max(...subtitleLines.map((l: string) => l.length));
                 
                 return (
                   <View key={`info-line-${lineIndex}`} style={styles.textLineContainer}>
@@ -178,7 +183,7 @@ export default function SuccessScreen() {
                 onPressOut={handlePressOut}
                 android_ripple={Platform.OS === 'android' ? { color: 'rgba(255,255,255,0.08)' } : undefined}
               >
-                <Text style={styles.buttonText}>Volver</Text>
+                <Text style={styles.buttonText}>{t('success.button')}</Text>
               </Pressable>
             </Animated.View>
           </View>
