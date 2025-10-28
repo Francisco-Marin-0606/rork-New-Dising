@@ -20,6 +20,7 @@ import ErrorModal from './ErrorModal';
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
+import i18n from '@/config/i18n';
 
 interface SettingsModalProps {
   visible: boolean;
@@ -30,7 +31,8 @@ interface SettingsModalProps {
 export default function SettingsModal({ visible, onClose, isOnline = true }: SettingsModalProps) {
   const { height: screenHeight } = useWindowDimensions();
   const insets = useSafeAreaInsets();
-  const { i18n } = useTranslation();
+  const { i18n: i18nHook } = useTranslation();
+  const i18nInstance = i18nHook || i18n;
   
   const translateY = useRef(new Animated.Value(screenHeight)).current;
   const opacity = useRef(new Animated.Value(0)).current;
@@ -129,8 +131,9 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
     }
 
     if (action === 'change-language') {
-      const newLanguage = i18n.language === 'es' ? 'en' : 'es';
-      await i18n.changeLanguage(newLanguage);
+      const currentLang = i18nInstance.language || 'es';
+      const newLanguage = currentLang === 'es' ? 'en' : 'es';
+      await i18nInstance.changeLanguage(newLanguage);
       console.log(`Language changed to: ${newLanguage}`);
       return;
     }
@@ -141,7 +144,7 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
         router.push('/login');
       }, 400);
     }
-  }, [closeModal, i18n]);
+  }, [closeModal, i18nInstance]);
 
   const getButtonAnimation = (buttonId: string) => {
     if (!buttonAnimations[buttonId]) {
@@ -364,7 +367,7 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
                   <Globe color="#ffffff" size={20} />
                 </View>
                 <Text style={styles.menuItemText}>
-                  Idioma: {i18n.language === 'es' ? 'Español' : 'English'}
+                  Idioma: {(i18nInstance.language || 'es') === 'es' ? 'Español' : 'English'}
                 </Text>
               </Pressable>
             </Animated.View>
