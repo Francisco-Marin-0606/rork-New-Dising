@@ -13,7 +13,7 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import { Video, ResizeMode, AVPlaybackStatus, Audio } from 'expo-av';
-
+import { useTranslation } from 'react-i18next';
 import * as Haptics from 'expo-haptics';
 
 export type Mode = 'audio' | 'video';
@@ -41,12 +41,17 @@ class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { has
     if (this.state.hasError) {
       return (
         <View style={styles.errorContainer} testID="player-error-boundary">
-          <Text style={styles.errorText}>Algo salió mal. Cierra el reproductor e intenta nuevamente.</Text>
+          <ErrorText />
         </View>
       );
     }
     return this.props.children as React.ReactElement;
   }
+}
+
+function ErrorText() {
+  const { t } = useTranslation();
+  return <Text style={styles.errorText}>{t('playerModal.error')}</Text>;
 }
 
 const BACKGROUND_URI =
@@ -60,7 +65,8 @@ const SPEED_ZONES = {
 
 const ZONE_HEIGHT = 80; // Height of each speed zone in pixels
 
-export default function PlayerModal({ visible, onClose, mode, title = 'Reproductor', mediaUri }: PlayerModalProps) {
+export default function PlayerModal({ visible, onClose, mode, title, mediaUri }: PlayerModalProps) {
+  const { t } = useTranslation();
   const { height: screenHeight } = useWindowDimensions();
   const [isClient, setIsClient] = useState(Platform.OS !== 'web');
 
@@ -682,8 +688,10 @@ export default function PlayerModal({ visible, onClose, mode, title = 'Reproduct
 
 
             <View style={styles.titleContainer}>
-              <Text style={styles.title}>{title ?? (mode === 'video' ? 'Video' : 'Audio')}</Text>
-              {mode === 'audio' ? <Text style={styles.subtitle}>Cierra los ojos…</Text> : null}
+              <Text style={styles.title}>
+                {title ?? (mode === 'video' ? t('playerModal.defaultTitleVideo') : t('playerModal.defaultTitleAudio'))}
+              </Text>
+              {mode === 'audio' ? <Text style={styles.subtitle}>{t('playerModal.subtitle')}</Text> : null}
             </View>
 
             <View style={styles.bottomControls}>
@@ -712,7 +720,7 @@ export default function PlayerModal({ visible, onClose, mode, title = 'Reproduct
                       source={{ uri: 'https://mental-app-images.nyc3.cdn.digitaloceanspaces.com/Mental%20%7C%20Aura_v2/FlechasPlayer.png' }}
                       style={{ width: 36, height: 36, resizeMode: 'contain', transform: [{ scaleX: -1 as const }] }}
                     />
-                    <Text style={styles.skipLabel}>10 segs</Text>
+                    <Text style={styles.skipLabel}>{t('playerModal.skipLabel')}</Text>
                   </View>
                 </TouchableOpacity>
 
@@ -734,7 +742,7 @@ export default function PlayerModal({ visible, onClose, mode, title = 'Reproduct
                       source={{ uri: 'https://mental-app-images.nyc3.cdn.digitaloceanspaces.com/Mental%20%7C%20Aura_v2/FlechasPlayer.png' }}
                       style={{ width: 36, height: 36, resizeMode: 'contain' }}
                     />
-                    <Text style={styles.skipLabel}>10 segs</Text>
+                    <Text style={styles.skipLabel}>{t('playerModal.skipLabel')}</Text>
                   </View>
                 </TouchableOpacity>
               </View>
