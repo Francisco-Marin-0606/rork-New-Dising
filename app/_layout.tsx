@@ -7,7 +7,6 @@ import * as SystemUI from "expo-system-ui";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { StyleSheet, Platform } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { LanguageProvider } from "@/contexts/LanguageContext";
 
 // Only prevent auto hide on native platforms
 if (Platform.OS !== 'web') {
@@ -45,11 +44,9 @@ export default function RootLayout() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <LanguageProvider>
-        <GestureHandlerRootView style={styles.flex} testID="gesture-root">
-          <RootLayoutNav />
-        </GestureHandlerRootView>
-      </LanguageProvider>
+      <GestureHandlerRootView style={styles.flex} testID="gesture-root">
+        <RootLayoutNav />
+      </GestureHandlerRootView>
     </QueryClientProvider>
   );
 }
