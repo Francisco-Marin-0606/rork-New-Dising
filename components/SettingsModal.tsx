@@ -10,7 +10,7 @@ import {
   Easing,
   Platform,
 } from 'react-native';
-import { X, User, Edit3, HelpCircle, Mail } from 'lucide-react-native';
+import { X, User, Edit3, HelpCircle, Mail, Globe } from 'lucide-react-native';
 import * as Haptics from 'expo-haptics';
 import { BUTTON_STYLES } from '@/constants/buttonStyles';
 import { router } from 'expo-router';
@@ -19,6 +19,7 @@ import ManageSubscriptionModal from './ManageSubscriptionModal';
 import ErrorModal from './ErrorModal';
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 
 interface SettingsModalProps {
   visible: boolean;
@@ -29,6 +30,7 @@ interface SettingsModalProps {
 export default function SettingsModal({ visible, onClose, isOnline = true }: SettingsModalProps) {
   const { height: screenHeight } = useWindowDimensions();
   const insets = useSafeAreaInsets();
+  const { i18n } = useTranslation();
   
   const translateY = useRef(new Animated.Value(screenHeight)).current;
   const opacity = useRef(new Animated.Value(0)).current;
@@ -125,6 +127,13 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
       setErrorModalVisible(true);
       return;
     }
+
+    if (action === 'change-language') {
+      const newLanguage = i18n.language === 'es' ? 'en' : 'es';
+      await i18n.changeLanguage(newLanguage);
+      console.log(`Language changed to: ${newLanguage}`);
+      return;
+    }
     
     if (action === 'logout') {
       closeModal();
@@ -132,7 +141,7 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
         router.push('/login');
       }, 400);
     }
-  }, [closeModal]);
+  }, [closeModal, i18n]);
 
   const getButtonAnimation = (buttonId: string) => {
     if (!buttonAnimations[buttonId]) {
@@ -334,6 +343,29 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
                   <Mail color="#ffffff" size={20} />
                 </View>
                 <Text style={styles.menuItemText}>Contacto</Text>
+              </Pressable>
+            </Animated.View>
+
+            <Animated.View
+              style={{
+                transform: [{ scale: getButtonAnimation('change-language').scale }],
+                opacity: getButtonAnimation('change-language').opacity,
+              }}
+            >
+              <Pressable
+                style={styles.menuItem}
+                onPress={() => handleMenuAction('change-language')}
+                onPressIn={() => handlePressIn('change-language')}
+                onPressOut={() => handlePressOut('change-language')}
+                android_ripple={Platform.OS === 'android' ? { color: 'transparent' } : undefined}
+                testID="menu-change-language"
+              >
+                <View style={styles.menuIconContainer}>
+                  <Globe color="#ffffff" size={20} />
+                </View>
+                <Text style={styles.menuItemText}>
+                  Idioma: {i18n.language === 'es' ? 'Español' : 'English'}
+                </Text>
               </Pressable>
             </Animated.View>
           </View>

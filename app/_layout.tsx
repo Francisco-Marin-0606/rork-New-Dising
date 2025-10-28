@@ -7,6 +7,7 @@ import * as SystemUI from "expo-system-ui";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { StyleSheet, Platform } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import "../config/i18n";
 
 // Only prevent auto hide on native platforms
 if (Platform.OS !== 'web') {
