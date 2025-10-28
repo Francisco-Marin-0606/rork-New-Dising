@@ -85,6 +85,49 @@ const initI18n = async () => {
                 subtitle: ['En menos de 1140 minutos (24hs)', 'te enviaré tu hipnosis.'],
                 button: 'Volver',
               },
+              form: {
+                placeholder: 'Escríbelo aquí…',
+                validation: {
+                  min: 'Mínimo 10 caracteres',
+                  max: 'Máximo 500 caracteres',
+                },
+                buttons: {
+                  back: 'Atrás',
+                  next: 'Siguiente',
+                  submit: 'Enviar',
+                },
+                alerts: {
+                  saveProgress: {
+                    title: '¿Deseas responder estas preguntas luego?',
+                    no: 'No',
+                    yes: 'Sí',
+                  },
+                  micPermission: {
+                    title: 'Permiso denegado',
+                    message: 'Necesitamos acceso al micrófono para grabar audio.',
+                  },
+                  recordingError: {
+                    title: 'Error',
+                    message: 'No se pudo iniciar la grabación.',
+                  },
+                  stopRecordingError: {
+                    title: 'Error',
+                    message: 'No se pudo detener la grabación.',
+                  },
+                  recordingUriError: {
+                    title: 'Error',
+                    message: 'No se pudo obtener la grabación.',
+                  },
+                  transcriptionError: {
+                    title: 'Error',
+                    message: 'No se pudo transcribir el audio.',
+                  },
+                  micAccessError: {
+                    title: 'Error',
+                    message: 'No se pudo acceder al micrófono.',
+                  },
+                },
+              },
             },
           },
           en: {
@@ -164,6 +207,49 @@ const initI18n = async () => {
                 title: ['Your hypnosis ', 'is being ', 'created.'],
                 subtitle: ['In less than 1140 minutes (24hrs)', 'I will send you your hypnosis.'],
                 button: 'Go back',
+              },
+              form: {
+                placeholder: 'Write it here…',
+                validation: {
+                  min: 'Minimum 10 characters',
+                  max: 'Maximum 500 characters',
+                },
+                buttons: {
+                  back: 'Back',
+                  next: 'Next',
+                  submit: 'Submit',
+                },
+                alerts: {
+                  saveProgress: {
+                    title: 'Do you want to answer these questions later?',
+                    no: 'No',
+                    yes: 'Yes',
+                  },
+                  micPermission: {
+                    title: 'Permission denied',
+                    message: 'We need access to the microphone to record audio.',
+                  },
+                  recordingError: {
+                    title: 'Error',
+                    message: 'Could not start recording.',
+                  },
+                  stopRecordingError: {
+                    title: 'Error',
+                    message: 'Could not stop recording.',
+                  },
+                  recordingUriError: {
+                    title: 'Error',
+                    message: 'Could not get the recording.',
+                  },
+                  transcriptionError: {
+                    title: 'Error',
+                    message: 'Could not transcribe the audio.',
+                  },
+                  micAccessError: {
+                    title: 'Error',
+                    message: 'Could not access the microphone.',
+                  },
+                },
               },
             },
           },

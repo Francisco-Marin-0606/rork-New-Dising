@@ -19,8 +19,10 @@ import * as Haptics from 'expo-haptics';
 import { FORM_QUESTIONS } from '@/constants/questions';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useTranslation } from 'react-i18next';
 
 export default function FormScreen() {
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
@@ -194,7 +196,7 @@ export default function FormScreen() {
 
   const handleNext = useCallback(async () => {
     if (inputValue.trim().length < 10) {
-      setValidationError('Mínimo 10 caracteres');
+      setValidationError(t('form.validation.min'));
       if (Platform.OS !== 'web') {
         try { await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error); } catch {}
       }
@@ -202,7 +204,7 @@ export default function FormScreen() {
     }
 
     if (inputValue.length > 500) {
-      setValidationError('Máximo 500 caracteres');
+      setValidationError(t('form.validation.max'));
       if (Platform.OS !== 'web') {
         try { await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error); } catch {}
       }
@@ -278,18 +280,18 @@ export default function FormScreen() {
       
       if (hasAnyAnswer) {
         Alert.alert(
-          '¿Deseas responder estas preguntas luego?',
+          t('form.alerts.saveProgress.title'),
           '',
           [
             {
-              text: 'No',
+              text: t('form.alerts.saveProgress.no'),
               style: 'cancel',
               onPress: () => {
                 console.log('User chose to stay');
               },
             },
             {
-              text: 'Sí',
+              text: t('form.alerts.saveProgress.yes'),
               onPress: () => {
                 router.back();
               },
@@ -343,7 +345,7 @@ export default function FormScreen() {
     try {
       const { status } = await Audio.requestPermissionsAsync();
       if (status !== 'granted') {
-        Alert.alert('Permiso denegado', 'Necesitamos acceso al micrófono para grabar audio.');
+        Alert.alert(t('form.alerts.micPermission.title'), t('form.alerts.micPermission.message'));
         return;
       }
 
@@ -393,7 +395,7 @@ export default function FormScreen() {
       console.log('Recording started');
     } catch (error) {
       console.error('Failed to start recording:', error);
-      Alert.alert('Error', 'No se pudo iniciar la grabación.');
+      Alert.alert(t('form.alerts.recordingError.title'), t('form.alerts.recordingError.message'));
     }
   };
 
@@ -415,7 +417,7 @@ export default function FormScreen() {
       setRecordingSeconds(0);
 
       if (!uri) {
-        Alert.alert('Error', 'No se pudo obtener la grabación.');
+        Alert.alert(t('form.alerts.recordingUriError.title'), t('form.alerts.recordingUriError.message'));
         return;
       }
 
@@ -423,7 +425,7 @@ export default function FormScreen() {
       await transcribeAudio(uri);
     } catch (error) {
       console.error('Failed to stop recording:', error);
-      Alert.alert('Error', 'No se pudo detener la grabación.');
+      Alert.alert(t('form.alerts.stopRecordingError.title'), t('form.alerts.stopRecordingError.message'));
       setIsRecording(false);
     }
   };
@@ -499,7 +501,7 @@ export default function FormScreen() {
       setIsRecording(true);
     } catch (error) {
       console.error('Failed to start web recording:', error);
-      Alert.alert('Error', 'No se pudo acceder al micrófono.');
+      Alert.alert(t('form.alerts.micAccessError.title'), t('form.alerts.micAccessError.message'));
       setIsRecording(false);
       if (recordingIntervalRef.current) {
         clearInterval(recordingIntervalRef.current);
@@ -567,7 +569,7 @@ export default function FormScreen() {
       }
     } catch (error) {
       console.error('Transcription error:', error);
-      Alert.alert('Error', 'No se pudo transcribir el audio.');
+      Alert.alert(t('form.alerts.transcriptionError.title'), t('form.alerts.transcriptionError.message'));
     } finally {
       setIsTranscribing(false);
     }
@@ -597,7 +599,7 @@ export default function FormScreen() {
       }
     } catch (error) {
       console.error('Transcription error:', error);
-      Alert.alert('Error', 'No se pudo transcribir el audio.');
+      Alert.alert(t('form.alerts.transcriptionError.title'), t('form.alerts.transcriptionError.message'));
     } finally {
       setIsTranscribing(false);
     }
@@ -717,7 +719,7 @@ export default function FormScreen() {
                         }
                       }
                     }}
-                    placeholder="Escríbelo aquí…"
+                    placeholder={t('form.placeholder')}
                     placeholderTextColor="rgba(251, 239, 217, 0.3)"
                     multiline
                     textAlignVertical="top"
@@ -838,7 +840,7 @@ export default function FormScreen() {
                   opacity: isRecording ? 0.3 : prevButtonOpacity
                 }
               ]}>
-                <Text style={[styles.buttonText, styles.buttonTextSecondary]}>Atrás</Text>
+                <Text style={[styles.buttonText, styles.buttonTextSecondary]}>{t('form.buttons.back')}</Text>
               </Animated.View>
             </Pressable>
 
@@ -887,7 +889,7 @@ export default function FormScreen() {
                 }
               ]}>
                 <Text style={[styles.buttonText, styles.buttonTextPrimary]}>
-                  {isLastQuestion ? 'Enviar' : 'Siguiente'}
+                  {isLastQuestion ? t('form.buttons.submit') : t('form.buttons.next')}
                 </Text>
               </Animated.View>
             </Pressable>
