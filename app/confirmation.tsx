@@ -6,6 +6,8 @@ import {
   Pressable,
   Platform,
   Animated,
+  PanResponder,
+  useWindowDimensions,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { router, Stack } from 'expo-router';
@@ -19,6 +21,7 @@ const EPS = 0.0001;
 export default function ConfirmationScreen() {
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
+  const { width: screenWidth } = useWindowDimensions();
   const title = t('confirmation.title');
   const titleChars = title.split('');
   const submitButtonScale = useRef(new Animated.Value(1)).current;
@@ -28,6 +31,8 @@ export default function ConfirmationScreen() {
   const textEraseProgress = useRef(new Animated.Value(0)).current;
   const textRevealProgress = useRef(new Animated.Value(0)).current;
   const buttonEnterProgress = useRef(new Animated.Value(0)).current;
+  const translateX = useRef(new Animated.Value(0)).current;
+  const swipeOpacity = useRef(new Animated.Value(1)).current;
   const [isErasing, setIsErasing] = React.useState(false);
 
   React.useEffect(() => {
@@ -70,6 +75,53 @@ export default function ConfirmationScreen() {
     }
     router.back();
   }, []);
+
+  const panResponder = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: (_, gestureState) => {
+        return Math.abs(gestureState.dx) > Math.abs(gestureState.dy) && gestureState.dx > 10;
+      },
+      onPanResponderMove: (_, gestureState) => {
+        if (gestureState.dx > 0) {
+          translateX.setValue(gestureState.dx);
+          const progress = Math.min(gestureState.dx / screenWidth, 1);
+          swipeOpacity.setValue(1 - progress * 0.5);
+        }
+      },
+      onPanResponderRelease: (_, gestureState) => {
+        if (gestureState.dx > screenWidth * 0.3) {
+          Animated.parallel([
+            Animated.timing(translateX, {
+              toValue: screenWidth,
+              duration: 250,
+              useNativeDriver: true,
+            }),
+            Animated.timing(swipeOpacity, {
+              toValue: 0,
+              duration: 250,
+              useNativeDriver: true,
+            }),
+          ]).start(() => {
+            router.back();
+          });
+        } else {
+          Animated.parallel([
+            Animated.spring(translateX, {
+              toValue: 0,
+              useNativeDriver: true,
+              tension: 65,
+              friction: 10,
+            }),
+            Animated.timing(swipeOpacity, {
+              toValue: 1,
+              duration: 200,
+              useNativeDriver: true,
+            }),
+          ]).start();
+        }
+      },
+    })
+  ).current;
 
   const handleSubmitPressIn = useCallback(() => {
     Animated.parallel([
@@ -140,7 +192,13 @@ export default function ConfirmationScreen() {
       <Stack.Screen options={{ headerShown: false }} />
       <StatusBar style="light" translucent backgroundColor="transparent" />
 
-      <View style={styles.safe}>
+      <Animated.View 
+        style={[styles.safe, {
+          transform: [{ translateX }],
+          opacity: swipeOpacity,
+        }]}
+        {...panResponder.panHandlers}
+      >
         <View style={styles.container}>
           <View style={styles.content}>
             <View style={styles.titleContainer}>
@@ -264,7 +322,7 @@ export default function ConfirmationScreen() {
             </Animated.View>
           </View>
         </View>
-      </View>
+      </Animated.View>
     </View>
   );
 }
