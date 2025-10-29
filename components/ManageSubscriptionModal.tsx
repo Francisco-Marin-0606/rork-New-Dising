@@ -159,6 +159,59 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
   const yesCancelOpacity = useRef(new Animated.Value(1)).current;
   const noContinueScale = useRef(new Animated.Value(1)).current;
   const noContinueOpacity = useRef(new Animated.Value(1)).current;
+  const confirmTranslateX = useRef(new Animated.Value(0)).current;
+  const confirmSwipeOpacity = useRef(new Animated.Value(1)).current;
+
+  const confirmPanResponder = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: (_, gestureState) => {
+        return Math.abs(gestureState.dx) > Math.abs(gestureState.dy) && gestureState.dx > 10;
+      },
+      onPanResponderMove: (_, gestureState) => {
+        if (gestureState.dx > 0) {
+          confirmTranslateX.setValue(gestureState.dx);
+          const progress = Math.min(gestureState.dx / screenWidth, 1);
+          confirmSwipeOpacity.setValue(1 - progress * 0.5);
+        }
+      },
+      onPanResponderRelease: (_, gestureState) => {
+        if (gestureState.dx > screenWidth * 0.3) {
+          Animated.parallel([
+            Animated.timing(confirmTranslateX, {
+              toValue: screenWidth,
+              duration: 250,
+              easing: easeInOut,
+              useNativeDriver: true,
+            }),
+            Animated.timing(confirmSwipeOpacity, {
+              toValue: 0,
+              duration: 250,
+              easing: easeInOut,
+              useNativeDriver: true,
+            }),
+          ]).start(() => {
+            confirmTranslateX.setValue(0);
+            confirmSwipeOpacity.setValue(1);
+            setShowCancelConfirm(false);
+          });
+        } else {
+          Animated.parallel([
+            Animated.spring(confirmTranslateX, {
+              toValue: 0,
+              useNativeDriver: true,
+              tension: 65,
+              friction: 10,
+            }),
+            Animated.timing(confirmSwipeOpacity, {
+              toValue: 1,
+              duration: 200,
+              useNativeDriver: true,
+            }),
+          ]).start();
+        }
+      },
+    })
+  ).current;
 
   const handleCancelSubscription = useCallback(async () => {
     if (Platform.OS !== 'web') {
@@ -171,6 +224,8 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
     setShowCancelConfirm(true);
     cancelConfirmTranslateX.setValue(screenWidth);
     cancelConfirmOpacity.setValue(0);
+    confirmTranslateX.setValue(0);
+    confirmSwipeOpacity.setValue(1);
     Animated.parallel([
       Animated.timing(cancelConfirmTranslateX, {
         toValue: 0,
@@ -433,10 +488,14 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
               styles.confirmContainer,
               {
                 height: screenHeight,
-                opacity: cancelConfirmOpacity,
-                transform: [{ translateX: cancelConfirmTranslateX }],
+                opacity: Animated.multiply(cancelConfirmOpacity, confirmSwipeOpacity),
+                transform: [
+                  { translateX: cancelConfirmTranslateX },
+                  { translateX: confirmTranslateX }
+                ],
               },
             ]}
+            {...confirmPanResponder.panHandlers}
           >
             <View style={styles.confirmContent}>
               <View style={styles.confirmHeader}>
