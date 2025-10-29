@@ -153,7 +153,7 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
   const [subscriptionActive, setSubscriptionActive] = useState<boolean>(true);
   const [currentStatus, setCurrentStatus] = useState<'active' | 'cancelled' | 'pending'>(subscriptionStatus);
   const [showCancelConfirm, setShowCancelConfirm] = useState<boolean>(false);
-  const cancelConfirmTranslateY = useRef(new Animated.Value(screenHeight)).current;
+  const cancelConfirmTranslateX = useRef(new Animated.Value(screenWidth)).current;
   const cancelConfirmOpacity = useRef(new Animated.Value(0)).current;
   const yesCancelScale = useRef(new Animated.Value(1)).current;
   const yesCancelOpacity = useRef(new Animated.Value(1)).current;
@@ -169,10 +169,10 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
       }
     }
     setShowCancelConfirm(true);
-    cancelConfirmTranslateY.setValue(screenHeight);
+    cancelConfirmTranslateX.setValue(screenWidth);
     cancelConfirmOpacity.setValue(0);
     Animated.parallel([
-      Animated.timing(cancelConfirmTranslateY, {
+      Animated.timing(cancelConfirmTranslateX, {
         toValue: 0,
         duration: 350,
         easing: easeInOut,
@@ -185,7 +185,7 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
         useNativeDriver: true,
       }),
     ]).start();
-  }, [cancelConfirmTranslateY, cancelConfirmOpacity, screenHeight, easeInOut]);
+  }, [cancelConfirmTranslateX, cancelConfirmOpacity, screenWidth, easeInOut]);
 
   const handleConfirmCancel = useCallback(async () => {
     if (Platform.OS !== 'web') {
@@ -196,8 +196,8 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
       }
     }
     Animated.parallel([
-      Animated.timing(cancelConfirmTranslateY, {
-        toValue: screenHeight,
+      Animated.timing(cancelConfirmTranslateX, {
+        toValue: screenWidth,
         duration: 250,
         easing: easeInOut,
         useNativeDriver: true,
@@ -212,7 +212,7 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
       setShowCancelConfirm(false);
       setIsCancelled(true);
     });
-  }, [cancelConfirmTranslateY, cancelConfirmOpacity, screenHeight, easeInOut]);
+  }, [cancelConfirmTranslateX, cancelConfirmOpacity, screenWidth, easeInOut]);
 
   const handleCloseCancelConfirm = useCallback(async () => {
     if (Platform.OS !== 'web') {
@@ -223,8 +223,8 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
       }
     }
     Animated.parallel([
-      Animated.timing(cancelConfirmTranslateY, {
-        toValue: screenHeight,
+      Animated.timing(cancelConfirmTranslateX, {
+        toValue: screenWidth,
         duration: 250,
         easing: easeInOut,
         useNativeDriver: true,
@@ -238,7 +238,7 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
     ]).start(() => {
       setShowCancelConfirm(false);
     });
-  }, [cancelConfirmTranslateY, cancelConfirmOpacity, screenHeight, easeInOut]);
+  }, [cancelConfirmTranslateX, cancelConfirmOpacity, screenWidth, easeInOut]);
 
   const handlePressIn = () => {
     Animated.parallel([
@@ -434,7 +434,7 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
               {
                 height: screenHeight,
                 opacity: cancelConfirmOpacity,
-                transform: [{ translateY: cancelConfirmTranslateY }],
+                transform: [{ translateX: cancelConfirmTranslateX }],
               },
             ]}
           >
