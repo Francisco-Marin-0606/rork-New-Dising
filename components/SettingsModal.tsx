@@ -212,18 +212,19 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
             styles.modalContent,
             { paddingTop: (Platform.OS === 'android' ? insets.top + 12 : insets.top + 20), paddingBottom: insets.bottom + 20 }
           ]}>
-          <TouchableOpacity 
-            style={[styles.closeButton, { top: (Platform.OS === 'android' ? insets.top + 8 : insets.top + 12) }]} 
-            onPress={closeModal} 
-            testID="close-button" 
-            activeOpacity={0.6}
-          >
-            <View style={styles.closeButtonInner}>
-              <X color="#fbefd9" size={24} strokeWidth={2} />
-            </View>
-          </TouchableOpacity>
-
-          <Text style={styles.title}>{t('settings.title')}</Text>
+          <View style={styles.headerContainer}>
+            <Text style={styles.title}>{t('settings.title')}</Text>
+            <TouchableOpacity 
+              style={styles.closeButton} 
+              onPress={closeModal} 
+              testID="close-button" 
+              activeOpacity={0.6}
+            >
+              <View style={styles.closeButtonInner}>
+                <X color="#fbefd9" size={24} strokeWidth={2} />
+              </View>
+            </TouchableOpacity>
+          </View>
 
           <View style={styles.subscriptionSection}>
             <View style={styles.subscriptionRow}>
@@ -472,9 +473,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 44,
     justifyContent: 'space-between',
   },
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 24,
+    marginTop: 8,
+  },
   closeButton: {
-    position: 'absolute',
-    right: 44,
     zIndex: 10,
   },
   closeButtonInner: {
@@ -489,8 +495,7 @@ const styles = StyleSheet.create({
     fontSize: 32.4,
     fontWeight: '700',
     color: '#fbefd9',
-    marginBottom: 24,
-    marginTop: 8,
+    flex: 1,
   },
   subscriptionSection: {
     marginBottom: 12,
