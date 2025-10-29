@@ -27,8 +27,8 @@ export default function EditProfileModal({ visible, onClose }: EditProfileModalP
   const { t } = useTranslation();
   const { height: screenHeight, width: screenWidth } = useWindowDimensions();
   
-  const translateY = useRef(new Animated.Value(screenHeight)).current;
-  const translateX = useRef(new Animated.Value(0)).current;
+  const translateY = useRef(new Animated.Value(0)).current;
+  const translateX = useRef(new Animated.Value(screenWidth)).current;
   const opacity = useRef(new Animated.Value(0)).current;
   
   const [nombre, setNombre] = useState<string>('Pancho');
@@ -64,14 +64,14 @@ export default function EditProfileModal({ visible, onClose }: EditProfileModalP
         easing: easeInOut,
         useNativeDriver: true,
       }),
-      Animated.timing(translateY, {
-        toValue: screenHeight,
+      Animated.timing(translateX, {
+        toValue: screenWidth,
         duration: DURATION_CLOSE,
         easing: easeInOut,
         useNativeDriver: true,
       }),
     ]).start(() => {
-      translateX.setValue(0);
+      translateY.setValue(0);
       onClose();
     });
   }, [opacity, translateY, translateX, screenHeight, onClose, easeInOut]);
@@ -84,14 +84,14 @@ export default function EditProfileModal({ visible, onClose }: EditProfileModalP
         easing: easeInOut,
         useNativeDriver: true,
       }),
-      Animated.timing(translateY, {
+      Animated.timing(translateX, {
         toValue: 0,
         duration: DURATION_OPEN,
         easing: easeInOut,
         useNativeDriver: true,
       }),
     ]).start();
-  }, [opacity, translateY, easeInOut]);
+  }, [opacity, translateX, easeInOut]);
 
   useEffect(() => {
     if (visible) {
@@ -101,11 +101,11 @@ export default function EditProfileModal({ visible, onClose }: EditProfileModalP
 
   useEffect(() => {
     if (!visible) {
-      translateY.setValue(screenHeight);
-      translateX.setValue(0);
+      translateY.setValue(0);
+      translateX.setValue(screenWidth);
       opacity.setValue(0);
     }
-  }, [visible, translateY, translateX, opacity, screenHeight]);
+  }, [visible, translateY, translateX, opacity, screenWidth]);
 
   const panResponder = useRef(
     PanResponder.create({
@@ -140,8 +140,8 @@ export default function EditProfileModal({ visible, onClose }: EditProfileModalP
               useNativeDriver: true,
             }),
           ]).start(() => {
-            translateX.setValue(0);
-            translateY.setValue(screenHeight);
+            translateX.setValue(screenWidth);
+            translateY.setValue(0);
             onClose();
           });
         } else {
