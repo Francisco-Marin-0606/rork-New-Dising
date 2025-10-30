@@ -18,9 +18,7 @@ const initI18n = async () => {
                     active: 'ACTIVA',
                     pending: 'PAGO PENDIENTE',
                     cancelled: 'CANCELADA',
-                    subscribe: 'SUSCRIBIRME',
                   },
-                  cancelledMessage: 'Tu suscripción ya está cancelada. Seguirá activa hasta que finalice tu periodo de pago.',
                 },
                 menu: {
                   manageSubscription: 'Gestionar suscripción',
@@ -258,9 +256,7 @@ const initI18n = async () => {
                     active: 'ACTIVE',
                     pending: 'PAYMENT PENDING',
                     cancelled: 'CANCELLED',
-                    subscribe: 'SUBSCRIBE',
                   },
-                  cancelledMessage: 'Your subscription is already cancelled. It will remain active until your billing period ends.',
                 },
                 menu: {
                   manageSubscription: 'Manage subscription',

@@ -232,57 +232,36 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
                 <Text style={styles.subscriptionLabel}>{t('settings.subscription.label')}</Text>
                 <Text style={styles.subscriptionType}>{t('settings.subscription.type')}</Text>
               </View>
-              <View style={styles.badgesContainer}>
-                <Pressable 
-                  style={[
-                    styles.budgetContainer,
-                    subscriptionStatus === 'active' && styles.budgetContainerActive,
-                    subscriptionStatus === 'cancelled' && styles.budgetContainerCancelled,
-                    subscriptionStatus === 'pending' && styles.budgetContainerPending
-                  ]}
-                  onPress={async () => {
-                    if (Platform.OS !== 'web') {
-                      try {
-                        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-                      } catch (error) {
-                        console.log('Haptic feedback error:', error);
-                      }
+              <Pressable 
+                style={[
+                  styles.budgetContainer,
+                  subscriptionStatus === 'active' && styles.budgetContainerActive,
+                  subscriptionStatus === 'cancelled' && styles.budgetContainerCancelled,
+                  subscriptionStatus === 'pending' && styles.budgetContainerPending
+                ]}
+                onPress={async () => {
+                  if (Platform.OS !== 'web') {
+                    try {
+                      await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                    } catch (error) {
+                      console.log('Haptic feedback error:', error);
                     }
-                    const statusCycle: ('active' | 'cancelled' | 'pending')[] = ['active', 'pending', 'cancelled'];
-                    const currentIndex = statusCycle.indexOf(subscriptionStatus);
-                    const nextIndex = (currentIndex + 1) % statusCycle.length;
-                    setSubscriptionStatus(statusCycle[nextIndex]);
-                  }}
-                >
-                  <Text style={[
-                    styles.budgetText,
-                    subscriptionStatus === 'active' && styles.budgetTextActive,
-                    (subscriptionStatus === 'cancelled' || subscriptionStatus === 'pending') && styles.budgetTextInactive
-                  ]}>
-                    {subscriptionStatus === 'active' ? t('settings.subscription.status.active') : 
-                     subscriptionStatus === 'pending' ? t('settings.subscription.status.pending') : t('settings.subscription.status.cancelled')}
-                  </Text>
-                </Pressable>
-                {subscriptionStatus === 'cancelled' && (
-                  <Pressable 
-                    style={styles.subscribeBadge}
-                    onPress={async () => {
-                      if (Platform.OS !== 'web') {
-                        try {
-                          await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-                        } catch (error) {
-                          console.log('Haptic feedback error:', error);
-                        }
-                      }
-                      console.log('Subscribe pressed');
-                    }}
-                  >
-                    <Text style={styles.subscribeBadgeText}>
-                      {t('settings.subscription.status.subscribe')}
-                    </Text>
-                  </Pressable>
-                )}
-              </View>
+                  }
+                  const statusCycle: ('active' | 'cancelled' | 'pending')[] = ['active', 'pending', 'cancelled'];
+                  const currentIndex = statusCycle.indexOf(subscriptionStatus);
+                  const nextIndex = (currentIndex + 1) % statusCycle.length;
+                  setSubscriptionStatus(statusCycle[nextIndex]);
+                }}
+              >
+                <Text style={[
+                  styles.budgetText,
+                  subscriptionStatus === 'active' && styles.budgetTextActive,
+                  (subscriptionStatus === 'cancelled' || subscriptionStatus === 'pending') && styles.budgetTextInactive
+                ]}>
+                  {subscriptionStatus === 'active' ? t('settings.subscription.status.active') : 
+                   subscriptionStatus === 'pending' ? t('settings.subscription.status.pending') : t('settings.subscription.status.cancelled')}
+                </Text>
+              </Pressable>
             </View>
           </View>
 
@@ -418,12 +397,6 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
               ]}>{t('settings.logout')}</Text>
             </Pressable>
           </Animated.View>
-
-          {subscriptionStatus === 'cancelled' && (
-            <Text style={styles.cancelledText}>
-              {t('settings.subscription.cancelledMessage')}
-            </Text>
-          )}
 
           <Text style={styles.versionText}>{t('settings.version')} 3.1.63</Text>
 
@@ -648,38 +621,5 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: 'rgba(251, 239, 217, 0.3)',
     textAlign: 'center',
-  },
-  badgesContainer: {
-    flexDirection: 'row',
-    gap: 8,
-    alignItems: 'center',
-  },
-  subscribeBadge: {
-    backgroundColor: '#ff6b35',
-    paddingHorizontal: 16,
-    paddingVertical: 7,
-    borderRadius: 999,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 8,
-    borderWidth: 1.5,
-    borderColor: 'rgba(255, 107, 53, 0.4)',
-  },
-  subscribeBadgeText: {
-    fontSize: 11,
-    fontWeight: '800',
-    color: '#ffffff',
-    letterSpacing: 1.2,
-  },
-  cancelledText: {
-    fontSize: 14,
-    fontWeight: '400',
-    color: '#fbefd9',
-    textAlign: 'center',
-    marginTop: 24,
-    lineHeight: 20,
-    opacity: 0.7,
   },
 });
