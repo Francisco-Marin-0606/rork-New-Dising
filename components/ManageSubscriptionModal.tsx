@@ -19,7 +19,7 @@ interface ManageSubscriptionModalProps {
   visible: boolean;
   onClose: () => void;
   isOnline?: boolean;
-  subscriptionStatus?: 'active' | 'cancelled' | 'pending';
+  subscriptionStatus?: 'active' | 'cancelled' | 'pending' | 'subscribe';
 }
 
 export default function ManageSubscriptionModal({ visible, onClose, isOnline = true, subscriptionStatus = 'active' }: ManageSubscriptionModalProps) {
@@ -151,7 +151,7 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
 
   const [isCancelled, setIsCancelled] = useState<boolean>(false);
   const [subscriptionActive, setSubscriptionActive] = useState<boolean>(true);
-  const [currentStatus, setCurrentStatus] = useState<'active' | 'cancelled' | 'pending'>(subscriptionStatus);
+  const [currentStatus, setCurrentStatus] = useState<'active' | 'cancelled' | 'pending' | 'subscribe'>(subscriptionStatus);
   const [showCancelConfirm, setShowCancelConfirm] = useState<boolean>(false);
   const cancelConfirmTranslateX = useRef(new Animated.Value(screenWidth)).current;
   const cancelConfirmOpacity = useRef(new Animated.Value(0)).current;
@@ -364,7 +364,8 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
                 style={[
                   styles.statusBadge,
                   currentStatus === 'cancelled' && styles.statusBadgeInactive,
-                  currentStatus === 'pending' && styles.statusBadgePending
+                  currentStatus === 'pending' && styles.statusBadgePending,
+                  currentStatus === 'subscribe' && styles.statusBadgeSubscribe
                 ]}
                 onPress={async () => {
                   if (Platform.OS !== 'web') {
@@ -375,22 +376,25 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
                     }
                   }
                   
-                  const statusOrder: Array<'active' | 'cancelled' | 'pending'> = ['active', 'cancelled', 'pending'];
+                  const statusOrder: Array<'active' | 'cancelled' | 'pending' | 'subscribe'> = ['active', 'cancelled', 'pending', 'subscribe'];
                   const currentIndex = statusOrder.indexOf(currentStatus);
                   const nextIndex = (currentIndex + 1) % statusOrder.length;
                   const newStatus = statusOrder[nextIndex];
                   
                   setCurrentStatus(newStatus);
-                  setSubscriptionActive(newStatus !== 'cancelled');
+                  setSubscriptionActive(newStatus !== 'cancelled' && newStatus !== 'subscribe');
                 }}
               >
                 <Text style={[
                   styles.statusText,
                   currentStatus === 'cancelled' && styles.statusTextInactive,
-                  currentStatus === 'pending' && styles.statusTextPending
+                  currentStatus === 'pending' && styles.statusTextPending,
+                  currentStatus === 'subscribe' && styles.statusTextSubscribe
                 ]}>
                   {currentStatus === 'active' ? t('settings.subscription.status.active') : 
-                   currentStatus === 'pending' ? t('settings.subscription.status.pending') : t('settings.subscription.status.cancelled')}
+                   currentStatus === 'pending' ? t('settings.subscription.status.pending') : 
+                   currentStatus === 'subscribe' ? t('settings.subscription.status.subscribe') :
+                   t('settings.subscription.status.cancelled')}
                 </Text>
               </Pressable>
             </View>
@@ -788,6 +792,14 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(201, 132, 30, 0.3)',
   },
   statusTextPending: {
+    color: '#ffffff',
+  },
+  statusBadgeSubscribe: {
+    backgroundColor: '#808080',
+    borderWidth: 0,
+    borderColor: 'transparent',
+  },
+  statusTextSubscribe: {
     color: '#ffffff',
   },
   infoLabelPending: {

@@ -42,7 +42,7 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
   const [editProfileModalVisible, setEditProfileModalVisible] = useState<boolean>(false);
   const [manageSubscriptionModalVisible, setManageSubscriptionModalVisible] = useState<boolean>(false);
   const [errorModalVisible, setErrorModalVisible] = useState<boolean>(false);
-  const [subscriptionStatus, setSubscriptionStatus] = useState<'active' | 'cancelled' | 'pending'>('active');
+  const [subscriptionStatus, setSubscriptionStatus] = useState<'active' | 'cancelled' | 'pending' | 'subscribe'>('active');
 
   const DURATION_OPEN = 400;
   const DURATION_CLOSE = 350;
@@ -237,7 +237,8 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
                   styles.budgetContainer,
                   subscriptionStatus === 'active' && styles.budgetContainerActive,
                   subscriptionStatus === 'cancelled' && styles.budgetContainerCancelled,
-                  subscriptionStatus === 'pending' && styles.budgetContainerPending
+                  subscriptionStatus === 'pending' && styles.budgetContainerPending,
+                  subscriptionStatus === 'subscribe' && styles.budgetContainerSubscribe
                 ]}
                 onPress={async () => {
                   if (Platform.OS !== 'web') {
@@ -247,7 +248,7 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
                       console.log('Haptic feedback error:', error);
                     }
                   }
-                  const statusCycle: ('active' | 'cancelled' | 'pending')[] = ['active', 'pending', 'cancelled'];
+                  const statusCycle: ('active' | 'cancelled' | 'pending' | 'subscribe')[] = ['active', 'pending', 'cancelled', 'subscribe'];
                   const currentIndex = statusCycle.indexOf(subscriptionStatus);
                   const nextIndex = (currentIndex + 1) % statusCycle.length;
                   setSubscriptionStatus(statusCycle[nextIndex]);
@@ -256,10 +257,12 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
                 <Text style={[
                   styles.budgetText,
                   subscriptionStatus === 'active' && styles.budgetTextActive,
-                  (subscriptionStatus === 'cancelled' || subscriptionStatus === 'pending') && styles.budgetTextInactive
+                  (subscriptionStatus === 'cancelled' || subscriptionStatus === 'pending' || subscriptionStatus === 'subscribe') && styles.budgetTextInactive
                 ]}>
                   {subscriptionStatus === 'active' ? t('settings.subscription.status.active') : 
-                   subscriptionStatus === 'pending' ? t('settings.subscription.status.pending') : t('settings.subscription.status.cancelled')}
+                   subscriptionStatus === 'pending' ? t('settings.subscription.status.pending') : 
+                   subscriptionStatus === 'subscribe' ? t('settings.subscription.status.subscribe') :
+                   t('settings.subscription.status.cancelled')}
                 </Text>
               </Pressable>
             </View>
@@ -544,6 +547,11 @@ const styles = StyleSheet.create({
   budgetContainerPending: {
     backgroundColor: 'rgba(201, 132, 30, 0.4)',
     borderColor: 'rgba(201, 132, 30, 0.3)',
+  },
+  budgetContainerSubscribe: {
+    backgroundColor: '#808080',
+    borderWidth: 0,
+    borderColor: 'transparent',
   },
 
   budgetText: {

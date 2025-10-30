@@ -18,6 +18,7 @@ const initI18n = async () => {
                     active: 'ACTIVA',
                     pending: 'PAGO PENDIENTE',
                     cancelled: 'CANCELADA',
+                    subscribe: 'SUSCRIBIRME',
                   },
                 },
                 menu: {
@@ -256,6 +257,7 @@ const initI18n = async () => {
                     active: 'ACTIVE',
                     pending: 'PAYMENT PENDING',
                     cancelled: 'CANCELLED',
+                    subscribe: 'SUBSCRIBE',
                   },
                 },
                 menu: {
