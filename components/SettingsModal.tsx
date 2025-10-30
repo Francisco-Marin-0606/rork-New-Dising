@@ -271,6 +271,11 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
                 {t('manageSubscription.cancelledMessage')}
               </Text>
             )}
+            {subscriptionStatus === 'pending' && (
+              <Text style={styles.cancelledTextTop}>
+                {t('manageSubscription.pendingMessage')}
+              </Text>
+            )}
           </View>
 
           <View style={styles.menuSection}>
