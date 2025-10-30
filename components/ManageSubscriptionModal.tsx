@@ -741,11 +741,10 @@ const styles = StyleSheet.create({
   pendingText: {
     fontSize: 14,
     fontWeight: '400',
-    color: '#fbefd9',
+    color: 'rgba(251, 239, 217, 0.35)',
     textAlign: 'center',
     marginTop: 16,
     lineHeight: 20,
-    opacity: 0.8,
   },
   cancelButtonTextActive: {
     color: '#ffffff',
