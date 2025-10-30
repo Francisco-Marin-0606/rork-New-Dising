@@ -547,8 +547,9 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(201, 132, 30, 0.4)',
   },
   budgetContainerCancelled: {
-    backgroundColor: '#ff6b35',
-    borderColor: 'rgba(255, 107, 53, 0.4)',
+    backgroundColor: '#808080',
+    borderWidth: 0,
+    borderColor: 'transparent',
   },
   budgetContainerPending: {
     backgroundColor: 'rgba(201, 132, 30, 0.4)',
