@@ -418,10 +418,10 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
                     style={[
                       styles.cancelButton,
                       isCancelled && styles.cancelButtonDisabled,
-                      !subscriptionActive && styles.cancelButtonActive
+                      (!subscriptionActive || currentStatus === 'cancelled') && styles.cancelButtonActive
                     ]}
                     onPress={async () => {
-                      if (!subscriptionActive) {
+                      if (!subscriptionActive || currentStatus === 'cancelled') {
                         if (Platform.OS !== 'web') {
                           try {
                             await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
@@ -442,9 +442,9 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
                     <Text style={[
                       styles.cancelButtonText,
                       isCancelled && styles.cancelButtonTextDisabled,
-                      !subscriptionActive && styles.cancelButtonTextActive
+                      (!subscriptionActive || currentStatus === 'cancelled') && styles.cancelButtonTextActive
                     ]}>
-                      {subscriptionActive ? t('manageSubscription.cancelButton') : t('manageSubscription.subscribeButton')}
+                      {(subscriptionActive && currentStatus !== 'cancelled') ? t('manageSubscription.cancelButton') : t('manageSubscription.subscribeButton')}
                     </Text>
                   </Pressable>
                 </Animated.View>
