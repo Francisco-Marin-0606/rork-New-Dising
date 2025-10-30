@@ -268,6 +268,12 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
             </View>
           </View>
 
+          {subscriptionStatus === 'cancelled' && (
+            <Text style={styles.cancelledTextTop}>
+              {t('manageSubscription.cancelledMessage')}
+            </Text>
+          )}
+
           <View style={styles.menuSection}>
             <Animated.View
               style={{
@@ -400,12 +406,6 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
               ]}>{t('settings.logout')}</Text>
             </Pressable>
           </Animated.View>
-
-          {subscriptionStatus === 'cancelled' && (
-            <Text style={styles.cancelledText}>
-              {t('manageSubscription.cancelledMessage')}
-            </Text>
-          )}
 
           <Text style={styles.versionText}>{t('settings.version')} 3.1.63</Text>
 
@@ -641,6 +641,14 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '400',
     color: '#fbefd9',
+    textAlign: 'center',
+    lineHeight: 18,
+    marginBottom: 24,
+  },
+  cancelledTextTop: {
+    fontSize: 14,
+    fontWeight: '400',
+    color: 'rgba(251, 239, 217, 0.35)',
     textAlign: 'center',
     lineHeight: 18,
     marginBottom: 24,
