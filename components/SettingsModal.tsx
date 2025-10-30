@@ -266,13 +266,12 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
                 </Text>
               </Pressable>
             </View>
+            {subscriptionStatus === 'cancelled' && (
+              <Text style={styles.cancelledTextTop}>
+                {t('manageSubscription.cancelledMessage')}
+              </Text>
+            )}
           </View>
-
-          {subscriptionStatus === 'cancelled' && (
-            <Text style={styles.cancelledTextTop}>
-              {t('manageSubscription.cancelledMessage')}
-            </Text>
-          )}
 
           <View style={styles.menuSection}>
             <Animated.View
