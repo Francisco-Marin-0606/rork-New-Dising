@@ -448,11 +448,6 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
                     </Text>
                   </Pressable>
                 </Animated.View>
-                {isCancelled && (
-                  <Text style={styles.cancelledText}>
-                    {t('manageSubscription.cancelledMessage')}
-                  </Text>
-                )}
                 {currentStatus === 'pending' && (
                   <Text style={styles.pendingText}>
                     {t('manageSubscription.pendingMessage')}
@@ -740,14 +735,6 @@ const styles = StyleSheet.create({
   },
   cancelButtonActive: {
     backgroundColor: '#ff6b35',
-  },
-  cancelledText: {
-    fontSize: 14,
-    fontWeight: '400',
-    color: '#fbefd9',
-    textAlign: 'center',
-    marginTop: 16,
-    lineHeight: 18,
   },
   pendingText: {
     fontSize: 14,

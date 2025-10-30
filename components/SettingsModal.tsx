@@ -401,6 +401,12 @@ export default function SettingsModal({ visible, onClose, isOnline = true }: Set
             </Pressable>
           </Animated.View>
 
+          {subscriptionStatus === 'cancelled' && (
+            <Text style={styles.cancelledText}>
+              {t('manageSubscription.cancelledMessage')}
+            </Text>
+          )}
+
           <Text style={styles.versionText}>{t('settings.version')} 3.1.63</Text>
 
           <View style={styles.footerContainer}>
@@ -629,5 +635,14 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: 'rgba(251, 239, 217, 0.3)',
     textAlign: 'center',
+  },
+  cancelledText: {
+    fontSize: 14,
+    fontWeight: '400',
+    color: '#fbefd9',
+    textAlign: 'center',
+    marginTop: 16,
+    lineHeight: 18,
+    marginBottom: 24,
   },
 });
