@@ -444,7 +444,7 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
                       isCancelled && styles.cancelButtonTextDisabled,
                       (!subscriptionActive || currentStatus === 'cancelled') && styles.cancelButtonTextActive
                     ]}>
-                      {(subscriptionActive && currentStatus !== 'cancelled') ? t('manageSubscription.cancelButton') : t('manageSubscription.subscribeButton')}
+                      {(subscriptionActive && currentStatus !== 'cancelled') ? t('manageSubscription.cancelButton') : 'Suscribirme'}
                     </Text>
                   </Pressable>
                 </Animated.View>
