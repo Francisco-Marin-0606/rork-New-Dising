@@ -795,9 +795,9 @@ const styles = StyleSheet.create({
     color: '#ffffff',
   },
   statusBadgeSubscribe: {
-    backgroundColor: '#808080',
-    borderWidth: 0,
-    borderColor: 'transparent',
+    backgroundColor: '#ff6b35',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255, 107, 53, 0.4)',
   },
   statusTextSubscribe: {
     color: '#ffffff',
