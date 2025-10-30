@@ -360,22 +360,23 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
           <View style={styles.infoSection}>
             <View style={styles.infoRow}>
               <Text style={styles.infoLabel}>{t('manageSubscription.subscription')}</Text>
-              {currentStatus !== 'cancelled' && (
-                <View 
-                  style={[
-                    styles.statusBadge,
-                    currentStatus === 'pending' && styles.statusBadgePending
-                  ]}
-                >
-                  <Text style={[
-                    styles.statusText,
-                    currentStatus === 'pending' && styles.statusTextPending
-                  ]}>
-                    {currentStatus === 'active' ? t('settings.subscription.status.active') : 
-                     t('settings.subscription.status.pending')}
-                  </Text>
-                </View>
-              )}
+              <View 
+                style={[
+                  styles.statusBadge,
+                  currentStatus === 'cancelled' && styles.statusBadgeInactive,
+                  currentStatus === 'pending' && styles.statusBadgePending
+                ]}
+              >
+                <Text style={[
+                  styles.statusText,
+                  currentStatus === 'cancelled' && styles.statusTextInactive,
+                  currentStatus === 'pending' && styles.statusTextPending
+                ]}>
+                  {currentStatus === 'active' ? t('settings.subscription.status.active') : 
+                   currentStatus === 'pending' ? t('settings.subscription.status.pending') : 
+                   t('settings.subscription.status.cancelled')}
+                </Text>
+              </View>
             </View>
 
             <View style={styles.infoRow}>
