@@ -360,43 +360,23 @@ export default function ManageSubscriptionModal({ visible, onClose, isOnline = t
           <View style={styles.infoSection}>
             <View style={styles.infoRow}>
               <Text style={styles.infoLabel}>{t('manageSubscription.subscription')}</Text>
-              <Pressable 
+              <View 
                 style={[
                   styles.statusBadge,
                   currentStatus === 'cancelled' && styles.statusBadgeInactive,
-                  currentStatus === 'pending' && styles.statusBadgePending,
-                  currentStatus === 'subscribe' && styles.statusBadgeSubscribe
+                  currentStatus === 'pending' && styles.statusBadgePending
                 ]}
-                onPress={async () => {
-                  if (Platform.OS !== 'web') {
-                    try {
-                      await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-                    } catch (error) {
-                      console.log('Haptic feedback error:', error);
-                    }
-                  }
-                  
-                  const statusOrder: Array<'active' | 'cancelled' | 'pending' | 'subscribe'> = ['active', 'cancelled', 'pending', 'subscribe'];
-                  const currentIndex = statusOrder.indexOf(currentStatus);
-                  const nextIndex = (currentIndex + 1) % statusOrder.length;
-                  const newStatus = statusOrder[nextIndex];
-                  
-                  setCurrentStatus(newStatus);
-                  setSubscriptionActive(newStatus !== 'cancelled' && newStatus !== 'subscribe');
-                }}
               >
                 <Text style={[
                   styles.statusText,
                   currentStatus === 'cancelled' && styles.statusTextInactive,
-                  currentStatus === 'pending' && styles.statusTextPending,
-                  currentStatus === 'subscribe' && styles.statusTextSubscribe
+                  currentStatus === 'pending' && styles.statusTextPending
                 ]}>
                   {currentStatus === 'active' ? t('settings.subscription.status.active') : 
                    currentStatus === 'pending' ? t('settings.subscription.status.pending') : 
-                   currentStatus === 'subscribe' ? t('settings.subscription.status.subscribe') :
                    t('settings.subscription.status.cancelled')}
                 </Text>
-              </Pressable>
+              </View>
             </View>
 
             <View style={styles.infoRow}>
@@ -794,14 +774,7 @@ const styles = StyleSheet.create({
   statusTextPending: {
     color: '#ffffff',
   },
-  statusBadgeSubscribe: {
-    backgroundColor: '#ff6b35',
-    borderWidth: 1.5,
-    borderColor: 'rgba(255, 107, 53, 0.4)',
-  },
-  statusTextSubscribe: {
-    color: '#ffffff',
-  },
+
   infoLabelPending: {
     color: '#ef4444',
   },
